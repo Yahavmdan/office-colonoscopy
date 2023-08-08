@@ -1,0 +1,23 @@
+<div class="container">
+  <label class="class">Movies</label>
+  <div *ngFor="let gameLink of gameLinks">
+    <div class="item" #movie (click)="handleClick(movie, gameLink)" *ngIf="gameLink.category === 'movies'">{{gameLink.name}}</div>
+  </div>
+  <label class="class">Geo</label>
+  <div *ngFor="let item of gameLinks">
+    <div class="item" #geo (click)="handleClick(geo, item)" *ngIf="item.category === 'geo'">{{item.name}}</div>
+  </div>
+  <label class="class">Words</label>
+  <div *ngFor="let item of gameLinks">
+    <div class="item" #words (click)="handleClick(words, item)" *ngIf="item.category === 'word'">{{item.name}}</div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="add()" style="display: flex; flex-direction: column; position: absolute; left: 10px; top: 10px;">
+    <span class="class">Add games:</span>
+    <input placeholder="name" formControlName="name">
+    <input placeholder="category" formControlName="category">
+    <input placeholder="link" formControlName="link">
+    <button type="submit">Submit</button>
+  </form>
+
+</div>
