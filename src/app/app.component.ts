@@ -34,7 +34,7 @@ export class AppComponent implements OnInit{
     {
       name: 'Worldle - Guess the Country!',
       link: 'https://worldle.teuteuf.fr/',
-      category: 'word'
+      category: 'geo'
     },
     {
       name: 'Sweardle - the 4 letter word guessing game',
