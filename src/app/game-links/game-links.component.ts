@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {GameLink} from 'src/app/models/game-link.model';
+import {GameLink} from 'src/app/shared/models/game-link.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
+import {LoginComponent} from 'src/app/login/login.component';
 
 @Component({
   selector: 'app-game-links',
@@ -42,4 +43,10 @@ export class GameLinksComponent implements OnInit {
     window.open(gameLink.link, '_blank')
     element.classList.add('clicked')
   }
+
+  // login() {
+  //   this.dialog.open(LoginComponent, {
+  //     width: '500px'
+  //   })
+  // }
 }

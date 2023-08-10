@@ -1,5 +1,5 @@
 import {Resolve} from '@angular/router';
-import {GameLinkService} from 'src/app/services/game-link.service';
+import {GameLinkService} from 'src/app/shared/services/game-link.service';
 import {Injectable} from '@angular/core';
 
 @Injectable()
