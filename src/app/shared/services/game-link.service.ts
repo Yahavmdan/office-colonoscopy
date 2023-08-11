@@ -25,8 +25,9 @@ export class GameLinkService {
   }
 
   private getHeaders(): {headers: HttpHeaders} {
+    console.log(this.authService.getUserSData());
     const headers = new HttpHeaders({
-      Authorization: this.authService.getUserSData().token
+      Authorization: this.authService.getUserSData()?.token ? this.authService.getUserSData()?.token : ''
     });
 
     return {headers};
@@ -34,5 +35,13 @@ export class GameLinkService {
 
   delete(gameLinkId: number) {
     return this.http.delete<boolean>(this.path + '/' + gameLinkId, this.getHeaders());
+  }
+
+  increaseClickCount(gameLinkId: number): Observable<boolean> {
+    return this.http.put<boolean>(this.path + '/increase/' + gameLinkId, {});
+  }
+
+  increaseClickCountByCategory(category: string) {
+    return this.http.put<boolean>(this.path + '/increaseByCategory', {category})
   }
 }

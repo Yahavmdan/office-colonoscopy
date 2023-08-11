@@ -41,6 +41,7 @@ export class AuthService {
     this.tokenSubscription.unsubscribe();
     this.isAdminAuthenticated.next(false);
     localStorage.clear();
+    this.userData = null;
   }
 
   setUserData() {
@@ -59,10 +60,6 @@ export class AuthService {
     }
     console.log(this.userData);
     this.isAdminAuthenticated.next(true);
-
-  }
-
-  getToken() {
 
   }
 }

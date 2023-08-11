@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {GameLink} from 'src/app/shared/models/game-link.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginComponent} from 'src/app/login/login.component';
 import {GameLinkService} from 'src/app/shared/services/game-link.service';
@@ -27,7 +27,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute,
               private dialog: MatDialog, private gameLinkService: GameLinkService,
-              private authService: AuthService) {
+              private authService: AuthService, private renderer: Renderer2) {
   }
 
 
@@ -44,8 +44,16 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   }
 
   handleClick(element: HTMLDivElement, gameLink: GameLink): void {
-    window.open(gameLink.link, '_blank')
-    element.classList.add('clicked')
+    window.open(gameLink.link, '_blank');
+    this.renderer.addClass(element, 'clicked');
+        this.gameLinkService.increaseClickCount(gameLink.id).subscribe(isSuccess => {
+          if (isSuccess) {
+            const g = this.categories[gameLink.category].find(gl => gl.id === gameLink.id);
+            if (g) {
+              g.clickCount++;
+            }
+          }
+        });
   }
 
   login() {
@@ -60,21 +68,28 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     this.authService.logout();
   }
 
-  navigateAll(gameLinks: GameLink[], type: string) {
+  navigateAll(gameLinks: GameLink[], category: 'geo' | 'word' | 'movies') {
     gameLinks.forEach(gameLink => {
       window.open(gameLink.link, '_blank');
     });
-    switch (type) {
+    switch (category) {
       case 'movies':
         this.moviesClicked = true;
         break;
-      case 'geos':
+      case 'geo':
         this.geosClicked = true;
         break;
       case 'word':
         this.wordsClicked = true;
         break;
     }
+    this.gameLinkService.increaseClickCountByCategory(category).subscribe(isSuccess => {
+      if (isSuccess) {
+        this.categories[category].forEach(gameLink => {
+          gameLink.clickCount++;
+        });
+      }
+    });
   }
 
   ngOnDestroy() {

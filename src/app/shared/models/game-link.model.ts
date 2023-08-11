@@ -2,5 +2,6 @@ export interface GameLink {
   id: number;
   name: string;
   link: string;
-  category: string;
+  category: 'geo' | 'word' | 'movies';
+  clickCount: number;
 }
