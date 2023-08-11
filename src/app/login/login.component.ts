@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {GameLinkService} from 'src/app/shared/services/game-link.service';
+import {MatDialogRef} from '@angular/material/dialog';
+import {AuthService} from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +12,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
   constructor(private fb: FormBuilder, private gameLinkService: GameLinkService,
-              /*public dialogRef: MatDialogRef<LoginComponent>*/) {
+              public dialogRef: MatDialogRef<LoginComponent>, private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -22,9 +24,9 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.loginForm.valid) {
-      this.gameLinkService.login(this.loginForm.value).subscribe(token => {
-        localStorage.setItem('user', JSON.stringify(token));
-        // this.dialogRef.close();
+      this.authService.login(this.loginForm.value).subscribe(authUser => {
+        this.authService.storeUserData(authUser);
+        this.dialogRef.close();
       })
     }
   }

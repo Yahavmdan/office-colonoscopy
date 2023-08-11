@@ -5,6 +5,8 @@ import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { AppRoutingModule } from "./app-routing.module";
 import { HttpClientModule } from "@angular/common/http";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AuthService} from 'src/app/shared/services/auth.service';
 
 @NgModule({
   declarations: [
@@ -14,6 +16,7 @@ import { HttpClientModule } from "@angular/common/http";
   imports: [
     AppRoutingModule,
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     RouterOutlet,
@@ -22,7 +25,8 @@ import { HttpClientModule } from "@angular/common/http";
   ],
 
   providers: [
-    FormBuilder
+    FormBuilder,
+    AuthService
   ],
 
   bootstrap: [

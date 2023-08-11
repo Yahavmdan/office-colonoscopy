@@ -1,0 +1,22 @@
+<form class="px-4 d-flex flex-column h-100 justify-content-center" [formGroup]="gameLinkForm" (ngSubmit)="submit()">
+  <mat-form-field class="w-100">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name">
+    <mat-error *ngIf="gameLinkForm.get('name')?.errors">required field</mat-error>
+  </mat-form-field>
+  <mat-form-field class="w-100">
+    <mat-label>Category</mat-label>
+    <mat-select formControlName="category">
+      <mat-option *ngFor="let category of categories" [value]="category">
+        {{category}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="gameLinkForm.get('category')?.errors">required field</mat-error>
+  </mat-form-field>
+  <mat-form-field class="w-100">
+    <mat-label>Link</mat-label>
+    <input matInput formControlName="link">
+    <mat-error *ngIf="gameLinkForm.get('link')?.errors">required field</mat-error>
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit" class="w-50">{{ data?.gameLink ? 'Update' : 'Add' }}</button>
+</form>

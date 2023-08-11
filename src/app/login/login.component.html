@@ -1,4 +1,11 @@
-<form [formGroup]="loginForm" (ngSubmit)="login()">
-    <input formControlName="userName">
-    <input formControlName="password" type="password">
+<form class="px-4 d-flex flex-column h-100 justify-content-center" [formGroup]="loginForm" (ngSubmit)="login()">
+  <mat-form-field class="w-100">
+    <mat-label>User Name</mat-label>
+    <input matInput formControlName="userName">
+  </mat-form-field>
+  <mat-form-field class="w-100">
+    <mat-label>Password</mat-label>
+    <input matInput formControlName="password" type="password">
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit" class="w-50">Login</button>
 </form>

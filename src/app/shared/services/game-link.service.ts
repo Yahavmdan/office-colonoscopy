@@ -1,24 +1,38 @@
-import {HttpClient} from '@angular/common/http';
-import {catchError, Observable, throwError} from 'rxjs';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {GameLink} from 'src/app/shared/models/game-link.model';
 import {environmentUrl} from 'src/environments/environment';
 import {Injectable} from '@angular/core';
+import {AuthService} from 'src/app/shared/services/auth.service';
+import {Categories} from 'src/app/shared/models/category.model';
 
 @Injectable()
 export class GameLinkService {
   path = environmentUrl.api + '/gameLink';
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
 
-  getGameLinks(): Observable<GameLink[]> {
-    return this.http.get<GameLink[]>(this.path);
+  getCategories(): Observable<Categories> {
+    return this.http.get<Categories>(this.path);
   }
 
-  login(value: any) {
-    return this.http.post<{token: string}>(this.path + '/login', value);
+  add(gameLink: any): Observable<boolean> {
+    return this.http.post<boolean>(this.path, gameLink, this.getHeaders());
   }
 
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('user');
+  update(gameLink: any, gameLinkId: number): Observable<boolean> {
+    return this.http.put<boolean>(this.path + '/' + gameLinkId, gameLink, this.getHeaders());
+  }
+
+  private getHeaders(): {headers: HttpHeaders} {
+    const headers = new HttpHeaders({
+      Authorization: this.authService.getUserSData().token
+    });
+
+    return {headers};
+  }
+
+  delete(gameLinkId: number) {
+    return this.http.delete<boolean>(this.path + '/' + gameLinkId, this.getHeaders());
   }
 }
