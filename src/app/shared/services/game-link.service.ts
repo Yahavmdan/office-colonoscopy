@@ -25,7 +25,6 @@ export class GameLinkService {
   }
 
   private getHeaders(): {headers: HttpHeaders} {
-    console.log(this.authService.getUserSData());
     const headers = new HttpHeaders({
       Authorization: this.authService.getUserSData()?.token ? this.authService.getUserSData()?.token : ''
     });

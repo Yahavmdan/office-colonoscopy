@@ -11,10 +11,6 @@ import {AuthUser} from 'src/app/shared/models/auth-user.model';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit {
-  constructor(private authService: AuthService) {
-  }
-  ngOnInit() {
-    console.log(2);
-  }
+export class AppComponent {
+
 }

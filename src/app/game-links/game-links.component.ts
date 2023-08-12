@@ -57,7 +57,6 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    console.log(this.isAdminAuthenticated);
     this.dialog.open(LoginComponent, {
       width: '500px',
       height: '200px'

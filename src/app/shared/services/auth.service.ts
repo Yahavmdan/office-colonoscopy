@@ -58,7 +58,6 @@ export class AuthService {
       this.isAdminAuthenticated.next(false);
       return;
     }
-    console.log(this.userData);
     this.isAdminAuthenticated.next(true);
 
   }
