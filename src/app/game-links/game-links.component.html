@@ -1,29 +1,29 @@
-<div *ngIf="!isAdminAuthenticated" class="d-flex justify-content-end"><span class="pointer" (click)="login()">Login</span></div>
-<div *ngIf="isAdminAuthenticated" class="d-flex justify-content-end"><span class="pointer" (click)="logout()">Logout</span></div>
-<div class="ml-20" *ngIf="isAdminAuthenticated"><span class="pointer" (click)="add()">Add</span></div>
+<div *ngIf="!isAdminAuthenticated" class="d-flex justify-content-end"><span class="pointer" (click)="login()"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</span></div>
+<div *ngIf="isAdminAuthenticated" class="d-flex justify-content-end"><span class="pointer" (click)="logout()">Logout <i class="fa fa-sign-out" aria-hidden="true"></i></span></div>
+<div class="ml-20" *ngIf="isAdminAuthenticated"><span class="pointer" (click)="add()"><i class="fa fa-plus-circle" aria-hidden="true"></i></span></div>
 <div class="container">
-  <label class="class pointer" (click)="navigateAll(categories.movies, 'movies')">Movies</label>
+  <label class="class pointer" (click)="navigateAll(categories.movies, 'movies')"><i class="fa fa-film" aria-hidden="true"></i> Movies</label>
   <div *ngFor="let gameLink of categories.movies">
     <div class="mt-2 d-flex justify-content-start">
       <div class="item" [ngClass]="{clicked: moviesClicked}" #movie (click)="handleClick(movie, gameLink)">{{gameLink.name + ' - ' + gameLink.clickCount}}</div>
-      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="edit(gameLink)">Edit</div>
-      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="delete(gameLink.id)">Delete</div>
+      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="edit(gameLink)"><i class="fa fa-pencil" aria-hidden="true"></i></div>
+      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="delete(gameLink.id)"><i class="fa fa-trash" aria-hidden="true"></i></div>
     </div>
     </div>
-  <label class="class pointer mt-5" (click)="navigateAll(categories.geo, 'geo')">Geo</label>
+  <label class="class pointer mt-5" (click)="navigateAll(categories.geo, 'geo')"><i class="fa fa-globe" aria-hidden="true"></i> Geo</label>
   <div *ngFor="let gameLink of categories.geo">
     <div class="mt-2 d-flex justify-content-start">
       <div class="item" [ngClass]="{clicked: geosClicked}" #geo (click)="handleClick(geo, gameLink)">{{gameLink.name + ' - ' + gameLink.clickCount}}</div>
-      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="edit(gameLink)">Edit</div>
-      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="delete(gameLink.id)">Delete</div>
+      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="edit(gameLink)"><i class="fa fa-pencil" aria-hidden="true"></i></div>
+      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="delete(gameLink.id)"><i class="fa fa-trash" aria-hidden="true"></i></div>
     </div>
   </div>
-  <label class="class pointer mt-2 mt-5" (click)="navigateAll(categories.word, 'word')">Words</label>
+  <label class="class pointer mt-2 mt-5" (click)="navigateAll(categories.word, 'word')"><i class="fa fa-font" aria-hidden="true"></i> Words</label>
   <div *ngFor="let gameLink of categories.word">
     <div class="mt-2 d-flex justify-content-start">
       <div class="item" [ngClass]="{clicked: wordsClicked}" #words (click)="handleClick(words, gameLink)">{{gameLink.name + ' - ' + gameLink.clickCount}}</div>
-      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="edit(gameLink)">Edit</div>
-      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="delete(gameLink.id)">Delete</div>
+      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="edit(gameLink)"><i class="fa fa-pencil" aria-hidden="true"></i></div>
+      <div class="ml-20 pointer" *ngIf="isAdminAuthenticated" (click)="delete(gameLink.id)"><i class="fa fa-trash" aria-hidden="true"></i></div>
     </div>
   </div>
 </div>

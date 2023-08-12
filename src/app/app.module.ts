@@ -21,7 +21,7 @@ import {AuthService} from 'src/app/shared/services/auth.service';
     ReactiveFormsModule,
     RouterOutlet,
     HttpClientModule,
-    RouterLink
+    RouterLink,
   ],
 
   providers: [
