@@ -17,23 +17,21 @@ export class GameLinkService {
   }
 
   add(gameLink: any): Observable<boolean> {
-    return this.http.post<boolean>(this.path, gameLink, this.getHeaders());
+    return this.http.post<boolean>(this.path, gameLink, {headers: this.getHeaders()});
   }
 
   update(gameLink: any, gameLinkId: number): Observable<boolean> {
-    return this.http.put<boolean>(this.path + '/' + gameLinkId, gameLink, this.getHeaders());
+    return this.http.put<boolean>(this.path + '/' + gameLinkId, gameLink, {headers: this.getHeaders()});
   }
 
-  private getHeaders(): {headers: HttpHeaders} {
-    const headers = new HttpHeaders({
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
       Authorization: this.authService.getUserSData()?.token ? this.authService.getUserSData()?.token : ''
     });
-
-    return {headers};
   }
 
   delete(gameLinkId: number) {
-    return this.http.delete<boolean>(this.path + '/' + gameLinkId, this.getHeaders());
+    return this.http.delete<boolean>(this.path + '/' + gameLinkId, {headers: this.getHeaders()});
   }
 
   increaseClickCount(gameLinkId: number): Observable<boolean> {
