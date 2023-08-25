@@ -33,7 +33,6 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    return;
     this.categories = this.route.snapshot.data['categories'];
     this.isAdminSub = this.authService.isAdminAuthenticated
       .subscribe((isAdminAuthenticated: boolean) => {
