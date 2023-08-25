@@ -1,4 +1,4 @@
-import {GameLink} from 'src/app/shared/models/game-link.model';
+import { GameLink } from 'src/app/shared/models/Game-Link/game-link.model';
 
 export interface Categories {
   geo: GameLink[];

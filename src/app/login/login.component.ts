@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {GameLinkService} from 'src/app/shared/services/game-link.service';
-import {MatDialogRef} from '@angular/material/dialog';
-import {AuthService} from 'src/app/shared/services/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { GameLinkService } from 'src/app/shared/services/Game-Link/game-link.service';
+import { MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from 'src/app/shared/services/User/auth.service';
 
 @Component({
   selector: 'app-login',

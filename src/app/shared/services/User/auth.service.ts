@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {delay, of, Subject, Subscription} from 'rxjs';
-import {environmentUrl} from 'src/environments/environment';
-import {HttpClient} from '@angular/common/http';
-import {AuthUser} from 'src/app/shared/models/auth-user.model';
+import { Injectable } from '@angular/core';
+import { delay, of, Subject, Subscription } from 'rxjs';
+import { environmentUrl } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { AuthUser } from 'src/app/shared/models/User/auth-user.model';
 
 @Injectable()
 export class AuthService {
@@ -31,8 +31,7 @@ export class AuthService {
     }
     const timeout = ((+this.userData.tokenExpirationAt * 1000) - new Date().getTime());
     this.tokenSubscription.unsubscribe();
-    this.tokenSubscription = of(null).pipe(delay(timeout)).subscribe((a) => {
-      console.log('EXPIRED');
+    this.tokenSubscription = of(null).pipe(delay(timeout)).subscribe(() => {
       this.logout();
     })
   }

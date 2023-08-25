@@ -1,14 +1,14 @@
-import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import {GameLink} from 'src/app/shared/models/game-link.model';
-import {FormGroup} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
-import {LoginComponent} from 'src/app/login/login.component';
-import {GameLinkService} from 'src/app/shared/services/game-link.service';
-import {Categories} from 'src/app/shared/models/category.model';
-import {Subscription} from 'rxjs';
-import {AuthService} from 'src/app/shared/services/auth.service';
-import {GameLinkFormComponent} from 'src/app/game-links/game-link-form/game-link-form.component';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { GameLink } from 'src/app/shared/models/Game-Link/game-link.model';
+import { FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginComponent } from 'src/app/login/login.component';
+import { GameLinkService } from 'src/app/shared/services/Game-Link/game-link.service';
+import { Categories } from 'src/app/shared/models/Game-Link/category.model';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/shared/services/User/auth.service';
+import { GameLinkFormComponent } from 'src/app/game-links/game-link-form/game-link-form.component';
 
 @Component({
   selector: 'app-game-links',
@@ -19,7 +19,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   categories: Categories;
   form: FormGroup
   isAdminAuthenticated = false;
-  isAdminSub : Subscription;
+  isAdminSub: Subscription;
   moviesClicked = false;
   geosClicked = false;
   wordsClicked = false
@@ -29,7 +29,6 @@ export class GameLinksComponent implements OnInit, OnDestroy {
               private dialog: MatDialog, private gameLinkService: GameLinkService,
               private authService: AuthService, private renderer: Renderer2) {
   }
-
 
 
   ngOnInit() {
@@ -46,14 +45,14 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   handleClick(element: HTMLDivElement, gameLink: GameLink): void {
     window.open(gameLink.link, '_blank');
     this.renderer.addClass(element, 'clicked');
-        this.gameLinkService.increaseClickCount(gameLink.id).subscribe(isSuccess => {
-          if (isSuccess) {
-            const g = this.categories[gameLink.category].find(gl => gl.id === gameLink.id);
-            if (g) {
-              g.clickCount++;
-            }
-          }
-        });
+    this.gameLinkService.increaseClickCount(gameLink.id).subscribe(isSuccess => {
+      if (isSuccess) {
+        const g = this.categories[gameLink.category].find(gl => gl.id === gameLink.id);
+        if (g) {
+          g.clickCount++;
+        }
+      }
+    });
   }
 
   login() {
@@ -96,17 +95,17 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   }
 
   edit(gameLink: GameLink) {
-      this.dialog.open(GameLinkFormComponent, {
-        width: '500px',
-        height: '400px',
-        data: {gameLink}
-      }).afterClosed().subscribe(res => {
-        if (res) {
-          this.gameLinkService.getCategories().subscribe(categories => {
-            this.categories = categories;
-          })
-        }
-      });
+    this.dialog.open(GameLinkFormComponent, {
+      width: '500px',
+      height: '400px',
+      data: {gameLink}
+    }).afterClosed().subscribe(res => {
+      if (res) {
+        this.gameLinkService.getCategories().subscribe(categories => {
+          this.categories = categories;
+        })
+      }
+    });
   }
 
   delete(gameLinkId: number) {

@@ -1,14 +1,14 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {GameLink} from 'src/app/shared/models/game-link.model';
-import {environmentUrl} from 'src/environments/environment';
-import {Injectable} from '@angular/core';
-import {AuthService} from 'src/app/shared/services/auth.service';
-import {Categories} from 'src/app/shared/models/category.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environmentUrl } from 'src/environments/environment';
+import { Injectable } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/User/auth.service';
+import { Categories } from 'src/app/shared/models/Game-Link/category.model';
 
 @Injectable()
 export class GameLinkService {
   path = environmentUrl.api + '/gameLink';
+
   constructor(private http: HttpClient, private authService: AuthService) {
   }
 

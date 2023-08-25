@@ -1,17 +1,22 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between f-16">
-    <div *ngIf="isAdminAuthenticated"><span class="pointer" (click)="add()">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></div>
-    <div *ngIf="!isAdminAuthenticated" class="d-flex justify-content-end"><span class="pointer" (click)="login()"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</span></div>
-    <div *ngIf="isAdminAuthenticated" class="d-flex justify-content-end"><span class="pointer" (click)="logout()">Logout <i class="fa fa-sign-out" aria-hidden="true"></i></span></div>
+    <div *ngIf="isAdminAuthenticated"><span class="pointer" (click)="add()">Add <i class="fa fa-plus-circle"
+                                                                                   aria-hidden="true"></i></span></div>
+    <div *ngIf="!isAdminAuthenticated" class="d-flex justify-content-end"><span class="pointer" (click)="login()"><i
+      class="fa fa-sign-in" aria-hidden="true"></i> Login</span></div>
+    <div *ngIf="isAdminAuthenticated" class="d-flex justify-content-end"><span class="pointer" (click)="logout()">Logout <i
+      class="fa fa-sign-out" aria-hidden="true"></i></span></div>
   </div>
   <div class="mt-4">
-    <label class="class pointer" [ngClass]="{clicked: moviesClicked}" (click)="navigateAll(categories.movies, 'movies')">
+    <label class="class pointer" [ngClass]="{clicked: moviesClicked}"
+           (click)="navigateAll(categories.movies, 'movies')">
       <i class="fa fa-film" aria-hidden="true"></i> Movies</label>
     <ul class="list-group list-group-numbered list-group-flush mt-2">
       <li *ngFor="let gameLink of categories.movies"
           class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
-          <div [ngClass]="{clicked: moviesClicked}" #movie class="pointer" (click)="handleClick(movie, gameLink)">{{ gameLink.name }}</div>
+          <div [ngClass]="{clicked: moviesClicked}" #movie class="pointer"
+               (click)="handleClick(movie, gameLink)">{{ gameLink.name }}</div>
           <i class="ml-20 pointer fa fa-pencil" *ngIf="isAdminAuthenticated" (click)="edit(gameLink)"></i>
           <i class="ml-20 pointer fa fa-trash" *ngIf="isAdminAuthenticated" (click)="delete(gameLink.id)"></i>
         </div>
@@ -25,7 +30,8 @@
       <li *ngFor="let gameLink of categories.geo"
           class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
-          <div [ngClass]="{clicked: geosClicked}" #geo class="pointer" (click)="handleClick(geo, gameLink)">{{ gameLink.name }}</div>
+          <div [ngClass]="{clicked: geosClicked}" #geo class="pointer"
+               (click)="handleClick(geo, gameLink)">{{ gameLink.name }}</div>
           <i class="ml-20 pointer fa fa-pencil" *ngIf="isAdminAuthenticated" (click)="edit(gameLink)"></i>
           <i class="ml-20 pointer fa fa-trash" *ngIf="isAdminAuthenticated" (click)="delete(gameLink.id)"></i>
         </div>
@@ -33,13 +39,15 @@
       </li>
     </ul>
 
-    <label [ngClass]="{clicked: wordsClicked}" class="class pointer mt-4" (click)="navigateAll(categories.word, 'word')">
+    <label [ngClass]="{clicked: wordsClicked}" class="class pointer mt-4"
+           (click)="navigateAll(categories.word, 'word')">
       <i class="fa fa-language" aria-hidden="true"></i> Word</label>
     <ul class="list-group list-group-numbered list-group-flush mt-2">
       <li *ngFor="let gameLink of categories.word"
           class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
-          <div [ngClass]="{clicked: wordsClicked}" #words class="pointer" (click)="handleClick(words, gameLink)">{{ gameLink.name }}</div>
+          <div [ngClass]="{clicked: wordsClicked}" #words class="pointer"
+               (click)="handleClick(words, gameLink)">{{ gameLink.name }}</div>
           <i class="ml-20 pointer fa fa-pencil" *ngIf="isAdminAuthenticated" (click)="edit(gameLink)"></i>
           <i class="ml-20 pointer fa fa-trash" *ngIf="isAdminAuthenticated" (click)="delete(gameLink.id)"></i>
         </div>
