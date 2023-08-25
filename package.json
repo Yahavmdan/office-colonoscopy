@@ -23,6 +23,8 @@
     "@types/socket.io-client": "^3.0.0",
     "bootstrap": "^5.3.1",
     "bootstrap-icons": "^1.10.2",
+    "firebase": "^10.3.0",
+    "firebase-tools": "^12.5.0",
     "font-awesome": "^4.7.0",
     "pusher-js": "^8.0.0",
     "rxjs": "~7.5.0",

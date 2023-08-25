@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "secret-killer": {
+    "office-colonoscopy": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/secret-killer",
+            "outputPath": "dist/office-colonoscopy",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "secret-killer:build:production"
+              "browserTarget": "office-colonoscopy:build:production"
             },
             "development": {
-              "browserTarget": "secret-killer:build:development"
+              "browserTarget": "office-colonoscopy:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "secret-killer:build"
+            "browserTarget": "office-colonoscopy:build"
           }
         },
         "test": {

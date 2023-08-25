@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {GameLink} from 'src/app/shared/models/game-link.model';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import {FormGroup} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginComponent} from 'src/app/login/login.component';
 import {GameLinkService} from 'src/app/shared/services/game-link.service';
@@ -25,7 +25,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   wordsClicked = false
 
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
               private dialog: MatDialog, private gameLinkService: GameLinkService,
               private authService: AuthService, private renderer: Renderer2) {
   }
@@ -33,6 +33,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    return;
     this.categories = this.route.snapshot.data['categories'];
     this.isAdminSub = this.authService.isAdminAuthenticated
       .subscribe((isAdminAuthenticated: boolean) => {
