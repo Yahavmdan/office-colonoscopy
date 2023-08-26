@@ -1,13 +1,15 @@
+.category-card {
+  height: 300px;
+  padding: 20px;
+  border: solid 5px #000000;
+  transition: all 300ms;
+  &:hover {
+    //box-shadow: rgba(0, 0, 0, 0.82) 20px 20px 0 0;
+    scale: 1.10;
+  }
+}
+
 .clicked {
   text-decoration: grey line-through;
   color: grey;
-}
-
-.class {
-  font-weight: bold;
-  font-size: 30px;
-}
-
-.ml-20 {
-  margin-left: 20px;
 }

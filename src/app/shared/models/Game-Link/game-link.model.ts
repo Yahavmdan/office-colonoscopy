@@ -1,7 +1,11 @@
 export interface GameLink {
   id: number;
   name: string;
+  description: string;
   link: string;
-  category: 'geo' | 'word' | 'movies';
+  "sub-category": string;
+  category: Category;
   clickCount: number;
 }
+
+export type Category = 'geo' | 'word' | 'movies' | 'other' | 'video-game';

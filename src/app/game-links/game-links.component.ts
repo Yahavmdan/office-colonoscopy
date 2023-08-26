@@ -1,14 +1,12 @@
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { GameLink } from 'src/app/shared/models/Game-Link/game-link.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { LoginComponent } from 'src/app/login/login.component';
-import { GameLinkService } from 'src/app/shared/services/Game-Link/game-link.service';
 import { Categories } from 'src/app/shared/models/Game-Link/category.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/User/auth.service';
-import { GameLinkFormComponent } from 'src/app/game-links/game-link-form/game-link-form.component';
+import { GameCategoryListComponent } from "./game-category-list/game-category-list.component";
+import { Category, GameLink } from "../shared/models/Game-Link/game-link.model";
 
 @Component({
   selector: 'app-game-links',
@@ -17,22 +15,20 @@ import { GameLinkFormComponent } from 'src/app/game-links/game-link-form/game-li
 })
 export class GameLinksComponent implements OnInit, OnDestroy {
   categories: Categories;
+  categoryKeys: Category[];
   form: FormGroup
-  isAdminAuthenticated = false;
   isAdminSub: Subscription;
-  moviesClicked = false;
-  geosClicked = false;
-  wordsClicked = false
-
+  isAdminAuthenticated: boolean = false;
 
   constructor(private route: ActivatedRoute,
-              private dialog: MatDialog, private gameLinkService: GameLinkService,
-              private authService: AuthService, private renderer: Renderer2) {
+              private dialog: MatDialog,
+              private authService: AuthService) {
   }
 
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.categories = this.route.snapshot.data['categories'];
+    this.categoryKeys = Object.keys(this.categories) as Category[];
+    this.categoryKeys.forEach(key => this.getSumClicks(key))
     this.isAdminSub = this.authService.isAdminAuthenticated
       .subscribe((isAdminAuthenticated: boolean) => {
         this.isAdminAuthenticated = isAdminAuthenticated;
@@ -42,92 +38,20 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     this.authService.autoLogout();
   }
 
-  handleClick(element: HTMLDivElement, gameLink: GameLink): void {
-    window.open(gameLink.link, '_blank');
-    this.renderer.addClass(element, 'clicked');
-    this.gameLinkService.increaseClickCount(gameLink.id).subscribe(isSuccess => {
-      if (isSuccess) {
-        const g = this.categories[gameLink.category].find(gl => gl.id === gameLink.id);
-        if (g) {
-          g.clickCount++;
-        }
-      }
-    });
+  public getSumClicks(key: Category, updated?: number): number {
+    return this.categories[key].reduce((sum: number, link: GameLink) => sum + link.clickCount, 0) + (updated ?? 0);
   }
 
-  login() {
-    this.dialog.open(LoginComponent, {
-      width: '500px',
-      height: '200px'
-    });
-  }
-
-  logout() {
-    this.authService.logout();
-  }
-
-  navigateAll(gameLinks: GameLink[], category: 'geo' | 'word' | 'movies') {
-    gameLinks.forEach(gameLink => {
-      window.open(gameLink.link, '_blank');
-    });
-    switch (category) {
-      case 'movies':
-        this.moviesClicked = true;
-        break;
-      case 'geo':
-        this.geosClicked = true;
-        break;
-      case 'word':
-        this.wordsClicked = true;
-        break;
-    }
-    this.gameLinkService.increaseClickCountByCategory(category).subscribe(isSuccess => {
-      if (isSuccess) {
-        this.categories[category].forEach(gameLink => {
-          gameLink.clickCount++;
-        });
-      }
-    });
+  handleClick(key: Category): void {
+    this.dialog.open(GameCategoryListComponent, {
+      data: this.categories[key],
+      width: '80%',
+      height: '80%'
+    })
   }
 
   ngOnDestroy() {
     this.isAdminSub.unsubscribe();
   }
 
-  edit(gameLink: GameLink) {
-    this.dialog.open(GameLinkFormComponent, {
-      width: '500px',
-      height: '400px',
-      data: {gameLink}
-    }).afterClosed().subscribe(res => {
-      if (res) {
-        this.gameLinkService.getCategories().subscribe(categories => {
-          this.categories = categories;
-        })
-      }
-    });
-  }
-
-  delete(gameLinkId: number) {
-    this.gameLinkService.delete(gameLinkId).subscribe(isDeleted => {
-      if (isDeleted) {
-        this.gameLinkService.getCategories().subscribe(categories => {
-          this.categories = categories;
-        })
-      }
-    })
-  }
-
-  add() {
-    this.dialog.open(GameLinkFormComponent, {
-      width: '500px',
-      height: '400px'
-    }).afterClosed().subscribe(res => {
-      if (res) {
-        this.gameLinkService.getCategories().subscribe(categories => {
-          this.categories = categories;
-        })
-      }
-    });
-  }
 }

@@ -12,6 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { GameLinkComponent } from './game-link/game-link.component';
+import { GameCategoryListComponent } from './game-category-list/game-category-list.component';
 
 const routes: Routes = [
   {
@@ -42,7 +44,9 @@ const routes: Routes = [
   ],
   declarations: [
     GameLinksComponent,
-    GameLinkFormComponent
+    GameLinkFormComponent,
+    GameLinkComponent,
+    GameCategoryListComponent
   ],
 })
 export class GameLinksModule {

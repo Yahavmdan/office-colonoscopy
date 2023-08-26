@@ -4,4 +4,6 @@ export interface Categories {
   geo: GameLink[];
   movies: GameLink[];
   word: GameLink[];
+  "video-game": GameLink[];
+  other: GameLink[]
 }
