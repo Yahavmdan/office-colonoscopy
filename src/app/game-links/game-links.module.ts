@@ -3,7 +3,7 @@ import { GameLinksComponent } from 'src/app/game-links/game-links.component';
 import { RouterModule, Routes } from '@angular/router';
 import { Categories } from 'src/app/shared/resolves/Game-Link/categories.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf, TitleCasePipe } from '@angular/common';
 import { GameLinkService } from 'src/app/shared/services/Game-Link/game-link.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from 'src/app/shared/services/User/auth.service';
@@ -35,7 +35,8 @@ const routes: Routes = [
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    TitleCasePipe
   ],
   providers: [
     Categories,

@@ -1,7 +1,10 @@
 <div class="d-flex col-12 justify-content-center mt-5">
   <div class="col-6 d-flex flex-wrap justify-content-center p-5">
-    <div *ngFor="let key of categoryKeys" class="category-card col-5 m-4" (click)="handleClick(key)">
-      <div>{{key}}</div>
+    <div *ngFor="let key of categoryKeys"
+         class="category-card col-5 m-4"
+         (click)="handleClick(key)"
+         [style.background-image]="'url(/assets/images/' + key + '.png)'">
+      <div class="f-24 fw-700">{{key | titlecase}}</div>
       <div>popularity(clicks): {{getSumClicks(key)}}</div>
     </div>
   </div>
