@@ -10,3 +10,13 @@
     scale: 1.01;
   }
 }
+
+@media (max-width: 600px) {
+  .game-link {
+    margin: 2px 0;
+    padding: 5px;
+  }
+  .game-link:hover {
+    scale: unset;
+  }
+}

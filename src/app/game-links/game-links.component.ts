@@ -43,10 +43,11 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   }
 
   handleClick(key: Category): void {
+    const width = document.documentElement.clientWidth;
     this.dialog.open(GameCategoryListComponent, {
       data: this.categories[key],
-      width: '80%',
-      height: '80%'
+      width: width > 700 ? '80%' : '95%',
+      height: width > 700 ? '80%' : '85dvh',
     })
   }
 
