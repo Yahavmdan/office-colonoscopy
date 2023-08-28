@@ -6,12 +6,23 @@
   cursor: pointer;
   border-radius: 10px;
   transition: all 200ms ease;
+  border-bottom: solid lightgray 1px;
   &:hover {
     scale: 1.01;
   }
 }
 
+.clicks {
+  border-radius: 10px;
+  background: lightgrey;
+  display: flex;
+  padding: 3px;
+  justify-content: center;
+  align-items: center;
+}
+
 .icons {
+  display: flex;
   margin-right: auto;
 }
 
@@ -24,6 +35,7 @@
   .game-link {
     margin: 2px 0;
     padding: 5px;
+    font-size: 12px;
   }
   .game-link:hover {
     scale: unset;

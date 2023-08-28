@@ -6,7 +6,11 @@
   transition: all 300ms;
   background-repeat: no-repeat;
   box-shadow: #333333 5px 5px 0 0;
-  @media (min-width: 600px) {
+  @media (max-width: 400px) {
+    background-size: contain;
+    background-position: bottom;
+  }
+    @media (min-width: 600px) {
     &:hover {
       box-shadow: #333333 10px 10px 0 0;
       scale: 1.10;
