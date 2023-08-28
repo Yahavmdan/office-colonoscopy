@@ -11,6 +11,15 @@
   }
 }
 
+.icons {
+  margin-right: auto;
+}
+
+.clicked {
+  color: #868686;
+  text-decoration: line-through;
+}
+
 @media (max-width: 600px) {
   .game-link {
     margin: 2px 0;

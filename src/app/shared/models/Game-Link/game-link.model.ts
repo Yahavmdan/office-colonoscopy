@@ -3,9 +3,10 @@ export interface GameLink {
   name: string;
   description: string;
   link: string;
-  "sub-category": string;
+  subCategory: string;
   category: Category;
   clickCount: number;
+  clicked?: boolean;
 }
 
 export type Category = 'geo' | 'word' | 'movies' | 'other' | 'video-game';

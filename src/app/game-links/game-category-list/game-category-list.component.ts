@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { GameLink } from "../../shared/models/Game-Link/game-link.model";
 import { GameLinkService } from "../../shared/services/Game-Link/game-link.service";

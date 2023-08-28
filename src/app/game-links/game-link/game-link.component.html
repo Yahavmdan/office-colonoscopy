@@ -1,10 +1,10 @@
-<div class="game-link" (click)="nav(gameLink.link)">
-  <section class="d-flex">
-    <span class="fw-bold">{{gameLink.name}}</span>
-    <span> - {{gameLink.description}}</span>
+<div class="game-link" (click)="nav(gameLink)">
+  <section class="d-flex mx-3">
+    <span class="fw-bold" [ngClass]="{'clicked' :gameLink.clicked}">{{gameLink.name}} </span>
+    <span class="d-md-block d-none" [ngClass]="{'clicked' :gameLink.clicked}"> - {{gameLink.description}}</span>
   </section>
+  <section class="icons"> <i *ngFor="let sc of JSON.parse(gameLink.subCategory)" [class]="setSubCategory(sc)"></i></section>
   <section>
     <span> clicked - {{gameLink.clickCount}} times</span>
   </section>
 </div>
-
