@@ -24,7 +24,7 @@ export class GameLinkFormComponent implements OnInit {
       description: [null, Validators.required],
       link: [null, Validators.required],
       category: [null, Validators.required],
-      subCategory: [null, Validators.required],
+      subCategory: [null],
     });
 
     if (this.data?.gameLink) {

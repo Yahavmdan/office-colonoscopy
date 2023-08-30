@@ -58,6 +58,10 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     });
   }
 
+  public logout(): void {
+    this.authService.logout();
+  }
+
   public handleClick(key: Category): void {
     this.dialog.open(GameCategoryListComponent, {
       data: {categories: this.categories[key], isAdmin: this.isAdminAuthenticated},
