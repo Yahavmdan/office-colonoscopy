@@ -19,9 +19,11 @@ export class GameLinkComponent {
   @Output() adminChangedContent:EventEmitter<boolean> = new EventEmitter();
 
   public nav(game: GameLink): void {
+    this.gameLinkService.increaseClickCount(game.id).subscribe(res => {
+      this.data.link.clickCount++
+    })
     window.open(game.link, '_blank');
     this.data.link.clicked = true;
-    this.data.link.clickCount++
   }
 
   edit(gameLink: GameLink): void {
