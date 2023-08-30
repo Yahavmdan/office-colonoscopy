@@ -5,6 +5,11 @@
     <mat-error *ngIf="gameLinkForm.get('name')?.errors">required field</mat-error>
   </mat-form-field>
   <mat-form-field class="w-100">
+    <mat-label>Description</mat-label>
+    <input matInput formControlName="description">
+    <mat-error *ngIf="gameLinkForm.get('description')?.errors">required field</mat-error>
+  </mat-form-field>
+  <mat-form-field class="w-100">
     <mat-label>Category</mat-label>
     <mat-select formControlName="category">
       <mat-option *ngFor="let category of categories" [value]="category">
@@ -14,9 +19,18 @@
     <mat-error *ngIf="gameLinkForm.get('category')?.errors">required field</mat-error>
   </mat-form-field>
   <mat-form-field class="w-100">
+    <mat-label>Sub category</mat-label>
+    <mat-select formControlName="subCategory" multiple>
+      <mat-option *ngFor="let subCategory of subCategories" [value]="subCategory">
+        {{subCategory}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="gameLinkForm.get('subCategory')?.errors">required field</mat-error>
+  </mat-form-field>
+  <mat-form-field class="w-100">
     <mat-label>Link</mat-label>
     <input matInput formControlName="link">
     <mat-error *ngIf="gameLinkForm.get('link')?.errors">required field</mat-error>
   </mat-form-field>
-  <button mat-raised-button color="primary" type="submit" class="w-50">{{ data?.gameLink ? 'Update' : 'Add' }}</button>
+  <button mat-raised-button color="warn" type="submit" class="w-50">{{ data?.gameLink ? 'Update' : 'Add' }}</button>
 </form>

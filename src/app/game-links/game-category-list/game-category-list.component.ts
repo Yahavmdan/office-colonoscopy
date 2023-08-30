@@ -1,7 +1,6 @@
 import {Component, Inject} from '@angular/core';
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { GameLink } from "../../shared/models/Game-Link/game-link.model";
-import { GameLinkService } from "../../shared/services/Game-Link/game-link.service";
 
 @Component({
   selector: 'app-game-category-list',
@@ -10,12 +9,11 @@ import { GameLinkService } from "../../shared/services/Game-Link/game-link.servi
 })
 export class GameCategoryListComponent {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: GameLink[],
-              private gameLinkService: GameLinkService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { categories: GameLink[], isAdmin: boolean },
+              public dialogRef: MatDialogRef<GameCategoryListComponent> ) {
   }
 
-  public handleClick(id: number): void {
-    this.gameLinkService.increaseClickCount(id).subscribe((res: boolean) => res);
+  public changed(event: boolean): void {
+    this.dialogRef.close(event);
   }
-
 }
