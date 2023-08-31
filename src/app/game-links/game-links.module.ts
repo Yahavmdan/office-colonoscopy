@@ -14,12 +14,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { GameLinkComponent } from './game-link/game-link.component';
 import { GameCategoryListComponent } from './game-category-list/game-category-list.component';
+import { LoginComponent } from "../login/login.component";
 
 const routes: Routes = [
   {
     path: '',
     component: GameLinksComponent,
     resolve: {categories: Categories}
+  },
+  {
+    path: 'login',
+    component: LoginComponent
   }
 ];
 

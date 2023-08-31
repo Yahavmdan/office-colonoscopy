@@ -1,10 +1,18 @@
-<div class="game-link" (click)="nav(gameLink)">
-  <section class="d-flex mx-1">
-    <span class="fw-bold" [ngClass]="{'clicked' :gameLink.clicked}">{{gameLink.name}} </span>
-    <span class="d-md-block d-none" [ngClass]="{'clicked' :gameLink.clicked}"> - {{gameLink.description}}</span>
-  </section>
-  <section class="icons"> <i *ngFor="let sc of JSON.parse(gameLink.subCategory)" [class]="setSubCategory(sc)"></i></section>
+<div class="game-link">
+  <div class="d-flex col-8">
+    <section class="icons col-4 col-md-2">
+      <i *ngFor="let sc of data.link.subCategory" [class]="setSubCategory(sc)"></i>
+    </section>
+    <section class="d-flex mx-1 col-10">
+      <span (click)="nav(data.link)" class="fw-bold pointer" [ngClass]="{'clicked' :data.link.clicked}">{{data.link.name}} </span>
+      <span class="d-md-block d-none" [ngClass]="{'clicked' :data.link.clicked}"> - {{data.link.description}}</span>
+      <div>
+        <i class="pointer mx-1 bi bi-trash3" *ngIf="data.isAdmin" (click)="delete(data.link.id)"></i>
+        <i class="pointer mx-1 bi bi-pencil" *ngIf="data.isAdmin" (click)="edit(data.link)"></i>
+      </div>
+    </section>
+  </div>
   <section>
-    <span class="clicks f-12 f-md-10"> {{gameLink.clickCount}} </span>
+    <span class="clicks f-12 f-md-10"> {{data.link.clickCount}} </span>
   </section>
 </div>
