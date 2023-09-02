@@ -1,19 +1,36 @@
 <div class="d-flex align-content-start justify-content-center mt-3 pointer"
-     *ngIf="isAdminAuthenticated"
+     *ngIf="isAdmin"
      (click)="add()">
   <i class="f-24 bi bi-plus-circle"></i>
   <span class="mx-2 mt-1 f-24">Add a game</span>
   <span class="mx-2 mt-1 f-24" (click)="logout()">logout</span>
 </div>
 <div class="d-flex col-12 justify-content-center">
-  <div class="col-xl-6 col-lg-10 col-12 d-flex align-content-center
-   flex-column flex-md-row flex-wrap justify-content-center p-lg-5 p-md-3 p-1">
-    <div *ngFor="let key of categoryKeys"
-         class="category-card col-md-5 col-11 m-md-4 m-2"
-         (click)="handleClick(key)"
-         [style.background-image]="'url(/assets/images/' + key + '.png)'">
-      <div class="f-24 fw-700">{{key | titlecase}}</div>
-      <div>popularity(clicks): {{getSumClicks(key)}}</div>
+  <div @slideLeftRight *ngIf="links" class="d-flex flex-column col-md-8 col-12 p-4">
+    <div class="d-flex justify-content-between align-content-center">
+      <div (click)="clearLinks()" class="f-20 pointer">
+        <i class="bi bi-x-lg"></i>
+      </div>
+      <div (click)="playEmAll(links)" class="pointer">
+        <i class="bi bi-hammer mx-1"></i>
+        Play 'em all!
+      </div>
+    </div>
+    <div *ngFor="let link of links">
+      <app-game-list [data]="{link, isAdmin}"></app-game-list>
+    </div>
+  </div>
+  <div @slideLeftRight
+       class="align-content-center flex-wrap justify-content-center transition"
+       [ngClass]="links ? 'flex-column col-4 d-md-flex d-none' : 'd-flex flex-row col-lg-6 col-12'">
+    <div *ngFor="let item of categories"
+         [ngClass]="links ? 'col-10' : 'col-md-5 col-11'"
+         class="category-card m-md-4 m-2"
+         (click)="handleClick(item.category)"
+         [style.background-image]="'url(/assets/images/' + item.category + '.png)'">
+      <div class="f-24 fw-700 my-2">{{item.category | titlecase}}</div>
+      <div class="text-grey3">clicks: {{item.totalClicks}}</div>
+      <div class="text-grey3">total games: {{item.itemCount}}</div>
     </div>
   </div>
 </div>

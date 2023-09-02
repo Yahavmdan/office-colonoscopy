@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CATEGORIES, Category, SUB_CATEGORIES, SubCategory } from "../../shared/models/Game-Link/game-link.model";
 
 @Component({
-  selector: 'app-game-link-form',
+  selector: 'app-game-form',
   templateUrl: './game-link-form.component.html'
 })
 export class GameLinkFormComponent implements OnInit {

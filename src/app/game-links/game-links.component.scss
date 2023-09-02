@@ -18,6 +18,10 @@
   }
 }
 
+.transition {
+  transition: all 200ms ease-in-out;
+}
+
 .clicked {
   text-decoration: grey line-through;
   color: grey;

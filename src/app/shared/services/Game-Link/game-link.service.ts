@@ -4,6 +4,7 @@ import { environmentUrl } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/User/auth.service';
 import { Categories } from 'src/app/shared/models/Game-Link/category.model';
+import { Category, GameLink } from "../../models/Game-Link/game-link.model";
 
 @Injectable()
 export class GameLinkService {
@@ -14,6 +15,10 @@ export class GameLinkService {
 
   getCategories(): Observable<Categories> {
     return this.http.get<Categories>(this.path);
+  }
+
+  getLinksByCategory(category: Category): Observable<GameLink[]> {
+    return this.http.get<GameLink[]>(this.path + '/' + category);
   }
 
   add(gameLink: any): Observable<boolean> {

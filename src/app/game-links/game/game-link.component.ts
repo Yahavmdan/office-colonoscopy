@@ -5,7 +5,7 @@ import { GameLinkFormComponent } from "../game-link-form/game-link-form.componen
 import { GameLinkService } from "../../shared/services/Game-Link/game-link.service";
 
 @Component({
-  selector: 'app-game-link',
+  selector: 'app-game',
   templateUrl: './game-link.component.html',
   styleUrls: ['./game-link.component.scss']
 })
@@ -16,7 +16,6 @@ export class GameLinkComponent {
   }
 
   @Input() data: { link: GameLink, isAdmin: boolean };
-  @Output() adminChangedContent:EventEmitter<boolean> = new EventEmitter();
 
   public nav(game: GameLink): void {
     this.gameLinkService.increaseClickCount(game.id).subscribe(res => {
@@ -34,7 +33,6 @@ export class GameLinkComponent {
     }).afterClosed().subscribe(res => {
       if (res) {
         this.gameLinkService.getCategories().subscribe(categories => {
-          this.adminChangedContent.emit(true);
         })
       }
     });
@@ -44,7 +42,6 @@ export class GameLinkComponent {
     this.gameLinkService.delete(gameLinkId).subscribe(isDeleted => {
       if (isDeleted) {
         this.gameLinkService.getCategories().subscribe(categories => {
-          this.adminChangedContent.emit(true);
         })
       }
     })
