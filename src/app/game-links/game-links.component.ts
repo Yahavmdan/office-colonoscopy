@@ -14,7 +14,7 @@ import { slideLeftRight } from "../shared/animations/animations";
   selector: 'app-game-links',
   templateUrl: './game-links.component.html',
   styleUrls: ['./game-links.component.scss'],
-  animations: [ slideLeftRight ]
+  animations: [slideLeftRight]
 })
 export class GameLinksComponent implements OnInit, OnDestroy {
   categories: Categories[];
@@ -43,7 +43,8 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   public add(): void {
     this.dialog.open(GameLinkFormComponent, {
       width: '500px',
-      height: '600px'
+      height: '600px',
+      autoFocus: false
     })
   }
 
@@ -58,7 +59,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getLinks(category: Category) : void {
+  private getLinks(category: Category): void {
     this.gameLinkService.getLinksByCategory(category).subscribe((res: GameLink[]): void => {
       this.links = res;
     });
@@ -68,6 +69,12 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     links!.forEach(link => {
       window.open(link.link, '_blank');
     })
+  }
+
+  public hasChange(event: { changed: boolean, category: Category }): void {
+    if (event.changed) {
+      this.getLinks(event.category);
+    }
   }
 
   public clearLinks(): void {

@@ -8,24 +8,24 @@ import { Category, GameLink } from "../../models/Game-Link/game-link.model";
 
 @Injectable()
 export class GameLinkService {
-  path = environmentUrl.api + '/gameLink';
+  path: string = environmentUrl.api + '/gameLink';
 
   constructor(private http: HttpClient, private authService: AuthService) {
   }
 
-  getCategories(): Observable<Categories> {
+  public getCategories(): Observable<Categories> {
     return this.http.get<Categories>(this.path);
   }
 
-  getLinksByCategory(category: Category): Observable<GameLink[]> {
+  public getLinksByCategory(category: Category): Observable<GameLink[]> {
     return this.http.get<GameLink[]>(this.path + '/' + category);
   }
 
-  add(gameLink: any): Observable<boolean> {
+  public add(gameLink: any): Observable<boolean> {
     return this.http.post<boolean>(this.path, gameLink, {headers: this.getHeaders()});
   }
 
-  update(gameLink: any, gameLinkId: number): Observable<boolean> {
+  public update(gameLink: any, gameLinkId: number): Observable<boolean> {
     return this.http.put<boolean>(this.path + '/' + gameLinkId, gameLink, {headers: this.getHeaders()});
   }
 
@@ -35,15 +35,12 @@ export class GameLinkService {
     });
   }
 
-  delete(gameLinkId: number) {
+  public delete(gameLinkId: number): Observable<boolean> {
     return this.http.delete<boolean>(this.path + '/' + gameLinkId, {headers: this.getHeaders()});
   }
 
-  increaseClickCount(gameLinkId: number): Observable<boolean> {
+  public increaseClickCount(gameLinkId: number): Observable<boolean> {
     return this.http.put<boolean>(this.path + '/increase/' + gameLinkId, {});
   }
 
-  increaseClickCountByCategory(category: string) {
-    return this.http.put<boolean>(this.path + '/increaseByCategory', {category})
-  }
 }

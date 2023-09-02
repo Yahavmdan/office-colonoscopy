@@ -18,7 +18,7 @@ export class GameLinkFormComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.gameLinkForm = this.fb.group({
       name: [null, Validators.required],
       description: [null, Validators.required],
@@ -32,7 +32,7 @@ export class GameLinkFormComponent implements OnInit {
     }
   }
 
-  submit() {
+  public submit(): void {
     if (this.gameLinkForm.valid) {
       if (this.data?.gameLink) {
         this.gameLinkService.update(this.gameLinkForm.value, this.data.gameLink.id).subscribe(isSuccess => {

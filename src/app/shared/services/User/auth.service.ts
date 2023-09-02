@@ -14,16 +14,16 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  login(userCredentials: any) {
+  public login(userCredentials: any) {
     return this.http.post<AuthUser>(this.path + '/login', userCredentials);
   }
 
-  storeUserData(authUser: AuthUser) {
+  public storeUserData(authUser: AuthUser): void {
     localStorage.setItem('user', JSON.stringify(authUser));
     this.isAdminAuthenticated.next(true);
   }
 
-  autoLogout() {
+  public autoLogout(): void {
     this.setUserData();
     if (!this.userData.hasOwnProperty('token')) {
       this.isAdminAuthenticated.next(false);
@@ -36,28 +36,30 @@ export class AuthService {
     })
   }
 
-  logout() {
+  public logout(): void {
     this.tokenSubscription.unsubscribe();
     this.isAdminAuthenticated.next(false);
     localStorage.clear();
     this.userData = null;
   }
 
-  setUserData() {
+  public setUserData(): void {
     this.userData = JSON.parse(localStorage.getItem('user') || '{}');
   }
 
-  getUserSData() {
+  public getUserSData(): any {
     return this.userData;
   }
 
-  autoLogin() {
+  public autoLogin(): void {
     this.setUserData();
     if (!this.userData.hasOwnProperty('token')) {
       this.isAdminAuthenticated.next(false);
       return;
     }
+
     this.isAdminAuthenticated.next(true);
 
   }
+
 }

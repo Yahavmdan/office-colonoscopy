@@ -33,7 +33,7 @@
       </div>
     </div>
     <div *ngFor="let link of links">
-      <app-game-list [data]="{link, isAdmin}"></app-game-list>
+      <app-game-list (change)="hasChange($event)" [data]="{link, isAdmin}"></app-game-list>
     </div>
   </div>
 </div>
