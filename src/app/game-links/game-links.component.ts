@@ -53,13 +53,13 @@ export class GameLinksComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.links[0].category !== category) {
+      this.links = null;
       this.getLinks(category);
     }
   }
 
   private getLinks(category: Category) : void {
     this.gameLinkService.getLinksByCategory(category).subscribe((res: GameLink[]): void => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
       this.links = res;
     });
   }
