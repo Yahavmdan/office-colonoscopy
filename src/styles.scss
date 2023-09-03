@@ -80,6 +80,14 @@ $white: #ffffff;
   cursor: pointer;
 }
 
+.grab {
+  cursor: grab;
+}
+
+.flip {
+  transform: scaleX(-1);
+}
+
 .truncate {
   white-space: nowrap;
   overflow: hidden;

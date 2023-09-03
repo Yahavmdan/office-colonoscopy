@@ -9,6 +9,7 @@ import { GameLinkFormComponent } from "./game-link-form/game-link-form.component
 import { GameLinkService } from "../shared/services/Game-Link/game-link.service";
 import { Categories } from "../shared/models/Game-Link/category.model";
 import { slideLeftRight } from "../shared/animations/animations";
+import {CdkDragDrop} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-game-links',
@@ -18,7 +19,7 @@ import { slideLeftRight } from "../shared/animations/animations";
 })
 export class GameLinksComponent implements OnInit, OnDestroy {
   categories: Categories[];
-  links: GameLink[] | null = null;
+  links: GameLink[] = [];
   form: FormGroup
   isAdminSub: Subscription;
   isAdmin: boolean = false;
@@ -48,25 +49,28 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     })
   }
 
-  public handleClick(category: Category): void {
+  public handleClick(category: Category, card: HTMLDivElement): void {
     if (!this.links?.length) {
-      this.getLinks(category);
+      this.getLinks(category, card);
       return;
     }
     if (this.links[0].category !== category) {
-      this.links = null;
-      this.getLinks(category);
+      this.getLinks(category, card);
     }
   }
 
-  private getLinks(category: Category): void {
+  private getLinks(category: Category, card?: HTMLDivElement): void {
     this.gameLinkService.getLinksByCategory(category).subscribe((res: GameLink[]): void => {
+      card ? card.classList.add('small-category-card') : null;
+      this.links = [];
       this.links = res;
+      this.getLayout(category);
     });
   }
 
   public playEmAll(links: GameLink[]): void {
     links!.forEach(link => {
+      link.clicked = true;
       window.open(link.link, '_blank');
     })
   }
@@ -77,8 +81,45 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     }
   }
 
-  public clearLinks(): void {
-    this.links = null;
+  public rearrangeLayout(event: CdkDragDrop<{ item: GameLink, index: number }>): void {
+    this.links![event.previousContainer.data.index] = event.container.data.item;
+    this.links![event.container.data.index] = event.previousContainer.data.item;
+    this.setLayout(this.links);
+  }
+
+  private rearrangeArrayByIndex(links: GameLink[], order: {name: string, index: number}[]): GameLink[] {
+    let result: GameLink[] = [];
+    if (!order) {
+      return [];
+    }
+    order.forEach((item: {name: string, index: number}) => {
+      if (links.find((obj) => obj.name === item.name)) {
+        result[item.index] = <GameLink>links.find(obj => obj.name === item.name);
+      }
+    });
+
+    return result as GameLink[];
+  }
+
+  private getLayout(category: Category): void {
+    if (localStorage.getItem(category)) {
+      const savedLinks: GameLink[] = this.rearrangeArrayByIndex(this.links, JSON.parse(localStorage.getItem(category) ?? ''));
+      if (savedLinks) {
+        this.links = savedLinks;
+      }
+    }
+  }
+
+  private setLayout(links: GameLink[]): void {
+    const order = links?.map((link, i) => {
+      return { name: link.name, index: i }
+    });
+    localStorage.setItem(links[0].category, JSON.stringify(order ?? null));
+  }
+
+  public clearLinks(card: HTMLDivElement): void {
+    card.classList.remove('small-category-card');
+    this.links = [];
   }
 
   public logout(): void {

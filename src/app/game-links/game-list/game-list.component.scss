@@ -1,0 +1,27 @@
+.grabbed-link-placeholder {
+  height: 50px;
+  width: 100%;
+  background: white;
+  opacity: .6;
+  border: #444444 dashed 3px;
+  transition: all ease-in-out 200ms;
+  animation: flashing 1s linear infinite;
+  @keyframes flashing {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+.tilt-item {
+  box-shadow: 63px 58px 43px -9px rgba(18, 28, 87, 0.13);
+  animation: tilt ease-in-out 350ms infinite;
+  opacity: .8;
+  @keyframes tilt {
+    0%		 {scale: 1; rotate: 0}
+    25%	 {scale: 1.005; rotate: .2deg}
+    50%	 {scale: 1; rotate: 0}
+    75%	 {scale: 1.005; rotate: -.2deg}
+    100%	 {scale: 1; rotate: 0}
+  }
+}
