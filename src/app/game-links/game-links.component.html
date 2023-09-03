@@ -1,19 +1,39 @@
-<div class="d-flex align-content-start justify-content-center mt-3 pointer"
-     *ngIf="isAdminAuthenticated"
+<div class="d-flex align-content-start justify-content-between pointer p-2 border-bottom text-grey2 f-16"
+     *ngIf="isAdmin"
      (click)="add()">
-  <i class="f-24 bi bi-plus-circle"></i>
-  <span class="mx-2 mt-1 f-24">Add a game</span>
-  <span class="mx-2 mt-1 f-24" (click)="logout()">logout</span>
+  <div class="d-flex align-items-center">
+    <i class="mx-2 bi bi-plus-circle"></i>
+    <span>Add a game</span>
+  </div>
+  <div class="d-flex align-items-center">
+    <span (click)="logout()">logout</span>
+    <i class="mx-2 bi bi-door-closed"></i>
+  </div>
 </div>
-<div class="d-flex col-12 justify-content-center">
-  <div class="col-xl-6 col-lg-10 col-12 d-flex align-content-center
-   flex-column flex-md-row flex-wrap justify-content-center p-lg-5 p-md-3 p-1">
-    <div *ngFor="let key of categoryKeys"
-         class="category-card col-md-5 col-11 m-md-4 m-2"
-         (click)="handleClick(key)"
-         [style.background-image]="'url(/assets/images/' + key + '.png)'">
-      <div class="f-24 fw-700">{{key | titlecase}}</div>
-      <div>popularity(clicks): {{getSumClicks(key)}}</div>
+<div class="overflow-x-hidden">
+  <div class="col-12 d-flex flex-md-row flex-column justify-content-center align-items-center"
+       [ngClass]="links ? 'd-md-flex d-none' : ''">
+    <div *ngFor="let item of categories"
+         class="category-card m-md-4 m-2 col-md-3 col-10"
+         (click)="handleClick(item.category)"
+         [style.background-image]="'url(/assets/images/' + item.category + '.png)'">
+      <div class="f-24 fw-700 my-2">{{item.category | titlecase}}</div>
+      <div class="text-grey3">clicks: {{item.totalClicks}}</div>
+      <div class="text-grey3">total games: {{item.itemCount}}</div>
+    </div>
+  </div>
+  <div @slideLeftRight *ngIf="links" class="d-flex flex-column col-md-12 col-12">
+    <div class="d-flex justify-content-between align-content-center p-3">
+      <div (click)="clearLinks()" class="f-20 pointer">
+        <i class="bi bi-x-lg"></i>
+      </div>
+      <div (click)="playEmAll(links)" class="pointer">
+        <i class="bi bi-hammer mx-1"></i>
+        Play 'em all!
+      </div>
+    </div>
+    <div *ngFor="let link of links">
+      <app-game-list (change)="hasChange($event)" [data]="{link, isAdmin}"></app-game-list>
     </div>
   </div>
 </div>

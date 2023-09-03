@@ -15,14 +15,14 @@ export class LoginComponent implements OnInit {
               private router: Router) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loginForm = this.fb.group({
       userName: null,
       password: null
     });
   }
 
-  login() {
+  public login(): void {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe(authUser => {
         this.authService.storeUserData(authUser);

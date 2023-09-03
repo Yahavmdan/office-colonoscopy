@@ -1,6 +1,0 @@
-<div class="p-md-5 p-1">
-  <div *ngFor="let link of data.categories">
-    <app-game-link (adminChangedContent)="changed($event)"
-                   [data]="{link: link, isAdmin: data.isAdmin}"></app-game-link>
-  </div>
-</div>
