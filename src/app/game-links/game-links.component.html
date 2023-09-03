@@ -25,7 +25,7 @@
     <div *ngIf="links.length" class="justify-content-center my-2"
          [ngClass]="links.length ? 'd-md-none d-flex' : ''">
         <div *ngFor="let item of categories"
-             class="col-4 d-flex justify-content-center"
+             class="col-4 d-flex justify-content-center user-select-none"
              (click)="handleClick(item.category, cards)"
              [ngClass]="{'border-bottom': links[0].category === item.category}">
             {{item.category | titlecase}}
