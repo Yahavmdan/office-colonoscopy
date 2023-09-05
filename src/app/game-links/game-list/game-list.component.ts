@@ -13,8 +13,19 @@ export class GameListComponent {
   @Output() change:
     EventEmitter<{ changed: boolean, category: Category }> =
     new EventEmitter<{ changed: boolean, category: Category }>();
+  @Output() dragging: EventEmitter<boolean> = new EventEmitter();
+  @Output() dropping: EventEmitter<boolean> = new EventEmitter();
 
   public changed(event: { changed: boolean, category: Category }): void {
     this.change.emit(event);
   }
+
+  public drag(): void {
+    this.dragging.emit(true);
+  }
+
+  public drop(): void {
+    this.dropping.emit(false);
+  }
+
 }

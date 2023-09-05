@@ -43,4 +43,7 @@ export class GameLinkService {
     return this.http.put<boolean>(this.path + '/increase/' + gameLinkId, {});
   }
 
+  public increaseClickCountToCategory(category: Category): Observable<boolean> {
+    return this.http.put<boolean>(this.path + '/increaseByCategory', {category: category});
+  }
 }

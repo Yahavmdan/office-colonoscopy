@@ -1,11 +1,15 @@
 <div class="game-link">
   <div class="d-flex col-8">
     <section *ngIf="data.isAdmin" class="d-flex">
-      <i class="admin-btn pointer mx-1 bi bi-trash3 bg-red text-white" (click)="delete(data.link)"></i>
-      <i class="admin-btn pointer mx-1 bi bi-pencil bg-blue text-white" (click)="edit(data.link)"></i>
+      <i class="admin-btn mx-1 bi bi-trash3 bg-red text-white"
+         (click)="delete(data.link)"></i>
+      <i class="admin-btn mx-1 bi bi-pencil bg-blue text-white"
+         (click)="edit(data.link)"></i>
     </section>
     <section class="d-flex mx-1 col-10" (click)="nav(data.link)">
-      <span class="fw-bold pointer" [ngClass]="{'clicked' :data.link.clicked}">{{data.link.name}} </span>
+      <span class="fw-bold" [ngClass]="{'clicked' : data.link.clicked}">
+        {{data.link.name}}
+      </span>
       <span class="d-md-block d-none" [ngClass]="{'clicked' :data.link.clicked}"> - {{data.link.description}}</span>
     </section>
   </div>

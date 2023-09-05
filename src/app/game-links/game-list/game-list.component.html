@@ -1,15 +1,14 @@
 <div cdkDrag
      cdkDragPreviewClass="tilt-item"
-     class="d-flex px-2 align-items-center px-4">
-  <div cdkDragHandle class="grab">
-    <i class="bi bi-arrows-move"></i>
+     (cdkDragStarted)="drag()"
+     (cdkDragDropped)="drop()"
+     class="d-flex px-2 align-items-center px-4 transition-all">
+  <div class="grab d-flex">
+    <i class="bi bi-three-dots-vertical position-relative l-2"></i>
+    <i class="bi bi-three-dots-vertical"></i>
   </div>
   <div class="col-12">
     <app-game (changed)="changed($event)" [data]="{link: data.link, isAdmin: data.isAdmin}"></app-game>
   </div>
   <div *cdkDragPlaceholder class="grabbed-link-placeholder"></div>
 </div>
-
-<!--todo: find a way to transition the remaining items while dragging!-->
-
-<!--todo: find a way to to make cursor look grabbing!-->

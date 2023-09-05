@@ -12,7 +12,6 @@
 }
 
 .category-card {
-  cursor: pointer;
   transition: all 300ms ease-in-out;
   height: min(350px, 80%);
   padding: 20px;
@@ -33,16 +32,12 @@
   }
 }
 
-.small-category-card {
+.shrink-card {
   height: 150px !important;
 }
 
-.grabbing {
-  cursor: grabbing;
-}
-
-.transition {
-  transition: all 200ms ease-in-out;
+.dragging {
+  cursor: grabbing !important;
 }
 
 .clicked {

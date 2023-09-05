@@ -28,7 +28,7 @@ export class GameLinkComponent {
     this.data.link.clicked = true;
   }
 
-  edit(gameLink: GameLink): void {
+  public edit(gameLink: GameLink): void {
     this.dialog.open(GameLinkFormComponent, {
       width: '500px',
       height: '600px',
@@ -43,7 +43,7 @@ export class GameLinkComponent {
       })
   }
 
-  delete(gameLink: GameLink): void {
+  public delete(gameLink: GameLink): void {
     let answer: boolean = confirm('Are you sure you want to delete?');
     if (!answer) return;
     this.gameLinkService.delete(gameLink.id).subscribe(isDeleted => {
@@ -57,22 +57,14 @@ export class GameLinkComponent {
   public setSubCategory(sc: string): string {
     let base: string = 'mx-1 bi'
     switch (sc) {
-      case 'map':
-        return base += ' bi-map text-grey3';
-      case 'geography':
-        return base += ' bi-globe2 text-grey3';
-      case 'picture':
-        return base += ' bi-card-image text-grey3';
-      case 'language':
-        return base += ' bi-translate text-grey3';
-      case 'puzzle':
-        return base += ' bi-puzzle text-grey3';
-      case 'quiz':
-        return base += ' bi-question-circle text-grey3';
-      case 'movies':
-        return base += ' bi-film text-grey3';
-      case 'flag':
-        return base += ' bi-flag text-grey3';
+      case 'map':return base += ' bi-map text-grey3';
+      case 'geography':return base += ' bi-globe2 text-grey3';
+      case 'picture':return base += ' bi-card-image text-grey3';
+      case 'language':return base += ' bi-translate text-grey3';
+      case 'puzzle':return base += ' bi-puzzle text-grey3';
+      case 'quiz':return base += ' bi-question-circle text-grey3';
+      case 'movies':return base += ' bi-film text-grey3';
+      case 'flag':return base += ' bi-flag text-grey3';
     }
     return base;
   }

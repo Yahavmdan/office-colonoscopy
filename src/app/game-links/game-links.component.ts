@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,6 +18,7 @@ import {CdkDragDrop} from "@angular/cdk/drag-drop";
   animations: [slideLeftRight]
 })
 export class GameLinksComponent implements OnInit, OnDestroy {
+  dragging: boolean = false;
   categories: Categories[];
   links: GameLink[] = [];
   form: FormGroup
@@ -61,7 +62,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
   private getLinks(category: Category, card?: HTMLDivElement): void {
     this.gameLinkService.getLinksByCategory(category).subscribe((res: GameLink[]): void => {
-      card ? card.classList.add('small-category-card') : null;
+      card ? card.classList.add('shrink-card') : null;
       this.links = [];
       this.links = res;
       this.getLayout(category);
@@ -72,7 +73,17 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     links!.forEach(link => {
       link.clicked = true;
       window.open(link.link, '_blank');
-    })
+    });
+    this.gameLinkService.increaseClickCountToCategory(links[0].category)
+      .subscribe(res => {
+        if (res) {
+          this.categories.forEach(category => {
+            if (category.category === links[0].category) {
+              category.totalClicks += links.length;
+            }
+          })
+        }
+      });
   }
 
   public hasChange(event: { changed: boolean, category: Category }): void {
@@ -117,8 +128,12 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     localStorage.setItem(links[0].category, JSON.stringify(order ?? null));
   }
 
+  public isDragging(event: boolean): void {
+    this.dragging = event;
+  }
+
   public clearLinks(card: HTMLDivElement): void {
-    card.classList.remove('small-category-card');
+    card.classList.remove('shrink-card');
     this.links = [];
   }
 

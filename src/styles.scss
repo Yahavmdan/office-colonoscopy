@@ -76,6 +76,10 @@ $white: #ffffff;
   background-color: rgba(0, 0, 0, 0.13);
 }
 
+.transition-all {
+  transition: all 200ms ease-in-out;
+}
+
 .pointer {
   cursor: pointer;
 }

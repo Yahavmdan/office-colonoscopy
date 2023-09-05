@@ -3,7 +3,7 @@
   width: 100%;
   background: white;
   opacity: .6;
-  border: #444444 dashed 3px;
+  border: #444444 dashed 2px;
   transition: all ease-in-out 200ms;
   animation: flashing 1s linear infinite;
   @keyframes flashing {
@@ -14,14 +14,19 @@
 }
 
 .tilt-item {
-  box-shadow: 63px 58px 43px -9px rgba(18, 28, 87, 0.13);
-  animation: tilt ease-in-out 350ms infinite;
+  animation: tilt ease-in-out 200ms infinite;
   opacity: .8;
   @keyframes tilt {
-    0%		 {scale: 1; rotate: 0}
-    25%	 {scale: 1.005; rotate: .2deg}
-    50%	 {scale: 1; rotate: 0}
-    75%	 {scale: 1.005; rotate: -.2deg}
-    100%	 {scale: 1; rotate: 0}
+    0%		  {scale: 1; rotate: 0}
+    25%	    {scale: 1.002; rotate: .1deg}
+    50%	    {scale: 1; rotate: 0}
+    75%	    {scale: 1.002; rotate: -.1deg}
+    100%	  {scale: 1; rotate: 0}
   }
 }
+
+.cdk-drag-preview {
+  box-shadow: 2px 4px 10px 0 rgba(0, 0, 0, 0.2), 0px -2px 40px 0px rgba(0, 0, 0, 0.2);
+  transition: none !important;
+}
+
