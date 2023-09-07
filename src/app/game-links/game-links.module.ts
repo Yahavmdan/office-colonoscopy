@@ -16,50 +16,52 @@ import {GameLinkComponent} from './game/game-link.component';
 import {GameListComponent} from './game-list/game-list.component';
 import {LoginComponent} from "../login/login.component";
 import {CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
+import {WheelClickModule} from "../shared/directives/wheel-click.module";
 
 const routes: Routes = [
-    {
-        path: '',
-        component: GameLinksComponent,
-        resolve: {categories: Categories}
-    },
-    {
-        path: 'login',
-        component: LoginComponent
-    }
+  {
+    path: '',
+    component: GameLinksComponent,
+    resolve: {categories: Categories}
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  }
 ];
 
 @NgModule({
-    imports: [
-        RouterModule.forChild(routes),
-        FormsModule,
-        NgForOf,
-        NgIf,
-        ReactiveFormsModule,
-        MatDialogModule,
-        NgClass,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        TitleCasePipe,
-        CdkDropList,
-        CdkDropListGroup,
-        CdkDrag,
-        CdkDragPlaceholder,
-        CdkDragHandle
-    ],
-    providers: [
-        Categories,
-        GameLinkService,
-        AuthService
-    ],
-    declarations: [
-        GameLinksComponent,
-        GameLinkFormComponent,
-        GameLinkComponent,
-        GameListComponent
-    ],
+  imports: [
+    RouterModule.forChild(routes),
+    FormsModule,
+    NgForOf,
+    NgIf,
+    ReactiveFormsModule,
+    MatDialogModule,
+    NgClass,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    TitleCasePipe,
+    CdkDropList,
+    CdkDropListGroup,
+    CdkDrag,
+    CdkDragPlaceholder,
+    CdkDragHandle,
+    WheelClickModule
+  ],
+  providers: [
+    Categories,
+    GameLinkService,
+    AuthService
+  ],
+  declarations: [
+    GameLinksComponent,
+    GameLinkFormComponent,
+    GameLinkComponent,
+    GameListComponent
+  ],
 })
 export class GameLinksModule {
 }
