@@ -66,9 +66,10 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   }
 
   public playEmAll(links: GameLink[]): void {
-    links!.forEach(link => {
+    links!.forEach((link: GameLink): void => {
       window.open(link.link, '_blank');
     })
+    void this.gameLinkService.increaseClickCountByCategory(links[0].category).subscribe();
   }
 
   public hasChange(event: { changed: boolean, category: Category }): void {
