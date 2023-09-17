@@ -5,13 +5,17 @@
   margin: 5px 0;
   justify-content: space-between;
   border-radius: 10px;
-  transition: all 200ms ease;
   border-bottom: solid lightgray 1px;
   cursor: pointer;
+  background: white;
 
-  &:hover {
-    scale: 1.01;
+  &:hover div.col-8 {
+    transform: translateX(10px);
   }
+}
+
+div.col-8 {
+  transition: all 100ms ease;
 }
 
 .clicks {
@@ -21,16 +25,6 @@
   padding: 3px;
   justify-content: center;
   align-items: center;
-}
-
-.admin-btn {
-  height: 20px;
-  width: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  padding: 15px;
 }
 
 .clicked {

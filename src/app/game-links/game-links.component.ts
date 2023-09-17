@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,6 +9,7 @@ import { GameLinkFormComponent } from "./game-link-form/game-link-form.component
 import { GameLinkService } from "../shared/services/Game-Link/game-link.service";
 import { Categories } from "../shared/models/Game-Link/category.model";
 import { slideLeftRight } from "../shared/animations/animations";
+import {CdkDragDrop} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-game-links',
@@ -17,8 +18,9 @@ import { slideLeftRight } from "../shared/animations/animations";
   animations: [slideLeftRight]
 })
 export class GameLinksComponent implements OnInit, OnDestroy {
+  dragging: boolean = false;
   categories: Categories[];
-  links: GameLink[] | null = null;
+  links: GameLink[] = [];
   form: FormGroup
   isAdminSub: Subscription;
   isAdmin: boolean = false;
@@ -48,28 +50,40 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     })
   }
 
-  public handleClick(category: Category): void {
+  public handleClick(category: Category, card: HTMLDivElement): void {
     if (!this.links?.length) {
-      this.getLinks(category);
+      this.getLinks(category, card);
       return;
     }
     if (this.links[0].category !== category) {
-      this.links = null;
-      this.getLinks(category);
+      this.getLinks(category, card);
     }
   }
 
-  private getLinks(category: Category): void {
+  private getLinks(category: Category, card?: HTMLDivElement): void {
     this.gameLinkService.getLinksByCategory(category).subscribe((res: GameLink[]): void => {
+      card ? card.classList.add('shrink-card') : null;
+      this.links = [];
       this.links = res;
+      this.getLayout(category);
     });
   }
 
   public playEmAll(links: GameLink[]): void {
-    links!.forEach((link: GameLink): void => {
+    links!.forEach(link => {
+      link.clicked = true;
       window.open(link.link, '_blank');
-    })
-    void this.gameLinkService.increaseClickCountByCategory(links[0].category).subscribe();
+    });
+    this.gameLinkService.increaseClickCountToCategory(links[0].category)
+      .subscribe(res => {
+        if (res) {
+          this.categories.forEach(category => {
+            if (category.category === links[0].category) {
+              category.totalClicks += links.length;
+            }
+          })
+        }
+      });
   }
 
   public hasChange(event: { changed: boolean, category: Category }): void {
@@ -78,8 +92,49 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     }
   }
 
-  public clearLinks(): void {
-    this.links = null;
+  public rearrangeLayout(event: CdkDragDrop<{ item: GameLink, index: number }>): void {
+    this.links![event.previousContainer.data.index] = event.container.data.item;
+    this.links![event.container.data.index] = event.previousContainer.data.item;
+    this.setLayout(this.links);
+  }
+
+  private rearrangeArrayByIndex(links: GameLink[], order: {name: string, index: number}[]): GameLink[] {
+    let result: GameLink[] = [];
+    if (!order) {
+      return [];
+    }
+    order.forEach((item: {name: string, index: number}) => {
+      if (links.find((obj) => obj.name === item.name)) {
+        result[item.index] = <GameLink>links.find(obj => obj.name === item.name);
+      }
+    });
+
+    return result as GameLink[];
+  }
+
+  private getLayout(category: Category): void {
+    if (localStorage.getItem(category)) {
+      const savedLinks: GameLink[] = this.rearrangeArrayByIndex(this.links, JSON.parse(localStorage.getItem(category) ?? ''));
+      if (savedLinks) {
+        this.links = savedLinks;
+      }
+    }
+  }
+
+  private setLayout(links: GameLink[]): void {
+    const order = links?.map((link, i) => {
+      return { name: link.name, index: i }
+    });
+    localStorage.setItem(links[0].category, JSON.stringify(order ?? null));
+  }
+
+  public isDragging(event: boolean): void {
+    this.dragging = event;
+  }
+
+  public clearLinks(card: HTMLDivElement): void {
+    card.classList.remove('shrink-card');
+    this.links = [];
   }
 
   public logout(): void {

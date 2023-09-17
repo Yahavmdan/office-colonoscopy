@@ -1,13 +1,26 @@
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all ease-in-out 200ms;
+  height: 100dvh;
+  width: 100%;
+  @media (max-width: 768px) {
+    justify-content: unset;
+    flex-direction: column;
+  }
+}
+
 .category-card {
-  cursor: pointer;
-  height: 300px;
+  transition: all 300ms ease-in-out;
+  height: min(350px, 80%);
   padding: 20px;
   border: solid 3px #333333;
-  transition: all 300ms;
   background-repeat: no-repeat;
+  background-size: contain;
   box-shadow: #333333 5px 5px 0 0;
+
   @media (max-width: 400px) {
-    background-size: contain;
     background-position: bottom;
   }
   @media (min-width: 600px) {
@@ -18,8 +31,12 @@
   }
 }
 
-.transition {
-  transition: all 200ms ease-in-out;
+.shrink-card {
+  height: 150px !important;
+}
+
+.dragging {
+  cursor: grabbing !important;
 }
 
 .clicked {

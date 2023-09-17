@@ -1,16 +1,17 @@
 <div class="game-link">
-  <div class="d-flex col-8">
-    <section *ngIf="data.isAdmin" class="d-flex">
-      <i class="admin-btn pointer mx-1 bi bi-trash3 bg-red text-white" (click)="delete(data.link)"></i>
-      <i class="admin-btn pointer mx-1 bi bi-pencil bg-blue text-white" (click)="edit(data.link)"></i>
-    </section>
-    <section class="d-flex mx-1 col-10" (click)="nav(data.link)">
-      <span class="fw-bold pointer" [ngClass]="{'clicked' :data.link.clicked}">{{data.link.name}} </span>
-      <span class="d-md-block d-none" [ngClass]="{'clicked' :data.link.clicked}"> - {{data.link.description}}</span>
+  <div class="d-flex col-8" (click)="nav(data.link)" (wheelClick)="nav(data.link)">
+    <section class="d-flex mx-1 col-10 user-select-none">
+      <span class="fw-bold" [ngClass]="{'clicked' : data.link.clicked}">
+        {{data.link.name}}
+      </span>
+      <span class="d-md-block d-none"
+            [ngClass]="{'clicked' :data.link.clicked}"> - {{data.link.description}}</span>
     </section>
   </div>
-  <section class="d-flex align-items-center justify-content-end col-4" (click)="nav(data.link)">
-    <div class="d-flex"><i *ngFor="let sc of data.link.subCategory" [class]="setSubCategory(sc)"></i></div>
+  <section class="d-flex align-items-center justify-content-end col-4 user-select-none">
+    <div class="d-flex">
+      <i *ngFor="let subCategory of data.link.subCategory" [class]="setSubCategory(subCategory)"></i>
+    </div>
     <span class="clicks f-12 f-md-10 mx-2"> {{data.link.clickCount}} </span>
   </section>
 </div>

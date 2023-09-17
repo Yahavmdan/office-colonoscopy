@@ -1,39 +1,60 @@
 <div class="d-flex align-content-start justify-content-between pointer p-2 border-bottom text-grey2 f-16"
      *ngIf="isAdmin"
      (click)="add()">
-  <div class="d-flex align-items-center">
-    <i class="mx-2 bi bi-plus-circle"></i>
-    <span>Add a game</span>
-  </div>
-  <div class="d-flex align-items-center">
-    <span (click)="logout()">logout</span>
-    <i class="mx-2 bi bi-door-closed"></i>
-  </div>
+    <div class="d-flex align-items-center">
+        <i class="mx-2 bi bi-plus-circle"></i>
+        <span>Add a game</span>
+    </div>
+    <div class="d-flex align-items-center">
+        <span (click)="logout()">logout</span>
+        <i class="mx-2 bi bi-door-closed"></i>
+    </div>
 </div>
-<div class="overflow-x-hidden">
-  <div class="col-12 d-flex flex-md-row flex-column justify-content-center align-items-center"
-       [ngClass]="links ? 'd-md-flex d-none' : ''">
-    <div *ngFor="let item of categories"
-         class="category-card m-md-4 m-2 col-md-3 col-10"
-         (click)="handleClick(item.category)"
-         [style.background-image]="'url(/assets/images/' + item.category + '.png)'">
-      <div class="f-24 fw-700 my-2">{{item.category | titlecase}}</div>
-      <div class="text-grey3">clicks: {{item.totalClicks}}</div>
-      <div class="text-grey3">total games: {{item.itemCount}}</div>
+<div class="overflow-x-hidden" [ngClass]="{'dragging' : dragging}">
+    <div #cards class="card-container"
+         [ngClass]="links.length ? 'd-md-flex d-none' : ''">
+        <div *ngFor="let item of categories"
+             class="category-card m-md-4 m-2 col-md-2 col-10 user-select-none"
+             [ngClass]="{'pointer' : !dragging}"
+             (click)="handleClick(item.category, cards)"
+             [style.background-image]="'url(/assets/images/' + item.category + '.png)'"
+             [style.background-position]="links.length ? 'right' : 'bottom'">
+            <div class="f-24 fw-700 my-2">{{item.category | titlecase}}</div>
+            <div class="text-grey3">clicks: {{item.totalClicks}}</div>
+            <div class="text-grey3">total games: {{item.itemCount}}</div>
+        </div>
     </div>
-  </div>
-  <div @slideLeftRight *ngIf="links" class="d-flex flex-column col-md-12 col-12">
-    <div class="d-flex justify-content-between align-content-center p-3">
-      <div (click)="clearLinks()" class="f-20 pointer">
-        <i class="bi bi-x-lg"></i>
-      </div>
-      <div (click)="playEmAll(links)" class="pointer">
-        <i class="bi bi-hammer mx-1"></i>
-        Play 'em all!
-      </div>
+    <div *ngIf="links.length" class="justify-content-center my-2"
+         [ngClass]="links.length ? 'd-md-none d-flex' : ''">
+        <div *ngFor="let item of categories"
+             class="mx-2 d-flex justify-content-center user-select-none"
+             (click)="handleClick(item.category, cards)"
+             [ngClass]="{'border-bottom': links[0].category === item.category}">
+            {{item.category | titlecase}}
+        </div>
     </div>
-    <div *ngFor="let link of links">
-      <app-game-list (change)="hasChange($event)" [data]="{link, isAdmin}"></app-game-list>
+    <div @slideLeftRight *ngIf="links.length" class="d-flex flex-column col-md-12 col-12">
+        <div class="d-flex justify-content-between align-content-center p-3">
+            <div (click)="clearLinks(cards)" class="f-20 pointer">
+                <i class="bi bi-x-lg"></i>
+            </div>
+            <div (click)="playEmAll(links)" class="pointer d-flex user-select-none">
+                <div class="mt-1"><i class="bi bi-lightning-charge-fill f-10"></i></div>
+                Play 'em all!
+                <div class="flip mt-1"><i class="bi bi-lightning-charge-fill f-10"></i></div>
+            </div>
+        </div>
+        <div cdkDropListGroup>
+            <ng-container *ngFor="let link of links; let i = index">
+                <app-game-list cdkDropList
+                               (change)="hasChange($event)"
+                               [data]="{link, isAdmin}"
+                               [cdkDropListData]="{ item: link, index: i }"
+                               (cdkDropListDropped)="rearrangeLayout($event)"
+                               (dragging)="isDragging($event)"
+                               (dropping)="isDragging($event)">
+                </app-game-list>
+            </ng-container>
+        </div>
     </div>
-  </div>
 </div>
