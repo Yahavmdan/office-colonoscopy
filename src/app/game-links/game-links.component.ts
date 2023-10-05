@@ -11,7 +11,11 @@ import { Categories } from "../shared/models/Game-Link/category.model";
 import { slideLeftRight } from "../shared/animations/animations";
 import { CdkDragDrop } from "@angular/cdk/drag-drop";
 
-interface SavedItem { name: string; index: number; id: number }
+interface SavedItem {
+  name: string;
+  index: number;
+  id: number
+}
 
 @Component({
   selector: 'app-game-links',
@@ -78,9 +82,9 @@ export class GameLinksComponent implements OnInit, OnDestroy {
       window.open(link.link, '_blank');
     });
     this.gameLinkService.increaseClickCountToCategory(links[0].category)
-      .subscribe(res => {
+      .subscribe((res: boolean): void => {
         if (res) {
-          this.categories.forEach(category => {
+          this.categories.forEach((category: Categories): void => {
             if (category.category === links[0].category) {
               category.totalClicks += links.length;
             }
@@ -101,12 +105,12 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     this.setLayout(this.links);
   }
 
-  private rearrangeArrayByIndex(links: GameLink[], order: { name: string, index: number }[]): GameLink[] {
+  private rearrangeArrayByIndex(links: GameLink[], order: SavedItem[]): GameLink[] {
     let result: GameLink[] = [];
     if (!order) {
       return [];
     }
-    order.forEach((item: { name: string, index: number }): void => {
+    order.forEach((item: SavedItem): void => {
       if (links.find((obj: GameLink): boolean => obj.name === item.name)) {
         result[item.index] = <GameLink>links.find((obj: GameLink): boolean => obj.name === item.name);
       }
@@ -117,9 +121,9 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
   private getLayout(category: Category): void {
     if (localStorage.getItem(category)) {
-      let savedLinks: GameLink[] = this.rearrangeArrayByIndex(this.links, JSON.parse(localStorage.getItem(category) ?? ''));
+      let savedLinks: GameLink[] = this.clearDuplicates(this.links);
+      savedLinks = this.rearrangeArrayByIndex(savedLinks, JSON.parse(localStorage.getItem(category) ?? ''));
       savedLinks = this.addMissingItemsToSavedLinks(savedLinks);
-      savedLinks = this.clearDuplicates(savedLinks);
       if (savedLinks) {
         this.links = savedLinks;
       }
@@ -143,6 +147,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     this.links.forEach((link: GameLink): void => {
       if (!savedLinksIds.has(link.id)) {
         savedLinks.push(link);
+        this.setLayout(savedLinks);
       }
     })
     return savedLinks as GameLink[];
@@ -150,7 +155,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
   private setLayout(links: GameLink[]): void {
     const order: SavedItem[] = links?.map((link: GameLink, i: number): SavedItem => {
-      return {name: link.name, index: i, id: link.id}
+      return {name: link.name, index: i, id: link.id};
     });
     localStorage.setItem(links[0].category, JSON.stringify(order ?? null));
   }
