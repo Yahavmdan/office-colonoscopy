@@ -114,8 +114,8 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     this.setNewSavedList(links, savedItems);
     let result: GameLink[] = [];
     savedItems.forEach((item: SavedItem): void => {
-      if (links.find((obj: GameLink): boolean => obj.name === item.name)) {
-        result[item.index] = <GameLink>links.find((obj: GameLink): boolean => obj.name === item.name);
+      if (links.find((obj: GameLink): boolean => obj.id === item.id)) {
+        result[item.index] = <GameLink>links.find((obj: GameLink): boolean => obj.id === item.id);
       }
     });
     result = result.filter((item: GameLink): boolean => item !== undefined);
