@@ -31,6 +31,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   form: FormGroup
   isAdminSub: Subscription;
   isAdmin: boolean = false;
+  isMobile: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private dialog: MatDialog,
@@ -39,6 +40,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isMobile = window.innerWidth <= 768;
     this.categories = this.route.snapshot.data['categories'];
     this.isAdminSub = this.authService.isAdminAuthenticated
       .subscribe((isAdminAuthenticated: boolean): void => {
@@ -72,12 +74,17 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   }
 
   private getLinks(category: Category, card?: HTMLDivElement): void {
+    this.deskTopAnimation();
     this.gameLinkService.getLinksByCategory(category).subscribe((res: GameLink[]): void => {
       card ? card.classList.add('shrink-card') : null;
       this.links = [];
       this.links = res;
       this.getLayout(category);
     });
+  }
+
+  private deskTopAnimation(): void {
+    !this.isMobile ? this.links = [] : null;
   }
 
   public playEmAll(links: GameLink[]): void {

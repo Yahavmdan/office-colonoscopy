@@ -19,10 +19,8 @@
   background-repeat: no-repeat;
   background-size: contain;
   box-shadow: #333333 5px 5px 0 0;
+  background-position: right bottom;
 
-  @media (max-width: 400px) {
-    background-position: bottom;
-  }
   @media (min-width: 600px) {
     &:hover {
       box-shadow: #333333 10px 10px 0 0;
