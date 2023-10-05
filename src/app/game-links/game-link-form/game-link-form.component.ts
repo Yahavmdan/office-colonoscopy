@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GameLinkService } from 'src/app/shared/services/Game-Link/game-link.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CATEGORIES, Category, SUB_CATEGORIES, SubCategory } from "../../shared/models/Game-Link/game-link.model";
+import { CATEGORIES, Category, GameLink, SUB_CATEGORIES, SubCategory } from "../../shared/models/Game-Link/game-link.model";
 
 @Component({
   selector: 'app-game-form',
@@ -15,10 +15,15 @@ export class GameLinkFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private gameLinkService: GameLinkService,
               public dialogRef: MatDialogRef<GameLinkFormComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: {link: GameLink}) {
   }
 
   ngOnInit(): void {
+    this.innitForm();
+    this.editMode() ? this.gameLinkForm.patchValue(this.data.link) : null;
+  }
+
+  private innitForm(): void {
     this.gameLinkForm = this.fb.group({
       name: [null, Validators.required],
       description: [null, Validators.required],
@@ -26,27 +31,41 @@ export class GameLinkFormComponent implements OnInit {
       category: [null, Validators.required],
       subCategory: [null],
     });
+  }
 
-    if (this.data?.gameLink) {
-      this.gameLinkForm.patchValue(this.data.gameLink);
-    }
+  private editMode(): boolean {
+    return this.data !== null;
   }
 
   public submit(): void {
-    if (this.gameLinkForm.valid) {
-      if (this.data?.gameLink) {
-        this.gameLinkService.update(this.gameLinkForm.value, this.data.gameLink.id).subscribe(isSuccess => {
-          if (isSuccess) {
-            this.dialogRef.close(true);
-          }
-        })
-        return;
-      }
-      this.gameLinkService.add(this.gameLinkForm.value).subscribe(isSuccess => {
-        if (isSuccess) {
-          this.dialogRef.close(true);
-        }
-      })
+    if (!this.gameLinkForm.valid) {
+      return;
     }
+
+    if (this.data.link) {
+      this.update();
+      return;
+    }
+    this.add();
   }
+
+  private update(): void {
+    this.gameLinkService.update(this.gameLinkForm.value, this.data.link.id)
+      .subscribe((isSuccess: boolean): void => {
+      isSuccess ? this.handleDialogCloseRes(isSuccess) : null;
+    });
+  }
+
+  private add(): void {
+    this.gameLinkService.add(this.gameLinkForm.value)
+      .subscribe((isSuccess: boolean): void => {
+      isSuccess ? this.handleDialogCloseRes(isSuccess) : null;
+    });
+  }
+
+  private handleDialogCloseRes(isSuccess: boolean): void {
+    this.dialogRef
+      .close({changed: isSuccess, category: this.gameLinkForm.get('category')?.value});
+  }
+
 }

@@ -54,7 +54,11 @@ export class GameLinksComponent implements OnInit, OnDestroy {
       width: '500px',
       height: '600px',
       autoFocus: false
-    })
+    }).afterClosed()
+      .subscribe(res => res
+        ? this.getLinks(res.category)
+        : null
+      );
   }
 
   public handleClick(category: Category, card: HTMLDivElement): void {
@@ -105,28 +109,34 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     this.setLayout(this.links);
   }
 
-  private rearrangeArrayByIndex(links: GameLink[], order: SavedItem[]): GameLink[] {
+  private rearrangeArrayByIndex(links: GameLink[], savedItems: SavedItem[]): GameLink[] {
+    savedItems = this.filterNonExistedLinks(links, savedItems);
+    this.setNewSavedList(links, savedItems);
     let result: GameLink[] = [];
-    if (!order) {
-      return [];
-    }
-    order.forEach((item: SavedItem): void => {
+    savedItems.forEach((item: SavedItem): void => {
       if (links.find((obj: GameLink): boolean => obj.name === item.name)) {
         result[item.index] = <GameLink>links.find((obj: GameLink): boolean => obj.name === item.name);
       }
     });
-
+    result = result.filter((item: GameLink): boolean => item !== undefined);
     return result as GameLink[];
+  }
+
+  private filterNonExistedLinks(links: GameLink[], savedItems: SavedItem[]): SavedItem[] {
+    const linkIds: number[] = links.map((item: GameLink) => item.id);
+    return savedItems.filter((item: SavedItem) => linkIds.includes(item.id));
+  }
+
+  private setNewSavedList(links: GameLink[], savedItems: SavedItem[]): void {
+    localStorage.setItem(links[0].category, JSON.stringify(savedItems));
   }
 
   private getLayout(category: Category): void {
     if (localStorage.getItem(category)) {
-      let savedLinks: GameLink[] = this.clearDuplicates(this.links);
-      savedLinks = this.rearrangeArrayByIndex(savedLinks, JSON.parse(localStorage.getItem(category) ?? ''));
-      savedLinks = this.addMissingItemsToSavedLinks(savedLinks);
-      if (savedLinks) {
-        this.links = savedLinks;
-      }
+      let links: GameLink[] = this.clearDuplicates(this.links);
+      links = this.rearrangeArrayByIndex(links, JSON.parse(localStorage.getItem(category) ?? ''));
+      links = this.addMissingItemsToSavedLinks(links);
+      this.links = links;
     }
   }
 
@@ -147,7 +157,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     this.links.forEach((link: GameLink): void => {
       if (!savedLinksIds.has(link.id)) {
         savedLinks.push(link);
-        this.setLayout(savedLinks);
+        this.setLayout(savedLinks.filter((val: GameLink) => val));
       }
     })
     return savedLinks as GameLink[];

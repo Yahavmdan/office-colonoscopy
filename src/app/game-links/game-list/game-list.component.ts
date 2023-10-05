@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Category, GameLink } from "../../shared/models/Game-Link/game-link.model";
-import {GameLinkFormComponent} from "../game-link-form/game-link-form.component";
-import {MatDialog} from "@angular/material/dialog";
-import {GameLinkService} from "../../shared/services/Game-Link/game-link.service";
+import { GameLinkFormComponent } from "../game-link-form/game-link-form.component";
+import { MatDialog } from "@angular/material/dialog";
+import { GameLinkService } from "../../shared/services/Game-Link/game-link.service";
 
 @Component({
   selector: 'app-game-list',
@@ -22,18 +22,18 @@ export class GameListComponent {
               private gameLinkService: GameLinkService) {
   }
 
-  public edit(gameLink: GameLink): void {
+  public edit(link: GameLink): void {
     this.dialog.open(GameLinkFormComponent, {
       width: '500px',
       height: '600px',
-      data: {gameLink},
+      data: { link },
       autoFocus: false
     }).afterClosed()
       .subscribe(res => {
         if (res) {
           this.gameLinkService.getCategories()
             .subscribe(() => this.change
-              .emit({changed: res, category: gameLink.category}))
+              .emit({changed: res.changed.message === 'Success', category: res.category}))
         }
       })
   }
