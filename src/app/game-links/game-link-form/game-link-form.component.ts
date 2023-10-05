@@ -42,7 +42,7 @@ export class GameLinkFormComponent implements OnInit {
       return;
     }
 
-    if (this.data.link) {
+    if (this.data?.link) {
       this.update();
       return;
     }
