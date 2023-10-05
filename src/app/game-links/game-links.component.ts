@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,7 +9,9 @@ import { GameLinkFormComponent } from "./game-link-form/game-link-form.component
 import { GameLinkService } from "../shared/services/Game-Link/game-link.service";
 import { Categories } from "../shared/models/Game-Link/category.model";
 import { slideLeftRight } from "../shared/animations/animations";
-import {CdkDragDrop} from "@angular/cdk/drag-drop";
+import { CdkDragDrop } from "@angular/cdk/drag-drop";
+
+interface SavedItem { name: string; index: number; id: number }
 
 @Component({
   selector: 'app-game-links',
@@ -17,6 +19,7 @@ import {CdkDragDrop} from "@angular/cdk/drag-drop";
   styleUrls: ['./game-links.component.scss'],
   animations: [slideLeftRight]
 })
+
 export class GameLinksComponent implements OnInit, OnDestroy {
   dragging: boolean = false;
   categories: Categories[];
@@ -98,14 +101,14 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     this.setLayout(this.links);
   }
 
-  private rearrangeArrayByIndex(links: GameLink[], order: {name: string, index: number}[]): GameLink[] {
+  private rearrangeArrayByIndex(links: GameLink[], order: { name: string, index: number }[]): GameLink[] {
     let result: GameLink[] = [];
     if (!order) {
       return [];
     }
-    order.forEach((item: {name: string, index: number}) => {
-      if (links.find((obj) => obj.name === item.name)) {
-        result[item.index] = <GameLink>links.find(obj => obj.name === item.name);
+    order.forEach((item: { name: string, index: number }): void => {
+      if (links.find((obj: GameLink): boolean => obj.name === item.name)) {
+        result[item.index] = <GameLink>links.find((obj: GameLink): boolean => obj.name === item.name);
       }
     });
 
@@ -114,16 +117,40 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
   private getLayout(category: Category): void {
     if (localStorage.getItem(category)) {
-      const savedLinks: GameLink[] = this.rearrangeArrayByIndex(this.links, JSON.parse(localStorage.getItem(category) ?? ''));
+      let savedLinks: GameLink[] = this.rearrangeArrayByIndex(this.links, JSON.parse(localStorage.getItem(category) ?? ''));
+      savedLinks = this.addMissingItemsToSavedLinks(savedLinks);
+      savedLinks = this.clearDuplicates(savedLinks);
       if (savedLinks) {
         this.links = savedLinks;
       }
     }
   }
 
+  private clearDuplicates(savedLinks: GameLink[]): GameLink[] {
+    const uniqueLinks: GameLink[] = [];
+    const seenIds: Set<number> = new Set<number>();
+    savedLinks.forEach((link: GameLink): void => {
+      if (!seenIds.has(link.id)) {
+        seenIds.add(link.id);
+        uniqueLinks.push(link);
+      }
+    })
+    return uniqueLinks as GameLink[];
+  }
+
+  private addMissingItemsToSavedLinks(savedLinks: GameLink[]): GameLink[] {
+    const savedLinksIds: Set<number> = new Set(savedLinks.map((link: GameLink) => link.id));
+    this.links.forEach((link: GameLink): void => {
+      if (!savedLinksIds.has(link.id)) {
+        savedLinks.push(link);
+      }
+    })
+    return savedLinks as GameLink[];
+  }
+
   private setLayout(links: GameLink[]): void {
-    const order = links?.map((link, i) => {
-      return { name: link.name, index: i }
+    const order: SavedItem[] = links?.map((link: GameLink, i: number): SavedItem => {
+      return {name: link.name, index: i, id: link.id}
     });
     localStorage.setItem(links[0].category, JSON.stringify(order ?? null));
   }
