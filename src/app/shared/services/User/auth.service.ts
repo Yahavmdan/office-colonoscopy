@@ -39,7 +39,7 @@ export class AuthService {
   public logout(): void {
     this.tokenSubscription.unsubscribe();
     this.isAdminAuthenticated.next(false);
-    localStorage.clear();
+    localStorage.removeItem('user');
     this.userData = null;
   }
 
