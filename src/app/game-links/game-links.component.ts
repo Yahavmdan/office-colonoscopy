@@ -65,7 +65,6 @@ export class GameLinksComponent implements OnInit, OnDestroy {
       card ? card.classList.add('shrink-card') : null;
       this.links = [];
       this.links = res;
-      this.getLayout(category);
     });
   }
 
@@ -95,7 +94,6 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   public rearrangeLayout(event: CdkDragDrop<{ item: GameLink, index: number }>): void {
     this.links![event.previousContainer.data.index] = event.container.data.item;
     this.links![event.container.data.index] = event.previousContainer.data.item;
-    this.setLayout(this.links);
   }
 
   private rearrangeArrayByIndex(links: GameLink[], order: {name: string, index: number}[]): GameLink[] {
@@ -112,21 +110,6 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     return result as GameLink[];
   }
 
-  private getLayout(category: Category): void {
-    if (localStorage.getItem(category)) {
-      const savedLinks: GameLink[] = this.rearrangeArrayByIndex(this.links, JSON.parse(localStorage.getItem(category) ?? ''));
-      if (savedLinks) {
-        this.links = savedLinks;
-      }
-    }
-  }
-
-  private setLayout(links: GameLink[]): void {
-    const order = links?.map((link, i) => {
-      return { name: link.name, index: i }
-    });
-    localStorage.setItem(links[0].category, JSON.stringify(order ?? null));
-  }
 
   public isDragging(event: boolean): void {
     this.dragging = event;
