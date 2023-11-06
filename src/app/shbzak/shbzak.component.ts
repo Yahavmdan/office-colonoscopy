@@ -1,4 +1,4 @@
-import {AfterViewInit, Component} from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 
 
 @Component({
@@ -56,26 +56,101 @@ export class ShbzakComponent implements AfterViewInit {
     {id: 45, name: 'אריאל קופלד', job: 'מפל"ג'},
     {id: 46, name: 'אבי גרינפילד', job: 'טען'},
     {id: 47, name: 'טל וקסמן', job: 'נהג'},
+    {id: 48, name: 'שקד כהן', job: 'מפקד'},
+    {id: 49, name: 'אדיאל חודומינסקי', job: 'תותחן'},
+    {id: 50, name: 'שחר בניאל', job: 'טען'},
+    {id: 51, name: 'יונתן קליאוט', job: 'נהג'},
   ];
 
   public titles: { id: number, name: string }[] = [
-    { id: 101, name: 'ג' },
-    { id: 102, name: 'ד' },
-    { id: 103, name: '1' },
-    { id: 104, name: '2' },
-    { id: 105, name: '3' },
-    { id: 106, name: '1ב' },
-    { id: 107, name: '2ב' },
-    { id: 108, name: '3ב' },
-    { id: 109, name: 'בבית' },
-    { id: 110, name: 'קרית 8' },
-    { id: 111, name: 'גדוד' }
+    {id: 101, name: 'ג'},
+    {id: 102, name: 'ד'},
+    {id: 103, name: '1'},
+    {id: 104, name: '2'},
+    {id: 105, name: '3'},
+    {id: 106, name: '1ב'},
+    {id: 107, name: '2ב'},
+    {id: 108, name: '3ב'},
+    {id: 109, name: 'בבית'},
+    {id: 110, name: 'קרית 8'},
+    {id: 111, name: 'גדוד'}
   ];
   public lastUpdate: string = '';
+  public localStorageKeys: [] = [];
+
 
   ngAfterViewInit(): void {
+    this.getLocalStorageItems();
     this.retrievePositions();
     this.retrieveChanges();
+  }
+
+  private getLocalStorageItems(): void {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key[0] === '$') {
+        // @ts-ignore
+        this.localStorageKeys.push(key);
+      }
+    }
+  }
+
+  public loadState(key: string): void {
+    this.deleteNonDollarKeys();
+    this.breakAndLoadLocalStorage(key);
+  }
+
+  private breakAndLoadLocalStorage(key: string): void {
+    const storedObject = localStorage.getItem(key);
+
+    if (storedObject) {
+      const parsedObject = JSON.parse(storedObject);
+
+      for (const [key, value] of Object.entries(parsedObject)) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+      window.location.reload();
+    } else {
+      console.log("No object found in local storage with the provided key.");
+    }
+  }
+
+  private deleteNonDollarKeys(): void {
+    const keysToDelete: string[] = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && !key.startsWith('$')) {
+        keysToDelete.push(key);
+      }
+    }
+
+    keysToDelete.forEach(key => {
+      localStorage.removeItem(key);
+    });
+  }
+
+  public saveState(): void {
+    const name = prompt('Enter: "$" to save the state');
+    if (name === '$') {
+      this.getTime();
+      localStorage.setItem(name + ' - ' + this.lastUpdate, JSON.stringify(this.getAllLocalStorageItems()));
+      window.location.reload();
+    }
+  }
+
+  private getAllLocalStorageItems(): string {
+    const localStorageItems: any = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key) {
+        const item = localStorage.getItem(key);
+        if (item) {
+          localStorageItems[key] = JSON.parse(item);
+        }
+      }
+    }
+    return localStorageItems;
   }
 
   public resetRecentChanges(sadak: HTMLDivElement): void {
@@ -122,7 +197,21 @@ export class ShbzakComponent implements AfterViewInit {
   }
 
   public getTime(): void {
-    this.lastUpdate = new Date().toLocaleString();
+    this.lastUpdate = this.getDay() + ' ' + new Date().toLocaleString('he-IL');
+  }
+
+  private getDay(): string {
+    const day = new Date().getDay();
+    switch (day) {
+      case 1: return 'ראשון';
+      case 2: return 'שני';
+      case 3: return 'שלישי';
+      case 4: return 'רביעי';
+      case 5: return 'חמישי';
+      case 6: return 'שישי';
+      case 0: return 'שבת';
+      default: return 'Invalid Day';
+    }
   }
 
   public onDragEnd(event: any): void {
@@ -158,6 +247,5 @@ export class ShbzakComponent implements AfterViewInit {
 
     return transform;
   }
-
 
 }

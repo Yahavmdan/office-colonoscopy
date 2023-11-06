@@ -6,7 +6,14 @@
     <button (click)="resetRecentChanges(sadakElements)" class="m-2">
       reset changes
     </button>
+    <button (click)="saveState()" class="m-2">
+      save current state
+    </button>
   </div>
+  <br>
+  <button class="m-2" *ngFor="let key of localStorageKeys" (click)="loadState(key)">
+    {{ key }}
+  </button>
   <br>
   <div class="rtl d-flex align-items-center f-22 fw-700 my-4">
     צבוע באדום: עודכן לאחרונה
