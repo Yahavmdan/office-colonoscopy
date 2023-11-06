@@ -17,6 +17,7 @@ import {GameListComponent} from './game-list/game-list.component';
 import {LoginComponent} from "../login/login.component";
 import {CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
 import {WheelClickModule} from "../shared/directives/wheel-click.module";
+import {ShbzakComponent} from "../shbzak/shbzak.component";
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'shbzak',
+    component: ShbzakComponent
   }
 ];
 

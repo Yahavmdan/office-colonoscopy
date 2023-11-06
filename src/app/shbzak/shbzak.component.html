@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="d-flex">
+    <button (click)="getTime()" class="m-2">
+      get date
+    </button>
+    <button (click)="resetRecentChanges(sadakElements)" class="m-2">
+      reset changes
+    </button>
+  </div>
+  <br>
+  <div class="rtl d-flex align-items-center f-22 fw-700 my-4">
+    צבוע באדום: עודכן לאחרונה
+    <div class="mx-2 updated-template"></div>
+  </div>
+  <div class="rtl f-22 fw-700 my-4">עודכן לאחרונה ב: {{lastUpdate}} </div>
+  <div class="rtl f-22 fw-700 my-4 w-100 d-flex justify-content-between">
+    <div class="col-3 d-flex justify-content-center">משגב</div>
+    <div class="col-3 d-flex justify-content-center">יפתח</div>
+    <div class="col-3 d-flex justify-content-center">מנרה</div>
+  </div>
+  <div class="titles">
+    <div class="title col-3"
+         [id]="title.id"
+         cdkDrag
+         (cdkDragEnded)="onDragEnd($event)"
+         [ngClass]="{
+         'bg-green': title.name.length === 1 || title.name.length === 2,
+          'bg-blue': title.name === 'בבית',
+           'bg-light-red': title.name === 'גדוד',
+            'bg-light-yellow': title.name === 'קרית 8'}"
+         *ngFor="let title of titles">
+      {{ title.name }}
+    </div>
+  </div>
+  <div #sadakElements class="sadak">
+    <div #personElement
+         class="people"
+         [id]="person.id"
+         *ngFor="let person of people"
+         cdkDrag
+         (click)="markChangedPerson(personElement)"
+         (cdkDragEnded)="onDragEnd($event)">
+      {{ person.name }} - {{ person.job }}
+    </div>
+  </div>
+</div>

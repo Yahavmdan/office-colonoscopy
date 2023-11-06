@@ -50,6 +50,14 @@ $white: #ffffff;
   animation: rotate-center 1s linear infinite both;
 }
 
+.rtl {
+  direction: rtl;
+}
+
+.ltr {
+  direction: ltr;
+}
+
 @keyframes rotate-center {
   0% {
     transform: rotate(-360deg);

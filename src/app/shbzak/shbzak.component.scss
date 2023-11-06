@@ -1,0 +1,39 @@
+.titles {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  height: 150px;
+  background: #c1c1c1;
+  border-radius: 10px;
+  border: 3px solid gray;
+  margin: 5px;
+  font-size: 20px;
+}
+
+.sadak {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.updated-template {
+  width: 100px;
+  height: 25px;
+  background: #ff918c;
+  border: 1px #6d8c96 solid;
+}
+
+.people {
+  cursor: grab;
+  padding: 2px;
+  margin: 2px;
+  border-radius: 5px;
+  background: lightblue;
+  border: 1px #6d8c96 solid;
+}
