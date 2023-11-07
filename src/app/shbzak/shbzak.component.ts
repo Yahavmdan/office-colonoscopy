@@ -1,4 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { people, titles } from "./consts/data";
 
 
 @Component({
@@ -8,76 +9,10 @@ import { AfterViewInit, Component } from '@angular/core';
 })
 export class ShbzakComponent implements AfterViewInit {
 
-  public people: { id: number, name: string, job: string }[] = [
-    {id: 1, name: 'רפפורט גבריאל', job: 'מפקד'},
-    {id: 2, name: 'בראונר אשר יעקב', job: 'תותחן'},
-    {id: 3, name: 'אילוז עידו', job: 'טען'},
-    {id: 4, name: 'ברי שניר', job: 'נהג'},
-    {id: 5, name: 'אברמוביץ ינון', job: 'מפקד'},
-    {id: 6, name: 'נדלר עומר', job: 'תותחן'},
-    {id: 7, name: 'שנק גיא', job: 'טען'},
-    {id: 8, name: 'בירגר דנטה סמואל', job: 'נהג'},
-    {id: 9, name: 'כהן תום', job: 'מפקד'},
-    {id: 10, name: 'שלם עוז', job: 'תותחן'},
-    {id: 11, name: 'כהן אליה חיים', job: 'טען'},
-    {id: 12, name: 'פיש ישראל מאיר', job: 'נהג'},
-    {id: 13, name: 'כליף ארז', job: 'מפקד'},
-    {id: 14, name: 'צבירן גיא', job: 'תותחן'},
-    {id: 15, name: 'כהן בן בנימין', job: 'טען'},
-    {id: 16, name: 'ריק ליאור', job: 'נהג'},
-    {id: 17, name: 'נבו אביב', job: 'מפקד'},
-    {id: 18, name: 'ציובוטרו גילעד', job: 'תותחן'},
-    {id: 19, name: 'כבישי תאמר', job: 'טען'},
-    {id: 20, name: 'נמני אבני יראל רפאל', job: 'נהג'},
-    {id: 21, name: 'בית אריה דוד', job: 'מפקד'},
-    {id: 22, name: 'קלור אוריאל', job: 'תותחן'},
-    {id: 23, name: 'טולידנו תומר איתן', job: 'טען'},
-    {id: 24, name: 'כהן יאיר', job: 'נהג'},
-    {id: 25, name: 'קום בועז', job: 'מפקד'},
-    {id: 26, name: 'דרטלר אסף', job: 'תותחן'},
-    {id: 27, name: 'אורן שוקר', job: 'טען'},
-    {id: 28, name: 'מנגיסטו ארמיאס', job: 'נהג'},
-    {id: 29, name: 'גופמן גנדי צבי', job: 'מפקד'},
-    {id: 30, name: 'איידלמן אריאל', job: 'תותחן'},
-    {id: 31, name: 'צדקני נריה', job: 'טען'},
-    {id: 32, name: 'יאיר שטרן', job: 'נהג'},
-    {id: 33, name: 'שון בנבנישתי', job: 'תותחן'},
-    {id: 34, name: 'מוסקוביץ איתן', job: 'תותחן'},
-    {id: 35, name: 'בניטה אוריה', job: 'טען'},
-    {id: 36, name: 'אלוש שמעון', job: 'נהג'},
-    {id: 37, name: 'לוי אייל', job: 'תותחן'},
-    {id: 38, name: 'דניאל טומניאן', job: 'נהג'},
-    {id: 39, name: 'יהודה מורג', job: 'מפקד'},
-    {id: 40, name: 'דין שלו', job: 'מפל"ג'},
-    {id: 41, name: 'יהב דן', job: 'מפל"ג'},
-    {id: 42, name: 'שני שם טוב', job: 'מפל"ג'},
-    {id: 43, name: 'אליהו ראובן', job: 'מפל"ג'},
-    {id: 44, name: 'רועי סולימני', job: 'מפל"ג'},
-    {id: 45, name: 'אריאל קופלד', job: 'מפל"ג'},
-    {id: 46, name: 'אבי גרינפילד', job: 'טען'},
-    {id: 47, name: 'טל וקסמן', job: 'נהג'},
-    {id: 48, name: 'שקד כהן', job: 'מפקד'},
-    {id: 49, name: 'אדיאל חודומינסקי', job: 'תותחן'},
-    {id: 50, name: 'שחר בניאל', job: 'טען'},
-    {id: 51, name: 'יונתן קליאוט', job: 'נהג'},
-  ];
-
-  public titles: { id: number, name: string }[] = [
-    {id: 101, name: 'ג'},
-    {id: 102, name: 'ד'},
-    {id: 103, name: '1'},
-    {id: 104, name: '2'},
-    {id: 105, name: '3'},
-    {id: 106, name: '1ב'},
-    {id: 107, name: '2ב'},
-    {id: 108, name: '3ב'},
-    {id: 109, name: 'בבית'},
-    {id: 110, name: 'קרית 8'},
-    {id: 111, name: 'גדוד'}
-  ];
+  public people: { id: number, name: string, job: string }[] = people;
+  public titles: { id: number, name: string }[] = titles;
   public lastUpdate: string = '';
   public localStorageKeys: [] = [];
-
 
   ngAfterViewInit(): void {
     this.getLocalStorageItems();
@@ -93,6 +28,15 @@ export class ShbzakComponent implements AfterViewInit {
         this.localStorageKeys.push(key);
       }
     }
+  }
+
+  public deleteState(key: string): void {
+    let answer: boolean = confirm('Are you sure you want to delete?');
+    if (!answer) {
+      return;
+    }
+    localStorage.removeItem(key);
+    window.location.reload();
   }
 
   public loadState(key: string): void {
@@ -132,7 +76,7 @@ export class ShbzakComponent implements AfterViewInit {
 
   public saveState(): void {
     const name = prompt('Enter: "$" to save the state');
-    if (name === '$') {
+    if (name && name.startsWith('$')) {
       this.getTime();
       localStorage.setItem(name + ' - ' + this.lastUpdate, JSON.stringify(this.getAllLocalStorageItems()));
       window.location.reload();
@@ -203,14 +147,14 @@ export class ShbzakComponent implements AfterViewInit {
   private getDay(): string {
     const day = new Date().getDay();
     switch (day) {
-      case 1: return 'ראשון';
-      case 2: return 'שני';
-      case 3: return 'שלישי';
-      case 4: return 'רביעי';
-      case 5: return 'חמישי';
-      case 6: return 'שישי';
-      case 0: return 'שבת';
-      default: return 'Invalid Day';
+      case 1:return 'ראשון';
+      case 2:return 'שני';
+      case 3:return 'שלישי';
+      case 4:return 'רביעי';
+      case 5:return 'חמישי';
+      case 6:return 'שישי';
+      case 0:return 'שבת';
+      default:return 'Invalid Day';
     }
   }
 

@@ -11,9 +11,14 @@
     </button>
   </div>
   <br>
-  <button class="m-2" *ngFor="let key of localStorageKeys" (click)="loadState(key)">
-    {{ key }}
-  </button>
+  <div class="d-flex">
+    <div class="d-flex align-items-center" *ngFor="let key of localStorageKeys">
+      <button class="m-2" (click)="loadState(key)">
+        {{ key }}
+      </button>
+      <i class="bi bi-trash pointer" (click)="deleteState(key)"></i>
+    </div>
+  </div>
   <br>
   <div class="rtl d-flex align-items-center f-22 fw-700 my-4">
     צבוע באדום: עודכן לאחרונה
@@ -26,7 +31,7 @@
     <div class="col-3 d-flex justify-content-center">מנרה</div>
   </div>
   <div class="titles">
-    <div class="title col-3"
+    <div class="title col-3 rtl"
          [id]="title.id"
          cdkDrag
          (cdkDragEnded)="onDragEnd($event)"
