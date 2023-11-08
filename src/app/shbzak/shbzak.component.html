@@ -31,7 +31,7 @@
     <div class="col-3 d-flex justify-content-center">מנרה</div>
   </div>
   <div class="titles">
-    <div class="title col-3 rtl"
+    <div class="title col-3 rtl p-2 d-flex"
          [id]="title.id"
          cdkDrag
          (cdkDragEnded)="onDragEnd($event)"
@@ -41,7 +41,13 @@
            'bg-light-red': title.name === 'גדוד',
             'bg-light-yellow': title.name === 'קרית 8'}"
          *ngFor="let title of titles">
-      {{ title.name }}
+      <div class="d-flex w-100"
+           [ngClass]="title.z
+           ? 'justify-content-between'
+           : 'justify-content-center'">
+        <span class="fw-700 f-24 mx-2">{{ title.name }}</span>
+        <span *ngIf="title.z">{{' צ: ' + title.z }}</span>
+      </div>
     </div>
   </div>
   <div #sadakElements class="sadak">

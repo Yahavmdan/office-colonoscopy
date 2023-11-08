@@ -1,4 +1,5 @@
-export const people: { id: number, name: string, job: string }[] = [
+export interface People {id: number, name: string, job: string}
+export const people: People[] = [
   {id: 1, name: 'רפפורט גבריאל', job: 'מפקד'},
   {id: 2, name: 'בראונר אשר יעקב', job: 'תותחן'},
   {id: 3, name: 'אילוז עידו', job: 'טען'},
@@ -52,15 +53,16 @@ export const people: { id: number, name: string, job: string }[] = [
   {id: 51, name: 'יונתן קליאוט', job: 'נהג'},
 ];
 
-export const titles: { id: number, name: string }[] = [
-  {id: 101, name: 'ג'},
-  {id: 102, name: 'ד'},
-  {id: 103, name: '1'},
-  {id: 104, name: '2'},
-  {id: 105, name: '3'},
-  {id: 106, name: '1ב'},
-  {id: 107, name: '2ב'},
-  {id: 108, name: '3ב'},
+export interface Title {id: number, name: string, z?: number}
+export const titles: Title[] = [
+  {id: 101, name: 'ג', z: 427},
+  {id: 102, name: 'ד', z: 220},
+  {id: 103, name: '1', z: 440},
+  {id: 104, name: '2', z: 214},
+  {id: 105, name: '3', z: 235},
+  {id: 106, name: '1ב', z: 249},
+  {id: 107, name: '2ב', z: 222},
+  {id: 108, name: '3ב', z: 262},
   {id: 109, name: 'בבית'},
   {id: 110, name: 'קרית 8'},
   {id: 111, name: 'גדוד'}

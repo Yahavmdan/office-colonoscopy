@@ -1,6 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { people, titles } from "./consts/data";
-
+import { People, people, Title, titles } from "./consts/data";
 
 @Component({
   selector: 'app-logistics',
@@ -9,8 +8,8 @@ import { people, titles } from "./consts/data";
 })
 export class ShbzakComponent implements AfterViewInit {
 
-  public people: { id: number, name: string, job: string }[] = people;
-  public titles: { id: number, name: string }[] = titles;
+  public people: People[] = people;
+  public titles: Title[] = titles;
   public lastUpdate: string = '';
   public localStorageKeys: [] = [];
 
@@ -76,18 +75,19 @@ export class ShbzakComponent implements AfterViewInit {
 
   public saveState(): void {
     const name = prompt('Enter: "$" to save the state');
-    if (name && name.startsWith('$')) {
-      this.getTime();
-      localStorage.setItem(name + ' - ' + this.lastUpdate, JSON.stringify(this.getAllLocalStorageItems()));
-      window.location.reload();
+    if (!name || !name.startsWith('$')) {
+      return;
     }
+    this.getTime();
+    localStorage.setItem(name + ' - ' + this.lastUpdate, JSON.stringify(this.getAllLocalStorageItems()));
+    window.location.reload();
   }
 
   private getAllLocalStorageItems(): string {
     const localStorageItems: any = {};
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key) {
+      if (key && !key.startsWith('$')) {
         const item = localStorage.getItem(key);
         if (item) {
           localStorageItems[key] = JSON.parse(item);
@@ -147,13 +147,13 @@ export class ShbzakComponent implements AfterViewInit {
   private getDay(): string {
     const day = new Date().getDay();
     switch (day) {
-      case 1:return 'ראשון';
-      case 2:return 'שני';
-      case 3:return 'שלישי';
-      case 4:return 'רביעי';
-      case 5:return 'חמישי';
-      case 6:return 'שישי';
-      case 0:return 'שבת';
+      case 0:return 'ראשון';
+      case 1:return 'שני';
+      case 2:return 'שלישי';
+      case 3:return 'רביעי';
+      case 4:return 'חמישי';
+      case 5:return 'שישי';
+      case 6:return 'שבת';
       default:return 'Invalid Day';
     }
   }
