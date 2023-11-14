@@ -1,5 +1,6 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { People, people, Title, titles } from "./consts/data";
+import {AfterViewInit, Component, ElementRef, HostListener, Renderer2} from '@angular/core';
+import { ElLocation, People, people, Title, titles } from "./consts/data";
+import { CdkDragEnd, CdkDragStart } from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-logistics',
@@ -11,7 +12,17 @@ export class ShbzakComponent implements AfterViewInit {
   public people: People[] = people;
   public titles: Title[] = titles;
   public lastUpdate: string = '';
-  public localStorageKeys: [] = [];
+  public localStorageKeys: string[] = [];
+  private logChanges: ElLocation[] = [];
+  private actionCounter: number = 0;
+
+  private isDrawing = false;
+  private startX: number;
+  private startY: number;
+  private currentBox: HTMLDivElement;
+
+  constructor(private renderer: Renderer2, private el: ElementRef) {
+  }
 
   ngAfterViewInit(): void {
     this.getLocalStorageItems();
@@ -23,8 +34,9 @@ export class ShbzakComponent implements AfterViewInit {
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key[0] === '$') {
-        // @ts-ignore
-        this.localStorageKeys.push(key);
+        if (!this.localStorageKeys.includes(key)) {
+          this.localStorageKeys.push(key);
+        }
       }
     }
   }
@@ -35,7 +47,10 @@ export class ShbzakComponent implements AfterViewInit {
       return;
     }
     localStorage.removeItem(key);
-    window.location.reload();
+    const index = this.localStorageKeys.indexOf(key);
+    if (index !== -1) {
+      this.localStorageKeys.splice(index, 1);
+    }
   }
 
   public loadState(key: string): void {
@@ -46,16 +61,16 @@ export class ShbzakComponent implements AfterViewInit {
   private breakAndLoadLocalStorage(key: string): void {
     const storedObject = localStorage.getItem(key);
 
-    if (storedObject) {
-      const parsedObject = JSON.parse(storedObject);
-
-      for (const [key, value] of Object.entries(parsedObject)) {
-        localStorage.setItem(key, JSON.stringify(value));
-      }
-      window.location.reload();
-    } else {
-      console.log("No object found in local storage with the provided key.");
+    if (!storedObject) {
+      return;
     }
+    const parsedObject = JSON.parse(storedObject);
+
+    for (const [key, value] of Object.entries(parsedObject)) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+    this.retrievePositions();
+    this.retrieveChanges();
   }
 
   private deleteNonDollarKeys(): void {
@@ -80,7 +95,7 @@ export class ShbzakComponent implements AfterViewInit {
     }
     this.getTime();
     localStorage.setItem(name + ' - ' + this.lastUpdate, JSON.stringify(this.getAllLocalStorageItems()));
-    window.location.reload();
+    this.localStorageKeys.push(name + ' - ' + this.lastUpdate);
   }
 
   private getAllLocalStorageItems(): string {
@@ -132,9 +147,37 @@ export class ShbzakComponent implements AfterViewInit {
       return;
     }
     const storedPositions = JSON.parse(teamPositions);
-    storedPositions.forEach((position: any) => {
-      const element = document.getElementById(position.id);
+    this.reArrangePositions(storedPositions);
+  }
+
+  private findAndReplace(updatedObject: { id: string, x: number, y: number }): void {
+    const storedObjectsString = localStorage.getItem('positions');
+    if (!storedObjectsString) {
+      return;
+    }
+    const storedObjects: any[] = JSON.parse(storedObjectsString);
+    const indexToUpdate = storedObjects.findIndex(obj => obj.id === updatedObject.id);
+
+    if (indexToUpdate !== -1) {
+      storedObjects[indexToUpdate].x = updatedObject.x;
+      storedObjects[indexToUpdate].y = updatedObject.y;
+
+      localStorage.setItem('positions', JSON.stringify(storedObjects));
+    }
+  }
+
+  private reArrangePositions(storedPositions: ElLocation[] | ElLocation): void {
+    if (!Array.isArray(storedPositions)) {
+      this.findAndReplace(storedPositions);
+      const element = document.getElementById(storedPositions.id);
       if (element !== null) {
+        element.style.transform = `translate(${storedPositions.x}px, ${storedPositions.y}px)`;
+      }
+      return;
+    }
+    storedPositions.forEach((position: ElLocation) => {
+      const element = document.getElementById(position.id);
+      if (element) {
         element.style.transform = `translate(${position.x}px, ${position.y}px)`;
       }
     });
@@ -158,15 +201,22 @@ export class ShbzakComponent implements AfterViewInit {
     }
   }
 
-  public onDragEnd(event: any): void {
-    this.getTime();
+  private getDragEvent(event: CdkDragStart | CdkDragEnd): ElLocation {
     const element = event.source.getRootElement();
     const id = element.id;
     const transform = this.getTransformValues(element);
-    const position = {id, ...transform};
-    let storedPositions = JSON.parse(localStorage.getItem('positions') || '[]');
+    return {id, ...transform};
+  }
 
-    const existingIndex = storedPositions.findIndex((p: any) => p.id === id);
+  public onDragStart(event: CdkDragStart): void {
+    this.storeDraggingLog(this.getDragEvent(event));
+  }
+
+  public onDragEnd(event: CdkDragEnd): void {
+    this.getTime();
+    const position = this.getDragEvent(event);
+    let storedPositions = JSON.parse(localStorage.getItem('positions') || '[]');
+    const existingIndex = storedPositions.findIndex((p: ElLocation) => p.id === position.id);
 
     if (existingIndex !== -1) {
       storedPositions[existingIndex] = position;
@@ -190,6 +240,77 @@ export class ShbzakComponent implements AfterViewInit {
     }
 
     return transform;
+  }
+
+  private storeDraggingLog(position: ElLocation): void {
+    this.actionCounter ++;
+    this.logChanges.push(position);
+  }
+
+  public undo(): void {
+    if (!this.logChanges.length || this.actionCounter === 0) {
+      return;
+    }
+    this.actionCounter --;
+    this.reArrangePositions(this.logChanges[this.actionCounter]);
+    this.actionCounter === 0 ? this.actionCounter = 1 : null;
+  }
+
+  public redo(): void {
+    if (!this.logChanges.length || this.actionCounter === 0) {
+      return;
+    }
+    if (this.actionCounter === this.logChanges.length) {
+      this.reArrangePositions(this.logChanges[this.actionCounter -1]);
+      return;
+    }
+    this.reArrangePositions(this.logChanges[this.actionCounter]);
+    this.actionCounter ++;
+  }
+  private previousBox: HTMLDivElement;
+
+
+  @HostListener('document:mousedown', ['$event'])
+  onMouseDown(event: MouseEvent) {
+    if (!event.ctrlKey) {
+      return;
+    }
+
+    if (this.previousBox) {
+      this.renderer.removeChild(this.el.nativeElement, this.previousBox);
+    }
+
+    this.isDrawing = true;
+    this.startX = event.clientX;
+    this.startY = event.clientY;
+
+    this.currentBox = this.renderer.createElement('div');
+    this.currentBox.className = 'drawn-box';
+    this.updateBoxSize(event);
+    this.renderer.appendChild(this.el.nativeElement, this.currentBox);
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    if (!this.isDrawing) return;
+    this.updateBoxSize(event);
+  }
+
+  @HostListener('document:mouseup')
+  onMouseUp() {
+    this.isDrawing = false;
+    this.previousBox = this.currentBox;
+  }
+
+  private updateBoxSize(event: any) {
+    const width = Math.abs(this.startX - event.clientX);
+    const height = Math.abs(this.startY - event.clientY);
+
+    this.renderer.setStyle(this.currentBox, 'width', `${width}px`);
+    this.renderer.setStyle(this.currentBox, 'height', `${height}px`);
+
+    this.renderer.setStyle(this.currentBox, 'left', `${Math.min(this.startX, event.clientX)}px`);
+    this.renderer.setStyle(this.currentBox, 'top', `${Math.min(this.startY, event.clientY)}px`);
   }
 
 }

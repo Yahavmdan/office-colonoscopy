@@ -1,3 +1,4 @@
+export interface ElLocation {id: string, x: number, y: number}
 export interface People {id: number, name: string, job: string}
 export const people: People[] = [
   {id: 1, name: 'רפפורט גבריאל', job: 'מפקד'},
@@ -46,7 +47,7 @@ export const people: People[] = [
   {id: 44, name: 'רועי סולימני', job: 'מפל"ג'},
   {id: 45, name: 'אריאל קופלד', job: 'מפל"ג'},
   {id: 46, name: 'אבי גרינפילד', job: 'טען'},
-  {id: 47, name: 'טל וקסמן', job: 'נהג'},
+  {id: 47, name: 'מאיר חמיאס', job: 'מפל"ג'},
   {id: 48, name: 'שקד כהן', job: 'מפקד'},
   {id: 49, name: 'אדיאל חודומינסקי', job: 'תותחן'},
   {id: 50, name: 'שחר בניאל', job: 'טען'},
@@ -56,14 +57,14 @@ export const people: People[] = [
 export interface Title {id: number, name: string, z?: number}
 export const titles: Title[] = [
   {id: 101, name: 'ג', z: 427},
-  {id: 102, name: 'ד', z: 220},
   {id: 103, name: '1', z: 440},
   {id: 104, name: '2', z: 214},
-  {id: 105, name: '3', z: 235},
+  {id: 102, name: 'ד', z: 220},
   {id: 106, name: '1ב', z: 249},
   {id: 107, name: '2ב', z: 222},
-  {id: 108, name: '3ב', z: 262},
+  {id: 105, name: '3', z: 235},
   {id: 109, name: 'בבית'},
   {id: 110, name: 'קרית 8'},
+  {id: 108, name: '3ב', z: 262},
   {id: 111, name: 'גדוד'}
 ];

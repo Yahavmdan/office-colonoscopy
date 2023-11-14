@@ -1,27 +1,27 @@
-<div class="container">
+<div class="container" (ctrlZ)="undo()" (ctrlY)="redo()" (ctrlShiftZ)="redo()">
   <div class="d-flex">
-    <button (click)="getTime()" class="m-2">
+    <button (click)="getTime()" class="m-2 button-layout bg-light-blue text-black">
       get date
     </button>
-    <button (click)="resetRecentChanges(sadakElements)" class="m-2">
+    <button (click)="resetRecentChanges(sadakElements)" class="m-2 button-layout bg-light-blue text-black">
       reset changes
     </button>
-    <button (click)="saveState()" class="m-2">
+    <button (click)="saveState()" class="m-2 button-layout bg-light-blue text-black">
       save current state
     </button>
   </div>
   <br>
   <div class="d-flex">
     <div class="d-flex align-items-center" *ngFor="let key of localStorageKeys">
-      <button class="m-2" (click)="loadState(key)">
+      <button class="m-2 button-layout bg-light-blue text-black" (click)="loadState(key)">
         {{ key }}
       </button>
-      <i class="bi bi-trash pointer" (click)="deleteState(key)"></i>
+      <i class="bi bi-trash pointer round-button-layout bg-light-red mx-2" (click)="deleteState(key)"></i>
     </div>
   </div>
   <br>
   <div class="rtl d-flex align-items-center f-22 fw-700 my-4">
-    צבוע באדום: עודכן לאחרונה
+    שינויים אחרונים צבועים באדום -
     <div class="mx-2 updated-template"></div>
   </div>
   <div class="rtl f-22 fw-700 my-4">עודכן לאחרונה ב: {{lastUpdate}} </div>
@@ -35,10 +35,11 @@
          [id]="title.id"
          cdkDrag
          (cdkDragEnded)="onDragEnd($event)"
+         (cdkDragStarted)="onDragStart($event)"
          [ngClass]="{
          'bg-green': title.name.length === 1 || title.name.length === 2,
           'bg-blue': title.name === 'בבית',
-           'bg-light-red': title.name === 'גדוד',
+           'bg-grey5': title.name === 'גדוד',
             'bg-light-yellow': title.name === 'קרית 8'}"
          *ngFor="let title of titles">
       <div class="d-flex w-100"
@@ -57,7 +58,8 @@
          *ngFor="let person of people"
          cdkDrag
          (click)="markChangedPerson(personElement)"
-         (cdkDragEnded)="onDragEnd($event)">
+         (cdkDragEnded)="onDragEnd($event)"
+         (cdkDragStarted)="onDragStart($event)">
       {{ person.name }} - {{ person.job }}
     </div>
   </div>
