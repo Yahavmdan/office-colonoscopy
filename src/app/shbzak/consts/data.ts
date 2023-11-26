@@ -64,7 +64,7 @@ export const titles: Title[] = [
   {id: 107, name: '2ב', z: 222},
   {id: 105, name: '3', z: 235},
   {id: 109, name: 'בבית'},
-  {id: 110, name: 'קרית 8'},
+  {id: 110, name: 'דלתון'},
   {id: 108, name: '3ב', z: 262},
   {id: 111, name: 'גדוד'}
 ];
