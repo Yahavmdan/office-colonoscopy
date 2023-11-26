@@ -2,7 +2,13 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GameLinkService } from 'src/app/shared/services/Game-Link/game-link.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CATEGORIES, Category, GameLink, SUB_CATEGORIES, SubCategory } from "../../shared/models/Game-Link/game-link.model";
+import {
+  CATEGORIES,
+  Category,
+  GameLink,
+  SUB_CATEGORIES,
+  SubCategory
+} from "../../shared/models/Game-Link/game-link.model";
 
 @Component({
   selector: 'app-game-form',
@@ -15,7 +21,7 @@ export class GameLinkFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private gameLinkService: GameLinkService,
               public dialogRef: MatDialogRef<GameLinkFormComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: {link: GameLink}) {
+              @Inject(MAT_DIALOG_DATA) public data: { link: GameLink }) {
   }
 
   ngOnInit(): void {
@@ -52,15 +58,15 @@ export class GameLinkFormComponent implements OnInit {
   private update(): void {
     this.gameLinkService.update(this.gameLinkForm.value, this.data.link.id)
       .subscribe((isSuccess: boolean): void => {
-      isSuccess ? this.handleDialogCloseRes(isSuccess) : null;
-    });
+        isSuccess ? this.handleDialogCloseRes(isSuccess) : null;
+      });
   }
 
   private add(): void {
     this.gameLinkService.add(this.gameLinkForm.value)
       .subscribe((isSuccess: boolean): void => {
-      isSuccess ? this.handleDialogCloseRes(isSuccess) : null;
-    });
+        isSuccess ? this.handleDialogCloseRes(isSuccess) : null;
+      });
   }
 
   private handleDialogCloseRes(isSuccess: boolean): void {

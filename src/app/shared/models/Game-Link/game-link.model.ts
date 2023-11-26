@@ -18,7 +18,16 @@ export const CATEGORIES: Category[] = [
   'video-games'
 ];
 
-export type SubCategory = 'map' | 'geography' | 'picture' | 'language' | 'puzzle' | 'movies' | 'quiz' | 'video' | 'flag';
+export type SubCategory =
+  'map'
+  | 'geography'
+  | 'picture'
+  | 'language'
+  | 'puzzle'
+  | 'movies'
+  | 'quiz'
+  | 'video'
+  | 'flag';
 export const SUB_CATEGORIES: SubCategory[] = [
   'map',
   'geography',

@@ -1,5 +1,6 @@
 export interface ElLocation {id: string, x: number, y: number}
 export interface People {id: number, name: string, job: string}
+
 export const people: People[] = [
   {id: 1, name: 'רפפורט גבריאל', job: 'מפקד'},
   {id: 2, name: 'בראונר אשר יעקב', job: 'תותחן'},
@@ -52,9 +53,11 @@ export const people: People[] = [
   {id: 51, name: 'יונתן קליאוט', job: 'נהג'},
   {id: 39, name: 'יהודה מורג', job: 'מפקד'},
   {id: 52, name: 'מאיר חמיאס', job: 'מפל"ג'},
+  {id: 53, name: 'אליאור מרגלית', job: 'טען'},
 ];
 
 export interface Title {id: number, name: string, z?: number}
+
 export const titles: Title[] = [
   {id: 101, name: 'ג', z: 427},
   {id: 103, name: '1', z: 440},

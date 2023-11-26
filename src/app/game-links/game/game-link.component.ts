@@ -27,14 +27,22 @@ export class GameLinkComponent {
   public setSubCategory(subCategory: string): string {
     let base: string = 'mx-1 bi'
     switch (subCategory) {
-      case 'map': return base += ' bi-map text-grey3';
-      case 'geography': return base += ' bi-globe2 text-grey3';
-      case 'picture': return base += ' bi-card-image text-grey3';
-      case 'language': return base += ' bi-translate text-grey3';
-      case 'puzzle': return base += ' bi-puzzle text-grey3';
-      case 'quiz': return base += ' bi-question-circle text-grey3';
-      case 'movies': return base += ' bi-film text-grey3';
-      case 'flag': return base += ' bi-flag text-grey3';
+      case 'map':
+        return base += ' bi-map text-grey3';
+      case 'geography':
+        return base += ' bi-globe2 text-grey3';
+      case 'picture':
+        return base += ' bi-card-image text-grey3';
+      case 'language':
+        return base += ' bi-translate text-grey3';
+      case 'puzzle':
+        return base += ' bi-puzzle text-grey3';
+      case 'quiz':
+        return base += ' bi-question-circle text-grey3';
+      case 'movies':
+        return base += ' bi-film text-grey3';
+      case 'flag':
+        return base += ' bi-flag text-grey3';
     }
     return base;
   }

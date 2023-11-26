@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, HostListener, Renderer2} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { ElLocation, People, people, Title, titles } from "./consts/data";
 import { CdkDragEnd, CdkDragStart } from "@angular/cdk/drag-drop";
 
@@ -15,11 +15,11 @@ export class ShbzakComponent implements AfterViewInit {
   public localStorageKeys: string[] = [];
   private logChanges: ElLocation[] = [];
   private actionCounter: number = 0;
-
   private isDrawing = false;
   private startX: number;
   private startY: number;
   private currentBox: HTMLDivElement;
+  private previousBox: HTMLDivElement;
 
   constructor(private renderer: Renderer2, private el: ElementRef) {
   }
@@ -243,7 +243,7 @@ export class ShbzakComponent implements AfterViewInit {
   }
 
   private storeDraggingLog(position: ElLocation): void {
-    this.actionCounter ++;
+    this.actionCounter++;
     this.logChanges.push(position);
   }
 
@@ -251,7 +251,7 @@ export class ShbzakComponent implements AfterViewInit {
     if (!this.logChanges.length || this.actionCounter === 0) {
       return;
     }
-    this.actionCounter --;
+    this.actionCounter--;
     this.reArrangePositions(this.logChanges[this.actionCounter]);
     this.actionCounter === 0 ? this.actionCounter = 1 : null;
   }
@@ -261,14 +261,12 @@ export class ShbzakComponent implements AfterViewInit {
       return;
     }
     if (this.actionCounter === this.logChanges.length) {
-      this.reArrangePositions(this.logChanges[this.actionCounter -1]);
+      this.reArrangePositions(this.logChanges[this.actionCounter - 1]);
       return;
     }
     this.reArrangePositions(this.logChanges[this.actionCounter]);
-    this.actionCounter ++;
+    this.actionCounter++;
   }
-  private previousBox: HTMLDivElement;
-
 
   @HostListener('document:mousedown', ['$event'])
   onMouseDown(event: MouseEvent) {
@@ -291,18 +289,18 @@ export class ShbzakComponent implements AfterViewInit {
   }
 
   @HostListener('document:mousemove', ['$event'])
-  onMouseMove(event: MouseEvent) {
+  protected onMouseMove(event: MouseEvent): void {
     if (!this.isDrawing) return;
     this.updateBoxSize(event);
   }
 
   @HostListener('document:mouseup')
-  onMouseUp() {
+  protected onMouseUp(): void {
     this.isDrawing = false;
     this.previousBox = this.currentBox;
   }
 
-  private updateBoxSize(event: any) {
+  private updateBoxSize(event: any): void {
     const width = Math.abs(this.startX - event.clientX);
     const height = Math.abs(this.startY - event.clientY);
 
