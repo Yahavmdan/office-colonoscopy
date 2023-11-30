@@ -54,6 +54,7 @@ export const people: People[] = [
   {id: 39, name: 'יהודה מורג', job: 'מפקד'},
   {id: 52, name: 'מאיר חמיאס', job: 'מפל"ג'},
   {id: 53, name: 'אליאור מרגלית', job: 'טען'},
+  {id: 54, name: 'חגי טסמה', job: 'תותחן'},
 ];
 
 export interface Title {id: number, name: string, z?: number}
