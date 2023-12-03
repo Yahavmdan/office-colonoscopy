@@ -7,7 +7,16 @@
 
 div {
   position: relative;
-  user-select: none;
+}
+
+.flicker {
+  animation: flick 1.2s 5;
+}
+
+@keyframes flick {
+  10%   { opacity:1; }
+  50%  { opacity:.5; }
+  100% { opacity:1; }
 }
 
 .drawn-box {
@@ -31,7 +40,7 @@ div {
 .sadak {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .updated-template {
@@ -95,8 +104,7 @@ div {
 }
 
 .round-button-layout {
-  position: relative;
-  right: 25px;
+  position: absolute;
   white-space: nowrap;
   display: flex;
   justify-content: center;

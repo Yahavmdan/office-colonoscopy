@@ -1,16 +1,18 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
-import { ElLocation, People, people, Title, titles } from "./consts/data";
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { ElLocation, ViewItem } from "./consts/data";
 import { CdkDragEnd, CdkDragStart } from "@angular/cdk/drag-drop";
+import { MatDialog } from "@angular/material/dialog";
+import { FormComponent } from "./form/form.component";
 
 @Component({
   selector: 'app-logistics',
   templateUrl: './shbzak.component.html',
   styleUrls: ['shbzak.component.scss']
 })
-export class ShbzakComponent implements AfterViewInit {
+export class ShbzakComponent implements AfterViewInit, OnInit {
 
-  public people: People[] = people;
-  public titles: Title[] = titles;
+  public people: ViewItem[] = [];
+  public locations: ViewItem[] = [];
   public lastUpdate: string = '';
   public localStorageKeys: string[] = [];
   private logChanges: ElLocation[] = [];
@@ -20,14 +22,46 @@ export class ShbzakComponent implements AfterViewInit {
   private startY: number;
   private currentBox: HTMLDivElement;
   private previousBox: HTMLDivElement;
+  public isAllowed: boolean = false;
 
-  constructor(private renderer: Renderer2, private el: ElementRef) {
+  constructor(private renderer: Renderer2,
+              private el: ElementRef,
+              private dialog: MatDialog) {
+  }
+
+  ngOnInit(): void {
+    this.askPass()
+    this.getItems();
   }
 
   ngAfterViewInit(): void {
     this.getLocalStorageItems();
     this.retrievePositions();
     this.retrieveChanges();
+  }
+
+  private askPass(): void {
+    const answer = prompt('הזן סיסמא:');
+    if (answer === 'passWow783fb3') {
+      this.isAllowed = true;
+      return;
+    }
+    this.isAllowed = false;
+  }
+
+  private getItems(): void {
+    const location = JSON.parse(localStorage.getItem('@location')!)
+    const person = JSON.parse(localStorage.getItem('@person')!)
+    if (location) {
+      location.forEach((location: ViewItem) => {
+        this.setLists('location', location);
+      })
+    }
+    if (person) {
+      person.forEach((singleP: ViewItem) => {
+        this.setLists('person', singleP);
+      })
+    }
   }
 
   private getLocalStorageItems(): void {
@@ -56,6 +90,27 @@ export class ShbzakComponent implements AfterViewInit {
   public loadState(key: string): void {
     this.deleteNonDollarKeys();
     this.breakAndLoadLocalStorage(key);
+  }
+
+  public add(type: 'person' | 'location'): void {
+    this.dialog.open(FormComponent, {data: type})
+      .afterClosed()
+      .subscribe(res => res
+        ? this.storeLists(type, res)
+        : null);
+  }
+
+  private storeLists(type: 'person' | 'location', res: ViewItem): void {
+    const list: ViewItem[] = JSON.parse(localStorage.getItem('@' + type)!) ?? [];
+    list.push(res);
+    localStorage.setItem('@' + type, JSON.stringify(list));
+    this.setLists(type, res);
+  }
+
+  private setLists(type: 'person' | 'location', res: ViewItem): void {
+    type === 'person'
+      ? this.people.push(res)
+      : this.locations.push(res);
   }
 
   private breakAndLoadLocalStorage(key: string): void {
@@ -89,13 +144,10 @@ export class ShbzakComponent implements AfterViewInit {
   }
 
   public saveState(): void {
-    const name = prompt('Enter: "$" to save the state');
-    if (!name || !name.startsWith('$')) {
-      return;
-    }
     this.getTime();
-    localStorage.setItem(name + ' - ' + this.lastUpdate, JSON.stringify(this.getAllLocalStorageItems()));
-    this.localStorageKeys.push(name + ' - ' + this.lastUpdate);
+    localStorage.setItem('$ - ' + this.lastUpdate, JSON.stringify(this.getAllLocalStorageItems()));
+    this.localStorageKeys.push('$ - ' + this.lastUpdate);
+    alert('נשמר בהצלחה');
   }
 
   private getAllLocalStorageItems(): string {
@@ -112,14 +164,6 @@ export class ShbzakComponent implements AfterViewInit {
     return localStorageItems;
   }
 
-  public resetRecentChanges(sadak: HTMLDivElement): void {
-    Array.from(sadak.children).forEach((element: Element) => {
-      const person = element as HTMLElement;
-      localStorage.removeItem(person.id);
-      person.classList.remove('bg-light-red');
-    });
-  }
-
   public markChangedPerson(person: HTMLDivElement): void {
     if (!person.classList.contains('bg-light-red')) {
       localStorage.setItem(person.id, person.id);
@@ -131,6 +175,9 @@ export class ShbzakComponent implements AfterViewInit {
   }
 
   private retrieveChanges(): void {
+    if (!this.people) {
+      return;
+    }
     this.people.forEach(person => {
       const el = document.getElementById(person.id.toString());
       const item = localStorage.getItem(person.id.toString());

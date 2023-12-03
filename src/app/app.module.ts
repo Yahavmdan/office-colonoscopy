@@ -7,10 +7,17 @@ import { AppRoutingModule } from "./app-routing.module";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from 'src/app/shared/services/User/auth.service';
+import { FormComponent } from './shbzak/form/form.component';
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FormComponent
   ],
 
   imports: [
@@ -22,6 +29,11 @@ import { AuthService } from 'src/app/shared/services/User/auth.service';
     RouterOutlet,
     HttpClientModule,
     RouterLink,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
   ],
 
   providers: [

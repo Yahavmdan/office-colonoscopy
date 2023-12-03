@@ -1,24 +1,41 @@
-<div class="container" (ctrlZ)="undo()" (ctrlY)="redo()" (ctrlShiftZ)="redo()">
-  <div class="d-flex">
-    <button (click)="getTime()" class="m-2 button-layout bg-light-blue text-black">
-      get date
+<div *ngIf="!isAllowed"
+     class="w-100 f-40 text-red mt-5 d-flex justify-content-center align-items-center">סיסמא שגויה</div>
+<div *ngIf="isAllowed"
+     class="container"
+     (ctrlZ)="undo()"
+     (ctrlY)="redo()"
+     (ctrlShiftZ)="redo()">
+  <div class="d-flex justify-content-end">
+    <button (click)="getTime()"
+            [disabled]="!locations.length || !people.length"
+            class="ml-2 my-3 button-layout bg-light-blue text-black">
+      הכנס נקודת זמן
     </button>
-    <button (click)="resetRecentChanges(sadakElements)" class="m-2 button-layout bg-light-blue text-black">
-      reset changes
+    <button (click)="saveState()"
+            [disabled]="!locations.length || !people.length"
+            class="ml-2 my-3 button-layout bg-light-blue text-black">
+      שמור מצב נוכחי
     </button>
-    <button (click)="saveState()" class="m-2 button-layout bg-light-blue text-black">
-      save current state
+    <button (click)="add('location')"
+            [ngClass]="{'flicker' : !locations.length}"
+            class="ml-2 my-3 button-layout bg-light-blue text-black">
+      הוסף כוח/מקום
+    </button>
+    <button (click)="add('person')"
+            [ngClass]="{'flicker' : !people.length}"
+            class="ml-2 my-3 button-layout bg-light-blue text-black">
+      הוסף חייל
     </button>
   </div>
-  <div class="d-flex">
+  <div class="d-flex justify-content-end">
     <div class="d-flex align-items-center" *ngFor="let key of localStorageKeys">
-      <button class="m-2 button-layout bg-light-blue text-black" (click)="loadState(key)">
+      <button class="button-layout bg-light-blue text-black mr-4" (click)="loadState(key)">
         {{ key }}
       </button>
-      <i class="bi bi-trash pointer round-button-layout bg-light-red mx-2" (click)="deleteState(key)"></i>
+      <i class="bi bi-trash pointer round-button-layout bg-light-red r-0" (click)="deleteState(key)"></i>
     </div>
   </div>
-  <div class="rtl d-flex align-items-center f-22 fw-700 my-4">
+  <div class="rtl d-flex align-items-center f-22 fw-700 my-4" *ngIf="people">
     סה"כ חיילים - {{ people.length }}
   </div>
   <div class="rtl d-flex align-items-center f-22 fw-700 my-4">
@@ -26,28 +43,31 @@
     <div class="mx-2 updated-template"></div>
   </div>
   <div class="rtl f-22 fw-700 my-4">עודכן לאחרונה ב: {{lastUpdate}} </div>
+  <div *ngIf="!locations.length && !people.length"
+    class="rtl f-14 fw-700 mt-5 justify-content-center d-flex flicker">אין חיילים/כוחות, לחץ "הוסף" בתפריט למעלה</div>
   <div class="titles">
     <div class="title col-3 rtl p-2 d-flex"
-         [id]="title.id"
+         [id]="location.id"
+         [ngClass]="{
+         'bg-light-yellow' : location.color === 'צהוב',
+         'bg-light-blue' : location.color === 'כחול',
+         'bg-light-red' : location.color === 'אדום',
+         'bg-light-green' : location.color === 'ירוק'
+         }"
          cdkDrag
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragStarted)="onDragStart($event)"
-         [ngClass]="{
-         'bg-green': title.name.length === 1 || title.name.length === 2,
-          'bg-blue': title.name === 'בבית',
-           'bg-grey5': title.name === 'גדוד',
-            'bg-light-yellow': title.name === 'דלתון'}"
-         *ngFor="let title of titles">
+         *ngFor="let location of locations">
       <div class="d-flex w-100"
-           [ngClass]="title.z
+           [ngClass]="location.z
            ? 'justify-content-between'
            : 'justify-content-center'">
-        <span class="fw-700 f-24 mx-2">{{ title.name }}</span>
-        <span *ngIf="title.z">{{' צ: ' + title.z }}</span>
+        <span class="fw-700 f-24 mx-2">{{ location.name }}</span>
+        <span *ngIf="location.z">{{' צ: ' + location.z }}</span>
       </div>
     </div>
   </div>
-  <div #sadakElements class="sadak">
+  <div class="sadak">
     <div #personElement
          class="people"
          [id]="person.id"

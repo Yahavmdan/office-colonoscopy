@@ -1,0 +1,30 @@
+<form class="p-5 rtl"  [formGroup]="form" (ngSubmit)="store()">
+  <p class="f-22">{{data === 'person' ? 'הוסף חייל' : 'הוסף כוח/מיקום'}}</p>
+  <mat-form-field class="w-100">
+    <mat-label>{{data === 'person' ? 'שם החייל' : 'שם הכוח/מיקום'}}:</mat-label>
+    <input matInput formControlName="name">
+  </mat-form-field>
+  <mat-form-field class="w-100" *ngIf="data === 'location'">
+    <mat-label>צבע:</mat-label>
+    <mat-select formControlName="color">
+      <mat-option *ngFor="let color of colors" [value]="color">
+        {{color}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-100" *ngIf="data === 'person'">
+    <mat-label>תפקיד:</mat-label>
+    <mat-select formControlName="job">
+      <mat-option *ngFor="let job of jobs" [value]="job">
+        {{job}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-100" *ngIf="data === 'location'">
+    <mat-label>צ':</mat-label>
+    <input matInput formControlName="z">
+  </mat-form-field>
+  <div class="d-flex justify-content-center">
+    <button mat-raised-button color="primary" type="submit" class="w-50">שלח</button>
+  </div>
+</form>
