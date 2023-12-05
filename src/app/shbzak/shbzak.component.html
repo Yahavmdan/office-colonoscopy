@@ -1,7 +1,4 @@
-<div *ngIf="!isAllowed"
-     class="w-100 f-40 text-red mt-5 d-flex justify-content-center align-items-center">סיסמא שגויה</div>
-<div *ngIf="isAllowed"
-     class="container"
+<div class="container"
      (ctrlZ)="undo()"
      (ctrlY)="redo()"
      (ctrlShiftZ)="redo()">

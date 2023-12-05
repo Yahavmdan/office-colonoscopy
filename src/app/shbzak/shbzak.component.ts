@@ -22,7 +22,6 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
   private startY: number;
   private currentBox: HTMLDivElement;
   private previousBox: HTMLDivElement;
-  public isAllowed: boolean = false;
 
   constructor(private renderer: Renderer2,
               private el: ElementRef,
@@ -30,7 +29,6 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-    this.askPass()
     this.getItems();
   }
 
@@ -38,15 +36,6 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     this.getLocalStorageItems();
     this.retrievePositions();
     this.retrieveChanges();
-  }
-
-  private askPass(): void {
-    const answer = prompt('הזן סיסמא:');
-    if (answer === 'passWow783fb3') {
-      this.isAllowed = true;
-      return;
-    }
-    this.isAllowed = false;
   }
 
   private getItems(): void {
