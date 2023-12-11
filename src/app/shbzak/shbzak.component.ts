@@ -81,7 +81,7 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     this.breakAndLoadLocalStorage(key);
   }
 
-  public add(type: 'person' | 'location', multiple?: boolean): void {
+  public add(type: 'person' | 'location' | 'positions', multiple?: boolean): void {
     this.dialog.open(FormComponent, {data: {type, multiple}})
       .afterClosed()
       .subscribe(res => res
@@ -89,7 +89,7 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
         : null);
   }
 
-  private storeList(type: 'person' | 'location', res: ViewItem): void {
+  private storeList(type: 'person' | 'location' | 'positions', res: ViewItem): void {
     if (res.list)
     {
       this.storeLists(type, res.list);
@@ -101,15 +101,14 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     this.setLists(type, res);
   }
 
-  private storeLists(type: 'person' | 'location', list: string): void {
-    localStorage.setItem('@' + type, list);
+  private storeLists(type: 'person' | 'location' | 'positions', list: string): void {
+    localStorage.setItem(type === 'positions' ? type : '@' + type, list);
     type === 'person'
       ? this.people = JSON.parse(list)
       : this.locations = JSON.parse(list);
-    this.retrievePositions();
   }
 
-  private setLists(type: 'person' | 'location', res: ViewItem): void {
+  private setLists(type: 'person' | 'location' | 'positions', res: ViewItem): void {
     type === 'person'
       ? this.people.push(res)
       : this.locations.push(res);

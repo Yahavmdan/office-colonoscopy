@@ -16,7 +16,7 @@ export class FormComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<ShbzakComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: {type: 'location' | 'person', multiple: boolean}) {
+              @Inject(MAT_DIALOG_DATA) public data: {type: 'person' | 'location' | 'positions', multiple: boolean}) {
   }
 
   ngOnInit(): void {
@@ -35,7 +35,7 @@ export class FormComponent implements OnInit {
     this.removeControlByType();
   }
 
-  private checkDuplicateId(idToCheck: number, type: 'location' | 'person'): number {
+  private checkDuplicateId(idToCheck: number, type: 'person' | 'location' | 'positions',): number {
     const list = JSON.parse(localStorage.getItem(type)!);
     if (!list) {
       return idToCheck;
