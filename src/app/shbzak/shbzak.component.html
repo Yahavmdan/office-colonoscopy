@@ -2,7 +2,12 @@
      (ctrlZ)="undo()"
      (ctrlY)="redo()"
      (ctrlShiftZ)="redo()">
-  <div class="d-flex justify-content-end">
+  <div class="d-flex justify-content-end flex-wrap">
+    <button (click)="deleteAllData()"
+            [disabled]="!locations.length || !people.length"
+            class="ml-2 my-3 button-layout bg-light-blue text-black">
+      מחק הכול
+    </button>
     <button (click)="getTime()"
             [disabled]="!locations.length || !people.length"
             class="ml-2 my-3 button-layout bg-light-blue text-black">

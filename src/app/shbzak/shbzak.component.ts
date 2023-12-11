@@ -64,8 +64,21 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     }
   }
 
+  public deleteAllData(): void {
+    let answer: boolean = confirm('האם אתה בטוח?');
+    if (!answer) {
+      return;
+    }
+    localStorage.clear();
+    this.people = [];
+    this.locations = [];
+    this.getLocalStorageItems();
+    this.retrievePositions();
+    this.retrieveChanges();
+  }
+
   public deleteState(key: string): void {
-    let answer: boolean = confirm('Are you sure you want to delete?');
+    let answer: boolean = confirm('האם אתה בטוח?');
     if (!answer) {
       return;
     }
@@ -103,9 +116,15 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
 
   private storeLists(type: 'person' | 'location' | 'positions', list: string): void {
     localStorage.setItem(type === 'positions' ? type : '@' + type, list);
-    type === 'person'
-      ? this.people = JSON.parse(list)
-      : this.locations = JSON.parse(list);
+    if (type !== 'positions') {
+      type === 'person'
+        ? this.people = JSON.parse(list)
+        : this.locations = JSON.parse(list);
+    }
+
+    this.getLocalStorageItems();
+    this.retrievePositions();
+    this.retrieveChanges();
   }
 
   private setLists(type: 'person' | 'location' | 'positions', res: ViewItem): void {
