@@ -1,10 +1,10 @@
-<form class="p-5 rtl"  [formGroup]="form" (ngSubmit)="store()">
-  <p class="f-22">{{data === 'person' ? 'הוסף חייל' : 'הוסף כוח/מיקום'}}</p>
+<form *ngIf="!data.multiple" class="p-5 rtl"  [formGroup]="form" (ngSubmit)="store()">
+  <p class="f-22">{{data.type === 'person' ? 'הוסף חייל' : 'הוסף כוח/מיקום'}}</p>
   <mat-form-field class="w-100">
-    <mat-label>{{data === 'person' ? 'שם החייל' : 'שם הכוח/מיקום'}}:</mat-label>
+    <mat-label>{{data.type === 'person' ? 'שם החייל' : 'שם הכוח/מיקום'}}:</mat-label>
     <input matInput formControlName="name">
   </mat-form-field>
-  <mat-form-field class="w-100" *ngIf="data === 'location'">
+  <mat-form-field class="w-100" *ngIf="data.type === 'location'">
     <mat-label>צבע:</mat-label>
     <mat-select formControlName="color">
       <mat-option *ngFor="let color of colors" [value]="color">
@@ -12,7 +12,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field class="w-100" *ngIf="data === 'person'">
+  <mat-form-field class="w-100" *ngIf="data.type === 'person'">
     <mat-label>תפקיד:</mat-label>
     <mat-select formControlName="job">
       <mat-option *ngFor="let job of jobs" [value]="job">
@@ -20,7 +20,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field class="w-100" *ngIf="data === 'location'">
+  <mat-form-field class="w-100" *ngIf="data.type === 'location'">
     <mat-label>צ':</mat-label>
     <input matInput formControlName="z">
   </mat-form-field>
@@ -28,3 +28,18 @@
     <button mat-raised-button color="primary" type="submit" class="w-50">שלח</button>
   </div>
 </form>
+
+<form *ngIf="data.multiple" [formGroup]="form" (ngSubmit)="store()" class="p-5 rtl">
+  <p class="f-22">{{data.type === 'person' ? 'הוסף חיילים' : 'הוסף כוחות/מיקומים'}}</p>
+  <mat-form-field class="w-100">
+    <mat-label>הכנס דאטה:</mat-label>
+    <textarea matInput
+              placeholder="הכנס דאטה"
+              formControlName="list">
+    </textarea>
+  </mat-form-field>
+  <div class="d-flex justify-content-center">
+    <button mat-raised-button color="primary" type="submit" class="w-50">שלח</button>
+  </div>
+</form>
+

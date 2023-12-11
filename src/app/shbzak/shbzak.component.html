@@ -13,15 +13,25 @@
             class="ml-2 my-3 button-layout bg-light-blue text-black">
       שמור מצב נוכחי
     </button>
+    <button (click)="add('location', true)"
+            [ngClass]="{'flicker' : !locations.length}"
+            class="ml-2 my-3 button-layout bg-light-blue text-black">
+      הוסף כוחות/מיקומים
+    </button>
     <button (click)="add('location')"
             [ngClass]="{'flicker' : !locations.length}"
             class="ml-2 my-3 button-layout bg-light-blue text-black">
       הוסף כוח/מקום
     </button>
+    <button (click)="add('person', true)"
+            [ngClass]="{'flicker' : !people.length}"
+            class="ml-2 my-3 button-layout bg-light-blue text-black">
+      הוסף חיילים
+    </button>
     <button (click)="add('person')"
             [ngClass]="{'flicker' : !people.length}"
             class="ml-2 my-3 button-layout bg-light-blue text-black">
-      הוסף חייל
+      הוסף חייל אחד
     </button>
   </div>
   <div class="d-flex justify-content-end">

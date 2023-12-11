@@ -81,19 +81,32 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     this.breakAndLoadLocalStorage(key);
   }
 
-  public add(type: 'person' | 'location'): void {
-    this.dialog.open(FormComponent, {data: type})
+  public add(type: 'person' | 'location', multiple?: boolean): void {
+    this.dialog.open(FormComponent, {data: {type, multiple}})
       .afterClosed()
       .subscribe(res => res
-        ? this.storeLists(type, res)
+        ? this.storeList(type, res)
         : null);
   }
 
-  private storeLists(type: 'person' | 'location', res: ViewItem): void {
+  private storeList(type: 'person' | 'location', res: ViewItem): void {
+    if (res.list)
+    {
+      this.storeLists(type, res.list);
+      return;
+    }
     const list: ViewItem[] = JSON.parse(localStorage.getItem('@' + type)!) ?? [];
     list.push(res);
     localStorage.setItem('@' + type, JSON.stringify(list));
     this.setLists(type, res);
+  }
+
+  private storeLists(type: 'person' | 'location', list: string): void {
+    localStorage.setItem('@' + type, list);
+    type === 'person'
+      ? this.people = JSON.parse(list)
+      : this.locations = JSON.parse(list);
+    this.retrievePositions();
   }
 
   private setLists(type: 'person' | 'location', res: ViewItem): void {
