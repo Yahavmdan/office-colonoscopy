@@ -31,10 +31,12 @@
 
 <form *ngIf="data.multiple" [formGroup]="form" (ngSubmit)="store()" class="p-5 rtl">
   <p class="f-22">{{data.type === 'person' ? 'הוסף חיילים' : 'הוסף כוחות/מיקומים'}}</p>
-  <mat-form-field class="w-100">
-    <mat-label>הכנס דאטה:</mat-label>
+  <mat-form-field [style.width.px]="500">
     <textarea matInput
-              placeholder="הכנס דאטה"
+              rows="20"
+              cols="50"
+              [style.resize]="'none'"
+              placeholder="הכנס דאטה בפורמט JSON"
               formControlName="list">
     </textarea>
   </mat-form-field>
