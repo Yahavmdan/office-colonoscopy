@@ -3,6 +3,7 @@ import { ElLocation, ViewItem } from "./consts/data";
 import { CdkDragEnd, CdkDragStart } from "@angular/cdk/drag-drop";
 import { MatDialog } from "@angular/material/dialog";
 import { FormComponent } from "./form/form.component";
+import { retry } from "rxjs";
 
 @Component({
   selector: 'app-logistics',
@@ -36,6 +37,26 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     this.getLocalStorageItems();
     this.retrievePositions();
     this.retrieveChanges();
+  }
+
+  public edit(element: ViewItem, type: 'person' | 'location'): void {
+    const list = localStorage.getItem('@' + type)!
+    if (!list) {
+      return;
+    }
+    JSON.parse(list).forEach((item: ViewItem, i: number) => {
+      if (item.id === element.id) {
+        this.formDialog(type, element);
+      }
+    });
+  }
+
+  public delete(id: ViewItem, type: 'person' | 'location'): void {
+    const list = localStorage.getItem(type)!
+    if (!list) {
+      return;
+    }
+    console.log(JSON.parse(list));
   }
 
   private getItems(): void {
@@ -81,16 +102,27 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     this.breakAndLoadLocalStorage(key);
   }
 
-  public add(type: 'person' | 'location'): void {
-    this.dialog.open(FormComponent, {data: type})
+  public formDialog(type: 'person' | 'location', toEdit?: ViewItem): void {
+    this.dialog.open(FormComponent, {
+      data: {
+        type: type,
+        toEdit: toEdit
+      }
+    })
       .afterClosed()
       .subscribe(res => res
         ? this.storeLists(type, res)
         : null);
   }
 
+  private checkIfExist(res: ViewItem, list: ViewItem[]): ViewItem {
+    const existingItem = list.find(item => item.id === res.id);
+    return existingItem ? existingItem : res;
+  }
+
   private storeLists(type: 'person' | 'location', res: ViewItem): void {
     const list: ViewItem[] = JSON.parse(localStorage.getItem('@' + type)!) ?? [];
+    res = this.checkIfExist(res, list);
     list.push(res);
     localStorage.setItem('@' + type, JSON.stringify(list));
     this.setLists(type, res);

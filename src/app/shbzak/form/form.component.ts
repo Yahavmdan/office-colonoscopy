@@ -16,7 +16,7 @@ export class FormComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<ShbzakComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: 'location' | 'person') {
+              @Inject(MAT_DIALOG_DATA) public data: {type: 'location' | 'person', toEdit: ViewItem}) {
   }
 
   ngOnInit(): void {
@@ -24,12 +24,18 @@ export class FormComponent implements OnInit {
   }
 
   private initForm(): void {
+    const name = this.data.toEdit?.name ?? null;
+    const job = this.data.toEdit?.job ?? null;
+    const color = this.data.toEdit?.color ?? null;
+    const id = this.data.toEdit?.id ?? null;
+    const z = this.data.toEdit?.z ?? null;
+
     this.form = this.fb.group({
-      name: [null, Validators.required],
-      job: [null, Validators.required],
-      color: [null],
-      id: [this.checkDuplicateId(Math.floor(100000 + Math.random() * 900000), this.data)],
-      z: [null]
+      name:   [name, Validators.required],
+      job:    [job, Validators.required],
+      color:  [color],
+      id:     [id ?? this.checkDuplicateId(Math.floor(100000 + Math.random() * 900000), this.data.type)],
+      z:      [z]
     });
     this.removeControlByType();
   }
@@ -46,7 +52,7 @@ export class FormComponent implements OnInit {
   }
 
   private removeControlByType(): void {
-    this.data === 'location'
+    this.data.type === 'location'
       ? this.form.removeControl('job')
       : this.form.removeControl('z');
   }

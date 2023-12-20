@@ -19,6 +19,22 @@ div {
   100% { opacity:1; }
 }
 
+.delete-btn {
+  position: absolute;
+  color: #1e1e1e;
+  opacity: 0;
+  left: 0;
+  transition: all ease .2s;
+}
+
+.edit-btn {
+  position: absolute;
+  color: #1e1e1e;
+  opacity: 0;
+  left: 0;
+  transition: all ease .2s;
+}
+
 .drawn-box {
   position: absolute;
   border: 1px solid #000;
@@ -50,13 +66,23 @@ div {
   border: 1px #6d8c96 solid;
 }
 
-.people {
+.person {
   cursor: grab;
   padding: 2px;
   margin: 2px;
   border-radius: 5px;
-  background: lightblue;
+  background: #cce8f3;
   border: 1px #6d8c96 solid;
+  &:hover .edit-btn {
+    width: 100%;
+    opacity: 1;
+    left: -40px;
+  }
+  &:hover .delete-btn {
+    width: 100%;
+    opacity: 1;
+    left: -20px;
+  }
 }
 
 @import "src/styles.scss";

@@ -13,12 +13,12 @@
             class="ml-2 my-3 button-layout bg-light-blue text-black">
       שמור מצב נוכחי
     </button>
-    <button (click)="add('location')"
+    <button (click)="formDialog('location')"
             [ngClass]="{'flicker' : !locations.length}"
             class="ml-2 my-3 button-layout bg-light-blue text-black">
       הוסף כוח/מקום
     </button>
-    <button (click)="add('person')"
+    <button (click)="formDialog('person')"
             [ngClass]="{'flicker' : !people.length}"
             class="ml-2 my-3 button-layout bg-light-blue text-black">
       הוסף חייל
@@ -66,7 +66,7 @@
   </div>
   <div class="sadak">
     <div #personElement
-         class="people"
+         class="person d-flex"
          [id]="person.id"
          *ngFor="let person of people"
          cdkDrag
@@ -74,6 +74,8 @@
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragStarted)="onDragStart($event)">
       {{ person.name }} - {{ person.job }}
+      <div class="bi bi-trash delete-btn" (click)="delete(person, 'person')"></div>
+      <div class="bi bi-pencil edit-btn" (click)="edit(person, 'person')"></div>
     </div>
   </div>
 </div>
