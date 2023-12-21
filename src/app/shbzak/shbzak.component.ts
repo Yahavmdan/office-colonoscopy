@@ -3,7 +3,6 @@ import { ElLocation, ViewItem } from "./consts/data";
 import { CdkDragEnd, CdkDragStart } from "@angular/cdk/drag-drop";
 import { MatDialog } from "@angular/material/dialog";
 import { FormComponent } from "./form/form.component";
-import { retry } from "rxjs";
 
 @Component({
   selector: 'app-logistics',
@@ -34,29 +33,13 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
+    this.setApp();
+  }
+
+  private setApp(): void {
     this.getLocalStorageItems();
     this.retrievePositions();
     this.retrieveChanges();
-  }
-
-  public edit(element: ViewItem, type: 'person' | 'location'): void {
-    const list = localStorage.getItem('@' + type)!
-    if (!list) {
-      return;
-    }
-    JSON.parse(list).forEach((item: ViewItem, i: number) => {
-      if (item.id === element.id) {
-        this.formDialog(type, element);
-      }
-    });
-  }
-
-  public delete(id: ViewItem, type: 'person' | 'location'): void {
-    const list = localStorage.getItem(type)!
-    if (!list) {
-      return;
-    }
-    console.log(JSON.parse(list));
   }
 
   private getItems(): void {
@@ -85,8 +68,19 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     }
   }
 
+  public deleteAllData(): void {
+    let answer: boolean = confirm('האם אתה בטוח?');
+    if (!answer) {
+      return;
+    }
+    localStorage.clear();
+    this.people = [];
+    this.locations = [];
+    this.setApp();
+  }
+
   public deleteState(key: string): void {
-    let answer: boolean = confirm('Are you sure you want to delete?');
+    let answer: boolean = confirm('האם אתה בטוח?');
     if (!answer) {
       return;
     }
@@ -102,33 +96,79 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     this.breakAndLoadLocalStorage(key);
   }
 
-  public formDialog(type: 'person' | 'location', toEdit?: ViewItem): void {
-    this.dialog.open(FormComponent, {
-      data: {
-        type: type,
-        toEdit: toEdit
+  public edit(element: ViewItem, type: 'person' | 'location'): void {
+    this.openForm(type, false, element);
+  }
+
+  public delete(item: ViewItem, type: 'person' | 'location'): void {
+    let answer: boolean = confirm('האם אתה בטוח?');
+    if (!answer) {
+      return;
+    }
+    const list: ViewItem[] = JSON.parse(localStorage.getItem('@' + type)!) ?? [];
+    if (!list) {
+      return;
+    }
+    if (this.checkIfExist(item, list)) {
+      const indexToDelete = list.findIndex(i => i.id === item.id);
+
+      if (indexToDelete !== -1) {
+        list.splice(indexToDelete, 1);
       }
-    })
-      .afterClosed()
+      this.setLists(type, list);
+      return;
+    }
+  }
+
+  public openForm(type: 'person' | 'location' | 'positions', multiple?: boolean, toEdit?: ViewItem): void {
+    this.dialog.open(FormComponent, {
+      data: { type, multiple, toEdit }
+    }).afterClosed()
       .subscribe(res => res
-        ? this.storeLists(type, res)
+        ? this.store(type, res)
         : null);
   }
 
-  private checkIfExist(res: ViewItem, list: ViewItem[]): ViewItem {
+  private checkIfExist(res: ViewItem, list: ViewItem[]): ViewItem | null {
     const existingItem = list.find(item => item.id === res.id);
-    return existingItem ? existingItem : res;
+    return existingItem ? existingItem : null;
   }
 
-  private storeLists(type: 'person' | 'location', res: ViewItem): void {
+  private store(type: 'person' | 'location' | 'positions', res: ViewItem): void {
+    if (res.list) {
+      this.storeLists(type, res.list);
+      return;
+    }
+
     const list: ViewItem[] = JSON.parse(localStorage.getItem('@' + type)!) ?? [];
-    res = this.checkIfExist(res, list);
+    if (this.checkIfExist(res, list)) {
+      list.map((l: ViewItem, i: number) => l.id === res.id ? list[i] = res : null)
+      this.setLists(type, list);
+      return;
+    }
     list.push(res);
-    localStorage.setItem('@' + type, JSON.stringify(list));
     this.setLists(type, res);
   }
 
-  private setLists(type: 'person' | 'location', res: ViewItem): void {
+  private storeLists(type: 'person' | 'location' | 'positions', list: string): void {
+    localStorage.setItem(type === 'positions' ? type : '@' + type, list);
+    if (type !== 'positions') {
+      type === 'person'
+        ? this.people = JSON.parse(list)
+        : this.locations = JSON.parse(list);
+    }
+
+    this.setApp();
+  }
+
+  private setLists(type: 'person' | 'location' | 'positions', res: ViewItem | ViewItem[]): void {
+    if (Array.isArray(res)) {
+      localStorage.setItem('@' + type, JSON.stringify(res));
+      type === 'person'
+        ? this.people = res
+        : this.locations = res;
+      return;
+    }
     type === 'person'
       ? this.people.push(res)
       : this.locations.push(res);

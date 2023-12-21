@@ -16,7 +16,8 @@ export class FormComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<ShbzakComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: {type: 'location' | 'person', toEdit: ViewItem}) {
+              @Inject(MAT_DIALOG_DATA)
+              public data: { type: 'person' | 'location' | 'positions', multiple: boolean, toEdit: ViewItem }) {
   }
 
   ngOnInit(): void {
@@ -24,23 +25,20 @@ export class FormComponent implements OnInit {
   }
 
   private initForm(): void {
-    const name = this.data.toEdit?.name ?? null;
-    const job = this.data.toEdit?.job ?? null;
-    const color = this.data.toEdit?.color ?? null;
-    const id = this.data.toEdit?.id ?? null;
-    const z = this.data.toEdit?.z ?? null;
+    const item = this.data.toEdit ?? null;
 
     this.form = this.fb.group({
-      name:   [name, Validators.required],
-      job:    [job, Validators.required],
-      color:  [color],
-      id:     [id ?? this.checkDuplicateId(Math.floor(100000 + Math.random() * 900000), this.data.type)],
-      z:      [z]
+      name: [item?.name ?? null, Validators.required],
+      job: [item?.job ?? null, Validators.required],
+      color: [item?.color ?? null],
+      id: [item?.id ?? this.checkDuplicateId(Math.floor(100000 + Math.random() * 900000), this.data.type)],
+      z: [item?.z ?? null],
+      list: [null, Validators.required],
     });
     this.removeControlByType();
   }
 
-  private checkDuplicateId(idToCheck: number, type: 'location' | 'person'): number {
+  private checkDuplicateId(idToCheck: number, type: 'person' | 'location' | 'positions',): number {
     const list = JSON.parse(localStorage.getItem(type)!);
     if (!list) {
       return idToCheck;
@@ -55,6 +53,16 @@ export class FormComponent implements OnInit {
     this.data.type === 'location'
       ? this.form.removeControl('job')
       : this.form.removeControl('z');
+
+    if (this.data.multiple) {
+      this.form.removeControl('job');
+      this.form.removeControl('z');
+      this.form.removeControl('color');
+      this.form.removeControl('id');
+      this.form.removeControl('name');
+      return;
+    }
+    this.form.removeControl('list');
   }
 
   public store(): void {

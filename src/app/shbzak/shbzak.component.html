@@ -2,27 +2,39 @@
      (ctrlZ)="undo()"
      (ctrlY)="redo()"
      (ctrlShiftZ)="redo()">
-  <div class="d-flex justify-content-end">
-    <button (click)="getTime()"
+  <div class="d-flex justify-content-end flex-wrap">
+    <button (click)="deleteAllData()"
+            mat-button
             [disabled]="!locations.length || !people.length"
-            class="ml-2 my-3 button-layout bg-light-blue text-black">
-      הכנס נקודת זמן
+            class="m-2 button-layout bg-light-blue text-black justify-content-center align-items-center">
+      <span class="d-flex">
+        <i class="bi bi-trash mr-2"></i>
+        <span>מחק הכול</span>
+      </span>
     </button>
     <button (click)="saveState()"
+            mat-button
             [disabled]="!locations.length || !people.length"
-            class="ml-2 my-3 button-layout bg-light-blue text-black">
-      שמור מצב נוכחי
+            class="m-2 button-layout bg-light-blue text-black justify-content-center align-items-center">
+      <span class="d-flex">
+        <i class="bi bi-layers-half mr-2"></i>
+        <span>שמור מצב</span>
+      </span>
     </button>
-    <button (click)="formDialog('location')"
-            [ngClass]="{'flicker' : !locations.length}"
-            class="ml-2 my-3 button-layout bg-light-blue text-black">
-      הוסף כוח/מקום
+    <button [matMenuTriggerFor]="data" class="m-2 button-layout bg-light-blue text-black" mat-button>
+      <span class="d-flex">
+        <i class="bi bi-tools mr-2"></i>
+        <span>כלים</span>
+      </span>
     </button>
-    <button (click)="formDialog('person')"
-            [ngClass]="{'flicker' : !people.length}"
-            class="ml-2 my-3 button-layout bg-light-blue text-black">
-      הוסף חייל
-    </button>
+    <mat-menu #data="matMenu" class="rtl">
+      <button mat-menu-item (click)="getTime()" [disabled]="!locations.length || !people.length">הכנס נקודת זמן</button>
+      <button mat-menu-item (click)="openForm('person')" [ngClass]="{'flicker' : !locations.length}">הוסף חייל</button>
+      <button mat-menu-item (click)="openForm('person', true)" [ngClass]="{'flicker' : !locations.length}">הוסף חיילים</button>
+      <button mat-menu-item (click)="openForm('location')" [ngClass]="{'flicker' : !locations.length}">הוסף כוח/מיקום</button>
+      <button mat-menu-item (click)="openForm('location', true)" [ngClass]="{'flicker' : !locations.length}">הוסף כוחות/מיקומים</button>
+      <button mat-menu-item (click)="openForm('positions', true)" [ngClass]="{'flicker' : !locations.length}">הוסף מיקום חיילים</button>
+    </mat-menu>
   </div>
   <div class="d-flex justify-content-end">
     <div class="d-flex align-items-center" *ngFor="let key of localStorageKeys">
@@ -41,7 +53,8 @@
   </div>
   <div class="rtl f-22 fw-700 my-4">עודכן לאחרונה ב: {{lastUpdate}} </div>
   <div *ngIf="!locations.length && !people.length"
-    class="rtl f-14 fw-700 mt-5 justify-content-center d-flex flicker">אין חיילים/כוחות, לחץ "הוסף" בתפריט למעלה</div>
+       class="rtl f-14 fw-700 mt-5 justify-content-center d-flex flicker">אין חיילים/כוחות, לחץ "כלים" על מנת להוסיף
+  </div>
   <div class="titles">
     <div class="title col-3 rtl p-2 d-flex"
          [id]="location.id"
@@ -51,9 +64,6 @@
          'bg-light-red' : location.color === 'אדום',
          'bg-light-green' : location.color === 'ירוק'
          }"
-         cdkDrag
-         (cdkDragEnded)="onDragEnd($event)"
-         (cdkDragStarted)="onDragStart($event)"
          *ngFor="let location of locations">
       <div class="d-flex w-100"
            [ngClass]="location.z
@@ -74,8 +84,10 @@
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragStarted)="onDragStart($event)">
       {{ person.name }} - {{ person.job }}
-      <div class="bi bi-trash delete-btn" (click)="delete(person, 'person')"></div>
-      <div class="bi bi-pencil edit-btn" (click)="edit(person, 'person')"></div>
+      <div class="crud-container">
+        <div class="bi bi-trash delete-btn" (click)="delete(person, 'person')"></div>
+        <div class="bi bi-pencil edit-btn" (click)="edit(person, 'person')"></div>
+      </div>
     </div>
   </div>
 </div>

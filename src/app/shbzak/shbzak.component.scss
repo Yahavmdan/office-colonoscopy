@@ -19,20 +19,35 @@ div {
   100% { opacity:1; }
 }
 
-.delete-btn {
+.crud-container {
   position: absolute;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100px;
+  padding: 10px;
+  opacity: 0;
+  bottom: 0;
+  transition: all ease .2s .5s;
+}
+
+.delete-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
   color: #1e1e1e;
   opacity: 0;
-  left: 0;
-  transition: all ease .2s;
+  transition: all ease .2s .5s;
 }
 
 .edit-btn {
-  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
   color: #1e1e1e;
   opacity: 0;
-  left: 0;
-  transition: all ease .2s;
+  transition: all ease .2s .5s;
 }
 
 .drawn-box {
@@ -67,21 +82,23 @@ div {
 }
 
 .person {
-  cursor: grab;
+  cursor: pointer;
   padding: 2px;
   margin: 2px;
   border-radius: 5px;
   background: #cce8f3;
   border: 1px #6d8c96 solid;
-  &:hover .edit-btn {
-    width: 100%;
+  &:hover .crud-container {
     opacity: 1;
-    left: -40px;
+    background: #dcdcdc;
+    border-radius: 20px;
+    bottom: 25px;
+  }
+  &:hover .edit-btn {
+    opacity: 1;
   }
   &:hover .delete-btn {
-    width: 100%;
     opacity: 1;
-    left: -20px;
   }
 }
 

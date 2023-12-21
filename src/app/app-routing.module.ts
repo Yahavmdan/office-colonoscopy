@@ -10,6 +10,7 @@ import { DatePipe, NgClass, NgForOf, NgIf } from "@angular/common";
 import { ShbzakComponent } from "./shbzak/shbzak.component";
 import { CdkDrag, CdkDropList } from "@angular/cdk/drag-drop";
 import { CtrlShiftZDirective, CtrlYDirective, CtrlZDirective } from "./shared/directives/ctrl-z-ctrl-y-ctrl-shift-z";
+import { MatMenuModule } from "@angular/material/menu";
 
 const routes = [
   {path: '', loadChildren: () => import('./game-links/game-links.module').then(m => m.GameLinksModule)},
@@ -29,6 +30,7 @@ const routes = [
     CdkDropList,
     NgClass,
     DatePipe,
+    MatMenuModule,
   ],
   declarations: [
     LoginComponent,

@@ -1,4 +1,4 @@
-<form class="p-5 rtl"  [formGroup]="form" (ngSubmit)="store()">
+<form *ngIf="!data.multiple" class="p-5 rtl"  [formGroup]="form" (ngSubmit)="store()">
   <p class="f-22">{{data.type === 'person' ? 'הוסף חייל' : 'הוסף כוח/מיקום'}}</p>
   <mat-form-field class="w-100">
     <mat-label>{{data.type === 'person' ? 'שם החייל' : 'שם הכוח/מיקום'}}:</mat-label>
@@ -28,3 +28,20 @@
     <button mat-raised-button color="primary" type="submit" class="w-50">שלח</button>
   </div>
 </form>
+
+<form *ngIf="data.multiple" [formGroup]="form" (ngSubmit)="store()" class="p-5 rtl">
+  <p class="f-22">{{data.type === 'person' ? 'הוסף חיילים' : 'הוסף כוחות/מיקומים'}}</p>
+  <mat-form-field [style.width.px]="500">
+    <textarea matInput
+              rows="20"
+              cols="50"
+              [style.resize]="'none'"
+              placeholder="הכנס דאטה בפורמט JSON"
+              formControlName="list">
+    </textarea>
+  </mat-form-field>
+  <div class="d-flex justify-content-center">
+    <button mat-raised-button color="primary" type="submit" class="w-50">שלח</button>
+  </div>
+</form>
+
