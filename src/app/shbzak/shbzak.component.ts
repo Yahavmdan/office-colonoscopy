@@ -148,6 +148,7 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     }
     list.push(res);
     this.setLists(type, res);
+    localStorage.setItem('@' + type, JSON.stringify(list));
   }
 
   private storeLists(type: 'person' | 'location' | 'positions', list: string): void {
@@ -317,10 +318,12 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
   }
 
   public onDragStart(event: CdkDragStart): void {
+    event.source.element.nativeElement.classList.add('dragged')
     this.storeDraggingLog(this.getDragEvent(event));
   }
 
   public onDragEnd(event: CdkDragEnd): void {
+    event.source.element.nativeElement.classList.remove('dragged')
     this.getTime();
     const position = this.getDragEvent(event);
     let storedPositions = JSON.parse(localStorage.getItem('positions') || '[]');

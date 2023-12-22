@@ -28,6 +28,7 @@ div {
   opacity: 0;
   bottom: 0;
   transition: all ease .2s .5s;
+  z-index: -1;
 }
 
 .delete-btn {
@@ -38,6 +39,11 @@ div {
   color: #1e1e1e;
   opacity: 0;
   transition: all ease .2s .5s;
+  z-index: -1;
+}
+
+.dragged {
+  scale: 1.2;
 }
 
 .edit-btn {
@@ -48,6 +54,7 @@ div {
   color: #1e1e1e;
   opacity: 0;
   transition: all ease .2s .5s;
+  z-index: -1;
 }
 
 .drawn-box {
@@ -93,12 +100,15 @@ div {
     background: #dcdcdc;
     border-radius: 20px;
     bottom: 25px;
+    z-index: 3;
   }
   &:hover .edit-btn {
     opacity: 1;
+    z-index: 3;
   }
   &:hover .delete-btn {
     opacity: 1;
+    z-index: 3;
   }
 }
 
