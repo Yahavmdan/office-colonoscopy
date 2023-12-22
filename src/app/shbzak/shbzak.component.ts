@@ -205,6 +205,22 @@ export class ShbzakComponent implements AfterViewInit, OnInit {
     });
   }
 
+  public resetElLocation(): void {
+    const name: string|null = prompt('הכנס שם חייל');
+    if (!name) {
+      return;
+    }
+    const person: ViewItem[] = JSON.parse(localStorage.getItem('@person')!) ?? [];
+    person.forEach(p => {
+      if (p.name === name) {
+        if (document.getElementById(p.id.toString())) {
+          document.getElementById(p.id.toString())!.style.position = 'absolute';
+          document.getElementById(p.id.toString())!.style.transform = 'translate(0px, 0px)';
+        }
+      }
+    })
+  }
+
   public saveState(): void {
     this.getTime();
     localStorage.setItem('$ - ' + this.lastUpdate, JSON.stringify(this.getAllLocalStorageItems()));

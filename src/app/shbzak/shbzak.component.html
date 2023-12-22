@@ -21,6 +21,15 @@
         <span>שמור מצב</span>
       </span>
     </button>
+    <button (click)="resetElLocation()"
+            mat-button
+            [disabled]="!locations.length || !people.length"
+            class="m-2 button-layout bg-light-blue text-black justify-content-center align-items-center">
+      <span class="d-flex">
+        <i class="bi bi-arrow-clockwise mr-2"></i>
+        <span>אפס מיקום חייל</span>
+      </span>
+    </button>
     <button [matMenuTriggerFor]="data" class="m-2 button-layout bg-light-blue text-black" mat-button>
       <span class="d-flex">
         <i class="bi bi-tools mr-2"></i>
