@@ -10,7 +10,7 @@
     <i class="mx-2 bi bi-door-closed"></i>
   </div>
 </div>
-<div class="overflow-x-hidden" [ngClass]="{'dragging' : dragging}">
+<div class="overflow-x-hidden">
   <div #cards class="card-container"
        [ngClass]="links.length ? 'd-md-flex d-none' : ''">
     <div *ngFor="let item of categories"
@@ -43,16 +43,9 @@
         <div class="flip mt-1"><i class="bi bi-lightning-charge-fill f-10"></i></div>
       </div>
     </div>
-    <div cdkDropListGroup>
+    <div>
       <ng-container *ngFor="let link of links; let i = index">
-        <app-game-list cdkDropList
-                       (change)="hasChange($event)"
-                       [data]="{link, isAdmin}"
-                       [cdkDropListData]="{ item: link, index: i }"
-                       (cdkDropListDropped)="rearrangeLayout($event)"
-                       (dragging)="isDragging($event)"
-                       (dropping)="isDragging($event)">
-        </app-game-list>
+        <app-game-list [data]="{link, isAdmin}"></app-game-list>
       </ng-container>
     </div>
   </div>

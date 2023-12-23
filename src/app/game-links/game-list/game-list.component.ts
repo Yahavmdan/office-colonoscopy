@@ -6,8 +6,7 @@ import { GameLinkService } from "../../shared/services/Game-Link/game-link.servi
 
 @Component({
   selector: 'app-game-list',
-  templateUrl: './game-list.component.html',
-  styleUrls: ['./game-list.component.scss']
+  templateUrl: './game-list.component.html'
 })
 
 export class GameListComponent {

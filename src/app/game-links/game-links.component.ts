@@ -77,9 +77,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     this.deskTopAnimation();
     this.gameLinkService.getLinksByCategory(category).subscribe((res: GameLink[]): void => {
       card ? card.classList.add('shrink-card') : null;
-      this.links = [];
       this.links = res;
-      this.getLayout(category);
     });
   }
 
@@ -102,83 +100,6 @@ export class GameLinksComponent implements OnInit, OnDestroy {
           })
         }
       });
-  }
-
-  public hasChange(event: { changed: boolean, category: Category }): void {
-    if (event.changed) {
-      this.getLinks(event.category);
-    }
-  }
-
-  public rearrangeLayout(event: CdkDragDrop<{ item: GameLink, index: number }>): void {
-    this.links![event.previousContainer.data.index] = event.container.data.item;
-    this.links![event.container.data.index] = event.previousContainer.data.item;
-    this.setLayout(this.links);
-  }
-
-  private rearrangeArrayByIndex(links: GameLink[], savedItems: SavedItem[]): GameLink[] {
-    savedItems = this.filterNonExistedLinks(links, savedItems);
-    this.setNewSavedList(links, savedItems);
-    let result: GameLink[] = [];
-    savedItems.forEach((item: SavedItem): void => {
-      if (links.find((obj: GameLink): boolean => obj.id === item.id)) {
-        result[item.index] = <GameLink>links.find((obj: GameLink): boolean => obj.id === item.id);
-      }
-    });
-    result = result.filter((item: GameLink): boolean => item !== undefined);
-    return result as GameLink[];
-  }
-
-  private filterNonExistedLinks(links: GameLink[], savedItems: SavedItem[]): SavedItem[] {
-    const linkIds: number[] = links.map((item: GameLink) => item.id);
-    return savedItems.filter((item: SavedItem) => linkIds.includes(item.id));
-  }
-
-  private setNewSavedList(links: GameLink[], savedItems: SavedItem[]): void {
-    localStorage.setItem(links[0].category, JSON.stringify(savedItems));
-  }
-
-  private getLayout(category: Category): void {
-    if (localStorage.getItem(category)) {
-      let links: GameLink[] = this.clearDuplicates(this.links);
-      links = this.rearrangeArrayByIndex(links, JSON.parse(localStorage.getItem(category) ?? ''));
-      links = this.addMissingItemsToSavedLinks(links);
-      this.links = links;
-    }
-  }
-
-  private clearDuplicates(savedLinks: GameLink[]): GameLink[] {
-    const uniqueLinks: GameLink[] = [];
-    const seenIds: Set<number> = new Set<number>();
-    savedLinks.forEach((link: GameLink): void => {
-      if (!seenIds.has(link.id)) {
-        seenIds.add(link.id);
-        uniqueLinks.push(link);
-      }
-    })
-    return uniqueLinks as GameLink[];
-  }
-
-  private addMissingItemsToSavedLinks(savedLinks: GameLink[]): GameLink[] {
-    const savedLinksIds: Set<number> = new Set(savedLinks.map((link: GameLink) => link.id));
-    this.links.forEach((link: GameLink): void => {
-      if (!savedLinksIds.has(link.id)) {
-        savedLinks.push(link);
-        this.setLayout(savedLinks.filter((val: GameLink) => val));
-      }
-    })
-    return savedLinks as GameLink[];
-  }
-
-  private setLayout(links: GameLink[]): void {
-    const order: SavedItem[] = links?.map((link: GameLink, i: number): SavedItem => {
-      return {name: link.name, index: i, id: link.id};
-    });
-    localStorage.setItem(links[0].category, JSON.stringify(order ?? null));
-  }
-
-  public isDragging(event: boolean): void {
-    this.dragging = event;
   }
 
   public clearLinks(card: HTMLDivElement): void {
