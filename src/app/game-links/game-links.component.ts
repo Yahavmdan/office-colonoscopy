@@ -9,13 +9,6 @@ import { GameLinkFormComponent } from "./game-link-form/game-link-form.component
 import { GameLinkService } from "../shared/services/Game-Link/game-link.service";
 import { Categories } from "../shared/models/Game-Link/category.model";
 import { slideLeftRight } from "../shared/animations/animations";
-import { CdkDragDrop } from "@angular/cdk/drag-drop";
-
-interface SavedItem {
-  name: string;
-  index: number;
-  id: number
-}
 
 @Component({
   selector: 'app-game-links',
