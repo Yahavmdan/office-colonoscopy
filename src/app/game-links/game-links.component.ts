@@ -32,6 +32,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   isAdminSub: Subscription;
   isAdmin: boolean = false;
   isMobile: boolean = false;
+  private currentCategory: Category;
 
   constructor(private route: ActivatedRoute,
               private dialog: MatDialog,
@@ -68,9 +69,10 @@ export class GameLinksComponent implements OnInit, OnDestroy {
       this.getLinks(category, card);
       return;
     }
-    if (this.links[0].category !== category) {
+    if (this.currentCategory !== category) {
       this.getLinks(category, card);
     }
+    this.currentCategory = category;
   }
 
   private getLinks(category: Category, card?: HTMLDivElement): void {

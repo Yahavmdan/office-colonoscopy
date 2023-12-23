@@ -9,13 +9,14 @@ export interface GameLink {
   clicked?: boolean;
 }
 
-export type Category = 'geo' | 'word' | 'movies' | 'other' | 'video-games';
+export type Category = 'geo' | 'word' | 'movies' | 'other' | 'video-games' | 'all';
 export const CATEGORIES: Category[] = [
   'geo',
   'word',
   'movies',
   'other',
-  'video-games'
+  'video-games',
+  'all'
 ];
 
 export type SubCategory =
