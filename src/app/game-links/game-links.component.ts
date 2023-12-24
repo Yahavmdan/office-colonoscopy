@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -18,14 +17,12 @@ import { slideLeftRight } from "../shared/animations/animations";
 })
 
 export class GameLinksComponent implements OnInit, OnDestroy {
-  dragging: boolean = false;
-  categories: Categories[];
-  links: GameLink[] = [];
-  form: FormGroup
-  isAdminSub: Subscription;
-  isAdmin: boolean = false;
-  isMobile: boolean = false;
-  private currentCategory: Category;
+  public categories: Categories[];
+  public links: GameLink[] = [];
+  public isAdmin: boolean = false;
+  public currentCategory: Category;
+  private isAdminSub: Subscription;
+  private isMobile: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private dialog: MatDialog,

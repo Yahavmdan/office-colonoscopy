@@ -14,8 +14,7 @@
   <div #cards class="card-container"
        [ngClass]="links.length ? 'd-md-flex d-none' : ''">
     <div *ngFor="let item of categories"
-         class="category-card m-md-4 m-2 col-md-2 col-10 user-select-none"
-         [ngClass]="{'pointer' : !dragging}"
+         class="category-card m-md-4 m-2 col-md-2 col-10 user-select-none pointer"
          (click)="handleClick(item.category, cards)"
          [style.background-image]="'url(/assets/images/' + item.category + '.png)'">
       <div class="f-24 fw-700 my-2">{{ item.category | titlecase }}</div>
@@ -28,7 +27,7 @@
     <div *ngFor="let item of categories"
          class="mx-2 d-flex justify-content-center user-select-none"
          (click)="handleClick(item.category, cards)"
-         [ngClass]="{'border-bottom': links[0].category === item.category}">
+         [ngClass]="{'border-bottom': currentCategory === item.category}">
       {{ item.category | titlecase }}
     </div>
   </div>

@@ -12,7 +12,7 @@
 }
 
 .category-card {
-  transition: all 300ms ease-in-out;
+  transition: all 300ms .2s ease-in-out;
   height: min(350px, 80%);
   padding: 20px;
   border: solid 3px #333333;

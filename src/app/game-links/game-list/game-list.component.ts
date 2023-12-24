@@ -49,12 +49,4 @@ export class GameListComponent {
     })
   }
 
-  public drag(): void {
-    this.dragging.emit(true);
-  }
-
-  public drop(): void {
-    this.dropping.emit(false);
-  }
-
 }

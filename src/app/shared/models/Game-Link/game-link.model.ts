@@ -10,6 +10,7 @@ export interface GameLink {
 }
 
 export type Category = 'geo' | 'word' | 'movies' | 'other' | 'video-games' | 'all';
+
 export const CATEGORIES: Category[] = [
   'geo',
   'word',
@@ -29,6 +30,7 @@ export type SubCategory =
   | 'quiz'
   | 'video'
   | 'flag';
+
 export const SUB_CATEGORIES: SubCategory[] = [
   'map',
   'geography',
