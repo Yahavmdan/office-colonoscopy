@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -9,13 +8,6 @@ import { GameLinkFormComponent } from "./game-link-form/game-link-form.component
 import { GameLinkService } from "../shared/services/Game-Link/game-link.service";
 import { Categories } from "../shared/models/Game-Link/category.model";
 import { slideLeftRight } from "../shared/animations/animations";
-import { CdkDragDrop } from "@angular/cdk/drag-drop";
-
-interface SavedItem {
-  name: string;
-  index: number;
-  id: number
-}
 
 @Component({
   selector: 'app-game-links',
@@ -25,14 +17,12 @@ interface SavedItem {
 })
 
 export class GameLinksComponent implements OnInit, OnDestroy {
-  dragging: boolean = false;
-  categories: Categories[];
-  links: GameLink[] = [];
-  form: FormGroup
-  isAdminSub: Subscription;
-  isAdmin: boolean = false;
-  isMobile: boolean = false;
-  private currentCategory: Category;
+  public categories: Categories[];
+  public links: GameLink[] = [];
+  public isAdmin: boolean = false;
+  public currentCategory: Category;
+  private isAdminSub: Subscription;
+  private isMobile: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private dialog: MatDialog,
