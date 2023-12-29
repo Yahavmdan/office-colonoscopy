@@ -43,10 +43,10 @@
         <div class="flip mt-1"><i class="bi bi-lightning-charge-fill f-10"></i></div>
       </div>
     </div>
-    <div>
-      <ng-container *ngFor="let link of links; let i = index">
-        <app-game-list [data]="{link, isAdmin}"></app-game-list>
-      </ng-container>
+    <div class="row px-4">
+      <div class="col-6 col-sm-4 col-lg-3 my-4" *ngFor="let link of links; let i = index">
+          <app-game-list [data]="{link, isAdmin}"></app-game-list>
+      </div>
     </div>
   </div>
 </div>

@@ -3,6 +3,7 @@ export interface GameLink {
   name: string;
   description: string;
   link: string;
+  image: string;
   subCategory: string;
   category: Category;
   clickCount: number;
