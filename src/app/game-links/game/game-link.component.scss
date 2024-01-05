@@ -1,21 +1,42 @@
 .game-link {
-  transition: all 300ms ease-in-out;
+  transition: all 200ms ease-in-out;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 20rem;
+  padding: 5px;
+  border: solid 3px #333333;
+  background-repeat: no-repeat;
+  background-size: contain;
+  box-shadow: #333333 5px 5px 0 0;
+  background-position: right bottom;
 
-  @media (min-width: 600px) {
-    &:hover {
-      scale: 1.10;
-    }
+  &:hover {
+    scale: 1.10;
   }
+
+  &:hover .description {
+    opacity: 1;
+  }
+
 }
 
-img.image-res {
+.description {
+  transition: height, opacity 200ms ease-in-out;
+  opacity: 0;
+}
+
+img {
   width: 18rem;
   height: auto;
   align-self: center;
 }
 
 .clicks {
-  border-radius: 10px;
+  border-radius: 50%;
+  width: 27px;
+  height: 27px;
   background: lightgrey;
   display: flex;
   padding: 3px;
@@ -24,12 +45,7 @@ img.image-res {
 }
 
 .clicked {
-  color: #868686;
-  text-decoration: line-through;
-}
-
-.card-height {
-  height: 15rem;
+  background: rgba(75, 75, 75, 0.76);
 }
 
 @media (max-width: 600px) {

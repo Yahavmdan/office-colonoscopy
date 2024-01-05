@@ -1,9 +1,18 @@
-<div class="game-link card pointer card-height" (click)="nav(data.link)" (wheelClick)="nav(data.link)">
-  <img class="card-img-top img-fluid image-res" [src]="'assets/images/' + data.link.image" [alt]="data.link.name">
-  <div class="card-body d-flex justify-content-between">
-    <p class="card-text">  {{data.link.name}} </p>
-    <p class="card-title d-flex align-items-center justify-content-start user-select-none">
-      <span class="clicks f-12 f-md-10 mx-2"> {{data.link.clickCount}} </span>
-    </p>
+<div class="game-link pointer" [ngClass]="{'clicked' : data.link.clicked}" (click)="nav(data.link)"
+     (wheelClick)="nav(data.link)">
+  <img class="img-fluid" [src]="'assets/images/' + data.link.image" [alt]="data.link.name">
+  <div class="p-2">
+    <div class=" d-flex justify-content-between">
+      <section class="card-text">{{data.link.name}}</section>
+      <section class="card-title d-flex align-items-center justify-content-start user-select-none">
+        <span class="clicks f-12 f-md-10 mx-2"> {{data.link.clickCount > 999 ? '+999' : data.link.clickCount}} </span>
+      </section>
+    </div>
+    <section class="description">{{data.link.description}}</section>
+    <section class="card-title d-flex align-items-center justify-content-start user-select-none">
+      <div class="d-flex">
+        <i *ngFor="let subCategory of data.link.subCategory" [class]="setSubCategory(subCategory)"></i>
+      </div>
+    </section>
   </div>
 </div>
