@@ -1,7 +1,7 @@
 <div class="game-link pointer" [ngClass]="{'clicked' : data.link.clicked}" (click)="nav(data.link)"
      (wheelClick)="nav(data.link)">
   <img class="img-fluid" [ngSrc]="'assets/images/game-pic/' + data.link.image" [alt]="data.link.name" [loading]="'lazy'" width="160" height="100">
-  <div class="p-2">
+  <div class="px-2 d-flex flex-column justify-content-between">
     <div class=" d-flex justify-content-between">
       <section class="card-text">{{data.link.name}}</section>
       <section class="card-title d-flex align-items-center justify-content-start user-select-none">
