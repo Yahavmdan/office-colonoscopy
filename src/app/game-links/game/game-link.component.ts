@@ -24,6 +24,10 @@ export class GameLinkComponent {
     this.data.link.clicked = true;
   }
 
+  public setGamePic(game: GameLink): string {
+    return game.image !== ('' || null) ? game.image : 'null.png';
+  }
+
   public setSubCategory(subCategory: string): string {
     let base: string = 'mx-1 bi'
     switch (subCategory) {

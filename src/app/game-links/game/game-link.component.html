@@ -1,8 +1,8 @@
 <div class="game-link pointer" [ngClass]="{'clicked' : data.link.clicked}" (click)="nav(data.link)"
      (wheelClick)="nav(data.link)">
-  <img class="img-fluid" [src]="'assets/images/' + data.link.image" [alt]="data.link.name">
+  <img class="img-fluid" [ngSrc]="'assets/images/game-pic/' + setGamePic(data.link)" [alt]="data.link.name" [loading]="'lazy'" width="160" height="100">
   <div class="px-2 d-flex flex-column justify-content-between">
-    <div class="d-flex justify-content-between">
+    <div class=" d-flex justify-content-between">
       <section class="card-text">{{data.link.name}}</section>
       <section class="card-title d-flex align-items-center justify-content-start user-select-none">
         <span class="clicks f-12 f-md-10 mx-2"> {{data.link.clickCount > 999 ? '+999' : data.link.clickCount}} </span>

@@ -16,7 +16,7 @@
     <div *ngFor="let item of categories"
          class="category-card m-md-4 m-2 col-md-2 col-10 user-select-none pointer"
          (click)="handleClick(item.category, cards)"
-         [style.background-image]="'url(/assets/images/' + item.category + '.png)'">
+         [style.background-image]="'url(/assets/images/categories/' + item.category + '.png)'">
       <div class="f-24 fw-700 my-2">{{ item.category | titlecase }}</div>
       <div class="text-grey3">clicks: {{ item.totalClicks }}</div>
       <div class="text-grey3">Total games: {{ item.itemCount }}</div>
