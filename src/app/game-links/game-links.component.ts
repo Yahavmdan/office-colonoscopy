@@ -8,6 +8,9 @@ import { GameLinkFormComponent } from "./game-link-form/game-link-form.component
 import { GameLinkService } from "../shared/services/Game-Link/game-link.service";
 import { Categories } from "../shared/models/Game-Link/category.model";
 import { slideLeftRight } from "../shared/animations/animations";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { firebaseConfig, environment } from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-game-links',
@@ -31,6 +34,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.initializeAnalytics();
     this.isMobile = window.innerWidth <= 768;
     this.categories = this.route.snapshot.data['categories'];
     this.isAdminSub = this.authService.isAdminAuthenticated
@@ -40,6 +44,12 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
     this.authService.autoLogin();
     this.authService.autoLogout();
+  }
+
+  private initializeAnalytics(): void {
+    environment.production
+      ? getAnalytics(initializeApp(firebaseConfig))
+      : null;
   }
 
   public add(): void {
