@@ -12,10 +12,9 @@
 </div>
 <div class="overflow-x-hidden">
   <div #cards class="card-container"
-       [ngClass]="links.length ? 'd-md-flex d-none' : ''">
+       [ngClass]="{'d-md-flex d-none' : links.length}">
     <div *ngFor="let item of categories"
-         class="category-card col-md-2 col-10 user-select-none pointer"
-         [ngClass]="!links.length ? 'm-md-4 m-2' : 'm-md-1 m-1'"
+         class="category-card col-md-2 col-10 user-select-none m-md-4 m-2 pointer"
          (click)="handleClick(item.category, cards)"
          [style.background-image]="'url(/assets/images/categories/' + item.category + '.png)'">
       <div class="f-24 fw-700 my-2">{{ item.category | titlecase }}</div>
