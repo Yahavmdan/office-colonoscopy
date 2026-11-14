@@ -5,7 +5,12 @@ import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styles: [`
+    .login-page { min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .login-card { width: 100%; max-width: 400px; padding: 32px 28px; display: flex; flex-direction: column; }
+    .login-error { color: var(--danger); margin: -4px 0 16px; font-size: 14px; }
+  `]
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;

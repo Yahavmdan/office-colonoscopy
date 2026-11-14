@@ -1,13 +1,7 @@
-<div class="d-flex align-items-center transition-all justify-content-center">
-  <div class="d-flex position-relative l-2">
-    <div *ngIf="data.isAdmin" class="d-flex pointer position-relative l-2">
-      <i class="bi bi-trash3 text-red"
-         (click)="delete(data.link)"></i>
-      <i class="mx-1 bi bi-pencil text-blue"
-         (click)="edit(data.link)"></i>
-    </div>
+<div class="game-wrap">
+  <div *ngIf="data.isAdmin" class="admin-actions">
+    <button class="ui-icon-btn" title="Edit" (click)="edit(data.link)"><i class="bi bi-pencil"></i></button>
+    <button class="ui-icon-btn danger" title="Delete" (click)="delete(data.link)"><i class="bi bi-trash3"></i></button>
   </div>
-  <div class="col-12">
-    <app-game [data]="{link: data.link, isAdmin: data.isAdmin}"></app-game>
-  </div>
+  <app-game [data]="{link: data.link, isAdmin: data.isAdmin}"></app-game>
 </div>

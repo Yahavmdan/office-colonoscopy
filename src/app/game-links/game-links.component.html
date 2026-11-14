@@ -1,57 +1,76 @@
-<div class="d-flex align-content-start justify-content-between p-2 border-bottom text-grey2 f-16"
-     *ngIf="isAdmin">
-  <div class="d-flex align-items-center">
-    <div class="d-flex align-items-center pointer" (click)="add()">
-      <i class="mx-2 bi bi-plus-circle"></i>
-      <span>Add a game</span>
-    </div>
-    <a routerLink="/admin" class="d-flex align-items-center ms-4 text-grey2 text-decoration-none">
-      <i class="mx-2 bi bi-gear"></i>
-      <span>Admin panel</span>
+<header class="topbar">
+  <div class="ui-page topbar-inner">
+    <a class="brand f-20 pointer" (click)="back()">
+      <img src="assets/images/app-icon.png" alt="">
+      Office Colonoscopy
     </a>
+    <nav *ngIf="isAdmin" class="d-flex align-items-center gap-2">
+      <button class="ui-btn accent" (click)="add()"><i class="bi bi-plus-lg"></i><span class="d-none d-sm-inline">Add game</span></button>
+      <a class="ui-btn" routerLink="/admin"><i class="bi bi-gear"></i><span class="d-none d-sm-inline">Admin</span></a>
+      <button class="ui-btn ghost" (click)="logout()" title="Logout"><i class="bi bi-box-arrow-right"></i></button>
+    </nav>
   </div>
-  <div class="d-flex align-items-center pointer" (click)="logout()">
-    <span>logout</span>
-    <i class="mx-2 bi bi-door-closed"></i>
+</header>
+
+<!-- Home: pick a category -->
+<main *ngIf="!currentCategory" class="ui-page">
+  <section class="hero">
+    <h1>Daily break games</h1>
+    <p>Pick a category, play today's puzzles, get back to work. Eventually.</p>
+  </section>
+
+  <div class="category-grid">
+    <button *ngFor="let item of categories"
+            class="category-card"
+            [style.--cat-color]="'var(--cat-' + item.category + ', var(--cat-other))'"
+            [style.background-image]="categoryImage(item.category)"
+            (click)="select(item.category)">
+      <span class="category-name">{{ item.category === 'all' ? 'All games' : label(item.category) }}</span>
+      <span class="category-meta">{{ item.itemCount }} games · {{ item.totalClicks }} plays</span>
+      <span class="category-go"><i class="bi bi-arrow-right"></i></span>
+    </button>
   </div>
-</div>
-<div class="overflow-x-hidden">
-  <div #cards class="card-container"
-       [ngClass]="{'d-md-flex d-none' : links.length}">
-    <div *ngFor="let item of categories"
-         class="category-card col-md-2 col-10 user-select-none m-md-4 m-2 pointer"
-         (click)="handleClick(item.category, cards)"
-         [style.background-image]="'url(/assets/images/categories/' + item.category + '.png)'">
-      <div class="f-24 fw-700 my-2">{{ item.category | titlecase }}</div>
-      <div class="text-grey3">clicks: {{ item.totalClicks }}</div>
-      <div class="text-grey3">Total games: {{ item.itemCount }}</div>
+</main>
+
+<!-- Category view -->
+<main *ngIf="currentCategory" class="ui-page">
+  <div class="tabs-bar">
+    <button class="ui-btn ghost back-btn" (click)="back()" title="All categories"><i class="bi bi-grid"></i></button>
+    <div class="tabs">
+      <button *ngFor="let item of categories"
+              class="tab"
+              [class.active]="currentCategory === item.category"
+              [style.--cat-color]="'var(--cat-' + item.category + ', var(--cat-other))'"
+              (click)="select(item.category)">
+        {{ item.category === 'all' ? 'All' : label(item.category) }}
+        <span>{{ item.itemCount }}</span>
+      </button>
     </div>
   </div>
-  <div *ngIf="links.length" class="justify-content-center my-2"
-       [ngClass]="links.length ? 'd-md-none d-flex' : ''">
-    <div *ngFor="let item of categories"
-         class="mx-2 d-flex justify-content-center user-select-none"
-         (click)="handleClick(item.category, cards)"
-         [ngClass]="{'border-bottom': currentCategory === item.category}">
-      {{ item.category | titlecase }}
+
+  <div class="toolbar">
+    <div class="search">
+      <i class="bi bi-search"></i>
+      <input [(ngModel)]="search" placeholder="Search games" aria-label="Search games"
+             (keydown.escape)="search = ''">
+      <button *ngIf="search" class="clear" (click)="search = ''" aria-label="Clear"><i class="bi bi-x"></i></button>
     </div>
+    <span class="text-grey2 f-14 d-none d-md-inline" *ngIf="links.length">
+      {{ playedCount }}/{{ links.length }} played today
+    </span>
+    <button class="ui-btn primary" (click)="playEmAll()" [disabled]="!filteredLinks.length">
+      <i class="bi bi-lightning-charge-fill"></i> Play 'em all
+    </button>
   </div>
-  <div @slideLeftRight *ngIf="links.length" class="d-flex flex-column col-md-12 col-12">
-    <div class="d-flex justify-content-between align-content-center p-3"
-         [ngClass]="{'mt-10': links.length}">
-      <div (click)="clearLinks(cards)" class="f-20 pointer">
-        <i class="bi bi-x-lg"></i>
-      </div>
-      <div (click)="playEmAll(links)" class="pointer d-flex user-select-none">
-        <div class="mt-1"><i class="bi bi-lightning-charge-fill f-10"></i></div>
-        Play 'em all!
-        <div class="flip mt-1"><i class="bi bi-lightning-charge-fill f-10"></i></div>
-      </div>
-    </div>
-    <div class="row px-4">
-      <div class="col-6 col-sm-4 col-lg-3 my-4" *ngFor="let link of links; let i = index">
-          <app-game-list [data]="{link, isAdmin}" (change)="onLinkChanged()"></app-game-list>
-      </div>
-    </div>
+
+  <div *ngIf="loading" class="empty"><i class="bi bi-arrow-repeat spinner d-inline-block f-24"></i></div>
+
+  <div *ngIf="!loading && !filteredLinks.length" class="empty">
+    {{ search ? 'No games match "' + search + '"' : 'No games here yet.' }}
   </div>
-</div>
+
+  <div *ngIf="!loading" class="game-grid">
+    <app-game-list *ngFor="let link of filteredLinks; trackBy: trackById"
+                   [data]="{link, isAdmin}" (change)="onLinkChanged()"></app-game-list>
+  </div>
+</main>

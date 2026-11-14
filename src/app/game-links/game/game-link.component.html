@@ -1,18 +1,19 @@
-<div class="game-link pointer" [ngClass]="{'clicked' : data.link.clicked}" (click)="nav(data.link)"
-     (wheelClick)="nav(data.link)">
-  <img class="img-fluid" [ngSrc]="'assets/images/game-pic/' + setGamePic(data.link)" [alt]="data.link.name" [loading]="'lazy'" width="160" height="100">
-  <div class="px-2 d-flex flex-column justify-content-between">
-    <div class=" d-flex justify-content-between">
-      <section class="card-text">{{data.link.name}}</section>
-      <section class="card-title d-flex align-items-center justify-content-start user-select-none">
-        <span class="clicks f-12 f-md-10 mx-2"> {{data.link.clickCount > 999 ? '+999' : data.link.clickCount}} </span>
-      </section>
-    </div>
-    <section class="description">{{data.link.description}}</section>
-    <section class="card-title d-flex align-items-center justify-content-start user-select-none">
-      <div class="d-flex">
-        <i *ngFor="let subCategory of data.link.subCategory" [class]="setSubCategory(subCategory)"></i>
-      </div>
-    </section>
+<a class="game-card" [class.played]="data.link.clicked"
+   [href]="data.link.link" target="_blank" rel="noopener"
+   (click)="nav(data.link)" (auxclick)="$event.button === 1 ? nav(data.link) : null">
+  <div class="thumb">
+    <img [src]="setGamePic(data.link)" [alt]="data.link.name" loading="lazy" width="320" height="200"
+         (error)="onImageError($event)">
+    <span *ngIf="data.link.clicked" class="played-badge"><i class="bi bi-check-lg"></i> played</span>
   </div>
-</div>
+  <div class="body">
+    <div class="title-row">
+      <span class="name">{{ data.link.name }}</span>
+      <span class="clicks" title="{{ data.link.clickCount }} plays"><i class="bi bi-hand-index"></i>{{ clicks }}</span>
+    </div>
+    <p class="description">{{ data.link.description }}</p>
+    <div class="tags" *ngIf="data.link.subCategory?.length">
+      <i *ngFor="let s of data.link.subCategory" [class]="subCategoryIcon(s)" [title]="s"></i>
+    </div>
+  </div>
+</a>

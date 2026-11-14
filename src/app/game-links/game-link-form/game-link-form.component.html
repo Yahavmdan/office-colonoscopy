@@ -54,12 +54,12 @@
 
   <div class="d-flex gap-2 mt-4 justify-content-end flex-wrap">
     <span *ngIf="addedCount" class="me-auto align-self-center text-grey3">{{ addedCount }} added</span>
-    <button mat-button type="button" (click)="cancel()">Cancel</button>
-    <button *ngIf="!editMode" mat-stroked-button type="button" [disabled]="saving" (click)="submit(true)">
+    <button class="ui-btn ghost" type="button" (click)="cancel()">Cancel</button>
+    <button *ngIf="!editMode" class="ui-btn" type="button" [disabled]="saving" (click)="submit(true)">
       Save &amp; add another
     </button>
-    <button mat-raised-button color="warn" type="submit" [disabled]="saving">
-      {{ editMode ? 'Update' : 'Add' }}
+    <button class="ui-btn primary" type="submit" [disabled]="saving">
+      {{ editMode ? 'Save changes' : 'Add game' }}
     </button>
   </div>
 </form>

@@ -1,7 +1,52 @@
+@use '@angular/material' as mat;
+
+// Custom Material theme: ink-black primary, warm yellow accent, red warn.
+// Replaces the prebuilt indigo-pink theme so focus rings, checkboxes and
+// buttons match the app's black-and-paper look.
+@include mat.core();
+
+$ink-palette: (
+  50: #f2f2f2, 100: #e0e0e0, 200: #bdbdbd, 300: #9e9e9e, 400: #757575,
+  500: #1e1e1e, 600: #1a1a1a, 700: #151515, 800: #101010, 900: #000000,
+  A100: #e0e0e0, A200: #9e9e9e, A400: #424242, A700: #1e1e1e,
+  contrast: (
+    50: rgba(black, .87), 100: rgba(black, .87), 200: rgba(black, .87), 300: rgba(black, .87),
+    400: white, 500: white, 600: white, 700: white, 800: white, 900: white,
+    A100: rgba(black, .87), A200: rgba(black, .87), A400: white, A700: white,
+  )
+);
+
+$app-theme: mat.define-light-theme((
+  color: (
+    primary: mat.define-palette($ink-palette, 500),
+    accent: mat.define-palette(mat.$amber-palette, 400),
+    warn: mat.define-palette(mat.$red-palette, 500),
+  ),
+  typography: mat.define-typography-config($font-family: "'Space Grotesk', system-ui, sans-serif"),
+  density: 0,
+));
+
+@include mat.all-component-themes($app-theme);
+
+// Dialogs: square paper card with a hard offset shadow.
 .mdc-dialog__surface {
   border-radius: 0 !important;
-  border: solid 3px #333333;
-  transition: all 300ms;
-  background-repeat: no-repeat;
-  box-shadow: #333333 15px 15px 0 0 !important;
+  border: solid 3px #1e1e1e;
+  box-shadow: #1e1e1e 10px 10px 0 0 !important;
+  background: #fffdf7 !important;
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border-radius: 0 !important;
+  border: solid 2px #1e1e1e;
+  box-shadow: #1e1e1e 4px 4px 0 0 !important;
+}
+
+.mat-mdc-raised-button, .mat-mdc-unelevated-button, .mat-mdc-outlined-button {
+  border-radius: 0 !important;
+}
+
+.mat-mdc-raised-button:not(:disabled) {
+  border: solid 2px #1e1e1e;
+  box-shadow: #1e1e1e 3px 3px 0 0 !important;
 }

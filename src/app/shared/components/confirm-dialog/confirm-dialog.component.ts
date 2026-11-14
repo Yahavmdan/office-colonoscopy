@@ -14,8 +14,8 @@ export interface ConfirmDialogData {
       <div class="f-20 fw-700 mb-3">{{ data.message }}</div>
       <div class="text-grey3 mb-4">This cannot be undone.</div>
       <div class="d-flex justify-content-end gap-2">
-        <button mat-button [mat-dialog-close]="false">Cancel</button>
-        <button mat-raised-button color="warn" [mat-dialog-close]="true" cdkFocusInitial>
+        <button class="ui-btn ghost" [mat-dialog-close]="false">Cancel</button>
+        <button class="ui-btn" style="background: var(--danger); color: #fff" [mat-dialog-close]="true" cdkFocusInitial>
           {{ data.confirmText || 'Delete' }}
         </button>
       </div>

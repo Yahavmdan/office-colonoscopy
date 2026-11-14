@@ -7,7 +7,12 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 
 @Component({
   selector: 'app-game-list',
-  templateUrl: './game-list.component.html'
+  templateUrl: './game-list.component.html',
+  styles: [`
+    :host { display: block; }
+    .game-wrap { position: relative; height: 100%; }
+    .admin-actions { position: absolute; top: 8px; right: 8px; z-index: 2; display: flex; gap: 6px; }
+  `]
 })
 
 export class GameListComponent {

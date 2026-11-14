@@ -1,6 +1,19 @@
 import { Component, Input } from '@angular/core';
 import { GameLink } from "../../shared/models/Game-Link/game-link.model";
 import { GameLinkService } from "../../shared/services/Game-Link/game-link.service";
+import { markPlayed } from "../../shared/played";
+
+const SUB_CATEGORY_ICONS: Record<string, string> = {
+  map: 'bi-map',
+  geography: 'bi-globe2',
+  picture: 'bi-card-image',
+  language: 'bi-translate',
+  puzzle: 'bi-puzzle',
+  quiz: 'bi-question-circle',
+  movies: 'bi-film',
+  video: 'bi-play-btn',
+  flag: 'bi-flag',
+};
 
 @Component({
   selector: 'app-game',
@@ -14,44 +27,34 @@ export class GameLinkComponent {
   constructor(private gameLinkService: GameLinkService) {
   }
 
+  /** Counts the click and marks the game as played; the anchor itself opens the tab. */
   public nav(game: GameLink): void {
     this.gameLinkService.increaseClickCount(game.id).subscribe((res: boolean): void => {
       if (res) {
-        this.data.link.clickCount++
+        this.data.link.clickCount++;
       }
-    })
-    window.open(game.link, '_blank');
+    });
     this.data.link.clicked = true;
+    markPlayed([game.id]);
   }
 
   public setGamePic(game: GameLink): string {
-    return game.image !== ('' || null) ? game.image : 'null.png';
+    return 'assets/images/game-pic/' + (game.image ? game.image : 'null.png');
   }
 
-  public setSubCategory(subCategory: string): string {
-    let base: string = 'mx-1 bi'
-    switch (subCategory) {
-      case 'map':
-        return base += ' bi-map text-grey3';
-      case 'geography':
-        return base += ' bi-globe2 text-grey3';
-      case 'picture':
-        return base += ' bi-card-image text-grey3';
-      case 'language':
-        return base += ' bi-translate text-grey3';
-      case 'puzzle':
-        return base += ' bi-puzzle text-grey3';
-      case 'quiz':
-        return base += ' bi-question-circle text-grey3';
-      case 'movies':
-        return base += ' bi-film text-grey3';
-      case 'flag':
-        return base += ' bi-flag text-grey3';
+  public onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (!img.src.endsWith('null.png')) {
+      img.src = 'assets/images/game-pic/null.png';
     }
-    return base;
   }
 
+  public subCategoryIcon(subCategory: string): string {
+    return 'bi ' + (SUB_CATEGORY_ICONS[subCategory] || 'bi-dot');
+  }
+
+  public get clicks(): string {
+    const n = this.data.link.clickCount;
+    return n > 999 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(n);
+  }
 }
-
-
-
