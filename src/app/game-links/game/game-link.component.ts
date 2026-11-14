@@ -2,7 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { GameLink } from "../../shared/models/Game-Link/game-link.model";
 import { GameLinkService } from "../../shared/services/Game-Link/game-link.service";
-import { markPlayed } from "../../shared/played";
+import { markPlayed, unmarkPlayed } from "../../shared/played";
 
 const SUB_CATEGORY_ICONS: Record<string, string> = {
   map: 'bi-map',
@@ -60,6 +60,11 @@ export class GameLinkComponent implements OnChanges {
     this.previewUrl = link && !link.image && canFrame(link.link)
       ? this.sanitizer.bypassSecurityTrustResourceUrl(link.link)
       : null;
+  }
+
+  public unplay(): void {
+    this.data.link.clicked = false;
+    unmarkPlayed([this.data.link.id]);
   }
 
   public setGamePic(game: GameLink): string {

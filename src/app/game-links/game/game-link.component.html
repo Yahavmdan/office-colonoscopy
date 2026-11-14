@@ -8,7 +8,6 @@
     <iframe *ngIf="previewUrl" class="site-preview" [src]="previewUrl" loading="lazy"
             sandbox="allow-scripts allow-same-origin" tabindex="-1" aria-hidden="true"
             referrerpolicy="no-referrer" [title]="data.link.name + ' preview'"></iframe>
-    <span *ngIf="data.link.clicked" class="played-badge"><i class="bi bi-check-lg"></i> played</span>
   </div>
   <div class="body">
     <div class="title-row">
@@ -21,3 +20,7 @@
     </div>
   </div>
 </a>
+<button *ngIf="data.link.clicked" class="played-badge" type="button"
+        title="Mark as not played" (click)="unplay()">
+  <i class="bi bi-check-lg"></i> played <i class="bi bi-x-lg undo"></i>
+</button>

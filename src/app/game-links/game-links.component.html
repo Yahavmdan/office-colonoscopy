@@ -1,6 +1,6 @@
 <header class="topbar">
   <div class="ui-page topbar-inner">
-    <a class="brand f-20 pointer" (click)="back()">
+    <a class="brand f-20" routerLink="/">
       <img src="assets/images/app-icon.png" alt="">
       Office Colonoscopy
     </a>
@@ -20,31 +20,31 @@
   </section>
 
   <div class="category-grid">
-    <button *ngFor="let item of categories"
+    <a *ngFor="let item of categories"
             class="category-card"
+            [routerLink]="['/games', item.category]"
             [style.--cat-color]="'var(--cat-' + item.category + ', var(--cat-other))'"
-            [style.background-image]="categoryImage(item.category)"
-            (click)="select(item.category)">
+            [style.background-image]="categoryImage(item.category)">
       <span class="category-name">{{ item.category === 'all' ? 'All games' : label(item.category) }}</span>
       <span class="category-meta">{{ item.itemCount }} games · {{ item.totalClicks }} plays</span>
       <span class="category-go"><i class="bi bi-arrow-right"></i></span>
-    </button>
+    </a>
   </div>
 </main>
 
 <!-- Category view -->
 <main *ngIf="currentCategory" class="ui-page">
   <div class="tabs-bar">
-    <button class="ui-btn ghost back-btn" (click)="back()" title="All categories"><i class="bi bi-grid"></i></button>
+    <a class="ui-btn ghost back-btn" routerLink="/" title="All categories"><i class="bi bi-grid"></i></a>
     <div class="tabs">
-      <button *ngFor="let item of categories"
-              class="tab"
-              [class.active]="currentCategory === item.category"
-              [style.--cat-color]="'var(--cat-' + item.category + ', var(--cat-other))'"
-              (click)="select(item.category)">
+      <a *ngFor="let item of categories"
+         class="tab"
+         [routerLink]="['/games', item.category]"
+         [class.active]="currentCategory === item.category"
+         [style.--cat-color]="'var(--cat-' + item.category + ', var(--cat-other))'">
         {{ item.category === 'all' ? 'All' : label(item.category) }}
         <span>{{ item.itemCount }}</span>
-      </button>
+      </a>
     </div>
   </div>
 
@@ -58,6 +58,9 @@
     <span class="text-grey2 f-14 d-none d-md-inline" *ngIf="links.length">
       {{ playedCount }}/{{ links.length }} played today
     </span>
+    <button *ngIf="playedCount" class="ui-btn ghost" (click)="resetPlayed()" title="Mark all games as not played">
+      <i class="bi bi-arrow-counterclockwise"></i><span class="d-none d-sm-inline">Reset played</span>
+    </button>
     <button class="ui-btn primary" (click)="playEmAll()" [disabled]="!filteredLinks.length">
       <i class="bi bi-lightning-charge-fill"></i> Play 'em all
     </button>

@@ -39,6 +39,7 @@
 
 .category-card {
   position: relative;
+  text-decoration: none;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -118,6 +119,8 @@
 
 .tab {
   flex-shrink: 0;
+  color: var(--ink);
+  text-decoration: none;
   padding: 6px 14px;
   border: solid 2px var(--ink);
   background: var(--card);
@@ -179,6 +182,10 @@
 
 .toolbar .ui-btn.primary {
   margin-left: auto;
+}
+
+.toolbar .ui-btn.ghost {
+  padding: 6px 8px;
 }
 
 .game-grid {

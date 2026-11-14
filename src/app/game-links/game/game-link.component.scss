@@ -1,5 +1,6 @@
 :host {
   display: block;
+  position: relative;
   height: 100%;
 }
 
@@ -64,15 +65,33 @@
 }
 
 .played-badge {
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   top: 8px;
   left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 2px 8px;
-  font-size: 12px;
-  font-weight: 700;
+  font: 700 12px var(--font);
+  color: var(--ink);
   background: var(--accent);
   border: solid 2px var(--ink);
+  cursor: pointer;
+
+  .undo {
+    font-size: 10px;
+    opacity: .6;
+  }
+
+  &:hover {
+    background: var(--ink);
+    color: #fff;
+
+    .undo {
+      opacity: 1;
+    }
+  }
 }
 
 .body {

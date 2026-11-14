@@ -11,3 +11,10 @@ export const adminGuard: CanActivateFn = () => {
   authService.logout();
   return inject(Router).createUrlTree(['/login']);
 };
+
+/** Already logged in? Skip the login form and go straight to the admin panel. */
+export const loginGuard: CanActivateFn = () => {
+  return inject(AuthService).hasValidToken()
+    ? inject(Router).createUrlTree(['/admin'])
+    : true;
+};

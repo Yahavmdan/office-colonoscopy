@@ -20,7 +20,7 @@ import { WheelClickModule } from "../shared/directives/wheel-click.module";
 import { ShbzakComponent } from "../shbzak/shbzak.component";
 import { AdminComponent } from "../admin/admin.component";
 import { ConfirmDialogComponent } from "../shared/components/confirm-dialog/confirm-dialog.component";
-import { adminGuard } from "../shared/guards/admin.guard";
+import { adminGuard, loginGuard } from "../shared/guards/admin.guard";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -28,21 +28,37 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    component: GameLinksComponent,
+    resolve: {categories: Categories},
+    title: 'Office Colonoscopy · Daily break games'
+  },
+  {
+    // category view, e.g. /games/geo or /games/all (title set by the component)
+    path: 'games/:category',
     component: GameLinksComponent,
     resolve: {categories: Categories}
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [loginGuard],
+    title: 'Admin login · Office Colonoscopy'
   },
   {
     path: 'admin',
     component: AdminComponent,
-    canActivate: [adminGuard]
+    canActivate: [adminGuard],
+    title: 'Admin · Office Colonoscopy'
   },
   {
     path: 'shbzak',
-    component: ShbzakComponent
+    component: ShbzakComponent,
+    title: 'שבצ"ק'
+  },
+  {
+    path: '**',
+    redirectTo: ''
   }
 ];
 

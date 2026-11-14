@@ -15,6 +15,15 @@ export function playedToday(): Set<number> {
   return new Set(read());
 }
 
+export function unmarkPlayed(ids: number[]): void {
+  try {
+    const drop = new Set(ids);
+    localStorage.setItem(key(), JSON.stringify(read().filter(id => !drop.has(id))));
+  } catch {
+    // storage unavailable
+  }
+}
+
 export function markPlayed(ids: number[]): void {
   try {
     const all = new Set([...read(), ...ids]);
