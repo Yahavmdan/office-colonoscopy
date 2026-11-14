@@ -8,7 +8,7 @@ const FIRST_DELAY_MS = 6000;
 const MIN_GAP_MS = 25000;
 const MAX_GAP_MS = 50000;
 const DIGEST_MS = 1800;   // two digest cycles
-const RELEASE_MS = 1500;  // push + drop + fade; keep in sync with CSS below
+const RELEASE_MS = 1800;  // 1400ms ooze + 400ms fade; keep in sync with CSS below
 
 /**
  * The header logo. Every so often it digests for a moment and drops a turd,
@@ -21,7 +21,7 @@ const RELEASE_MS = 1500;  // push + drop + fade; keep in sync with CSS below
   template: `
     <span class="mark" [class.digest]="phase === 'digest'" [class.release]="phase === 'release'">
       <img class="gut" src="assets/images/app-icon.png" alt="">
-      <app-turd *ngIf="phase === 'release'" class="poop"></app-turd>
+      <span *ngIf="phase === 'release'" class="chute"><app-turd class="poop"></app-turd></span>
     </span>
   `,
   styles: [`
@@ -30,12 +30,18 @@ const RELEASE_MS = 1500;  // push + drop + fade; keep in sync with CSS below
     .gut { display: block; width: 100%; height: 100%; transform-origin: 50% 85%; }
 
     .digest .gut  { animation: digest 900ms ease-in-out 2; }
-    .release .gut { animation: push 900ms ease-in-out forwards; }
+    .release .gut { animation: push 1400ms ease-in-out forwards; }
 
+    /* zero-size point at the rectum; anything above it is clipped so the turd emerges from the tube */
+    .chute {
+      position: absolute; left: 16.8px; top: 29.8px; width: 0; height: 0; pointer-events: none;
+      clip-path: polygon(-60px 0, 60px 0, 60px 60px, -60px 60px);
+      animation: fade 400ms ease-in 1400ms forwards;
+    }
     .poop {
-      position: absolute; left: 50%; top: 20px; width: 26px; height: 11px;
-      transform: translate(-50%, 0) scale(0); opacity: 0; pointer-events: none;
-      animation: drop 1500ms cubic-bezier(.3, .7, .4, 1) forwards;
+      position: absolute; left: -8.5px; top: -3.75px; width: 17px; height: 7.5px;
+      transform: translateY(-10px) rotate(-90deg);
+      animation: ooze 1400ms linear forwards;
     }
 
     @keyframes digest {
@@ -45,19 +51,27 @@ const RELEASE_MS = 1500;  // push + drop + fade; keep in sync with CSS below
       70%      { transform: scale(1.05, .94) rotate(-1deg); }
     }
     @keyframes push {
-      0%   { transform: scale(1, 1); }
-      25%  { transform: scale(1.18, .78); }
-      45%  { transform: scale(.9, 1.12); }
-      65%, 100% { transform: scale(1, 1); }
+      0%        { transform: scale(1, 1); }
+      18%       { transform: scale(1.12, .85); }
+      30%       { transform: scale(.96, 1.05); }
+      38%       { transform: scale(1, 1); }
+      46%       { transform: scale(1.14, .84); }
+      58%       { transform: scale(.95, 1.05); }
+      66%, 100% { transform: scale(1, 1); }
     }
-    @keyframes drop {
-      0%, 15% { transform: translate(-50%, 0) scale(0); opacity: 0; }
-      28%     { transform: translate(-50%, 8px) scale(1.1); opacity: 1; }
-      38%     { transform: translate(-50%, 18px) scale(1, .8); }
-      46%     { transform: translate(-50%, 14px) scale(1); }
-      54%     { transform: translate(-50%, 18px) scale(1.05, .9); }
-      80%     { transform: translate(-50%, 18px) scale(1); opacity: 1; }
-      100%    { transform: translate(-50%, 18px) scale(1); opacity: 0; }
+    /* same motion as the page loader, at half scale */
+    @keyframes ooze {
+      0%, 12% { transform: translateY(-10px) rotate(-90deg); animation-timing-function: ease-out; }
+      32%     { transform: translateY(-1.5px) rotate(-90deg); }
+      40%     { transform: translateY(-2.5px) rotate(-90deg); animation-timing-function: ease-out; }
+      58%     { transform: translateY(9px) rotate(-90deg); animation-timing-function: ease-in; }
+      64%     { transform: translateY(10.5px) rotate(-82deg); animation-timing-function: ease-in; }
+      80%     { transform: translateY(18px) rotate(0deg) scale(1.12, .72); animation-timing-function: ease-out; }
+      88%     { transform: translateY(16.5px) rotate(0deg) scale(.94, 1.06); }
+      100%    { transform: translateY(18px) rotate(0deg) scale(1, 1); }
+    }
+    @keyframes fade {
+      to { opacity: 0; }
     }
   `]
 })

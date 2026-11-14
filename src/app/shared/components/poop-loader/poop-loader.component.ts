@@ -7,7 +7,7 @@ type Phase = 'idle' | 'digest' | 'release';
 /** Ms a load must last before the animation shows (avoids flashing on fast responses). */
 const SHOW_DELAY = 150;
 /** Length of the "release" animation; keep in sync with the CSS below. */
-const RELEASE_MS = 900;
+const RELEASE_MS = 1400;
 
 /**
  * App-wide loader: the colon icon "digests" while loading, then squeezes out a poop when done.
@@ -25,7 +25,7 @@ const RELEASE_MS = 900;
          role="status" [attr.aria-label]="phase === 'digest' ? 'Loading' : 'Done'">
       <div class="stage">
         <img class="gut" src="assets/images/app-icon.png" alt="">
-        <app-turd class="poop"></app-turd>
+        <div class="chute"><app-turd class="poop"></app-turd></div>
       </div>
       <div class="caption">{{ phase === 'digest' ? 'Digesting…' : 'Ahh.' }}</div>
     </div>
@@ -62,34 +62,47 @@ const RELEASE_MS = 900;
       70%      { transform: scale(1.05, .94) rotate(-1deg); }
     }
 
+    /*
+     * The chute is a zero-size point at the rectum (52.5% across, 93% down the icon).
+     * Everything above that line is clipped, so the turd appears to come out of the tube.
+     */
+    .chute {
+      position: absolute; left: 37.6px; top: 59.5px; width: 0; height: 0;
+      clip-path: polygon(-100px 0, 100px 0, 100px 100px, -100px 100px);
+    }
     .poop {
-      position: absolute; left: 50%; top: 44px; width: 56px; height: 24px;
-      transform: translateX(-50%) scale(0); opacity: 0;
+      position: absolute; left: -17px; top: -7.5px; width: 34px; height: 15px;
+      transform: translateY(-19px) rotate(-90deg);
     }
 
-    /* release: one big push, then the poop drops out and bounces */
-    .release .gut   { animation: push 900ms ease-in-out forwards; }
-    .release .poop  { animation: drop 900ms cubic-bezier(.3, .7, .4, 1) forwards; }
+    /* release: two pushes slide the turd out vertically, then it tips over as it falls */
+    .release .gut   { animation: push 1400ms ease-in-out forwards; }
+    .release .poop  { animation: ooze 1400ms linear forwards; }
     .release .caption { color: var(--ink, #1e1e1e); }
 
     @keyframes push {
-      0%   { transform: scale(1, 1); }
-      25%  { transform: scale(1.18, .78); }
-      45%  { transform: scale(.9, 1.12); }
-      65%, 100% { transform: scale(1, 1); }
+      0%        { transform: scale(1, 1); }
+      18%       { transform: scale(1.12, .85); }
+      30%       { transform: scale(.96, 1.05); }
+      38%       { transform: scale(1, 1); }
+      46%       { transform: scale(1.14, .84); }
+      58%       { transform: scale(.95, 1.05); }
+      66%, 100% { transform: scale(1, 1); }
     }
-    @keyframes drop {
-      0%, 25% { transform: translate(-50%, 0) scale(0); opacity: 0; }
-      45%     { transform: translate(-50%, 18px) scale(1.1); opacity: 1; }
-      62%     { transform: translate(-50%, 46px) scale(1, .8); }
-      75%     { transform: translate(-50%, 36px) scale(1); }
-      85%     { transform: translate(-50%, 46px) scale(1.05, .9); }
-      100%    { transform: translate(-50%, 46px) scale(1); opacity: 1; }
+    @keyframes ooze {
+      0%, 12% { transform: translateY(-19px) rotate(-90deg); animation-timing-function: ease-out; }
+      32%     { transform: translateY(-3px) rotate(-90deg); }
+      40%     { transform: translateY(-5px) rotate(-90deg); animation-timing-function: ease-out; }
+      58%     { transform: translateY(18px) rotate(-90deg); animation-timing-function: ease-in; }
+      64%     { transform: translateY(21px) rotate(-82deg); animation-timing-function: ease-in; }
+      80%     { transform: translateY(40px) rotate(0deg) scale(1.12, .72); animation-timing-function: ease-out; }
+      88%     { transform: translateY(37px) rotate(0deg) scale(.94, 1.06); }
+      100%    { transform: translateY(40px) rotate(0deg) scale(1, 1); }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .gut, .release .gut, .release .poop { animation: none; }
-      .release .poop { transform: translate(-50%, 46px); opacity: 1; }
+      .release .poop { transform: translateY(40px); }
     }
   `]
 })
