@@ -58,10 +58,19 @@ export class GameLinksComponent implements OnInit, OnDestroy {
       height: '600px',
       autoFocus: false
     }).afterClosed()
-      .subscribe(res => res
-        ? this.getLinks(res.category)
-        : null
-      );
+      .subscribe(res => res ? this.onLinkChanged() : null);
+  }
+
+  /** Reload current list + category counters after an inline edit/delete. */
+  public onLinkChanged(): void {
+    this.gameLinkService.getCategories()
+      .subscribe((categories: any): void => this.categories = categories);
+    if (this.currentCategory) {
+      this.gameLinkService.getLinksByCategory(this.currentCategory)
+        .subscribe((res: GameLink[]): void => {
+          this.links = res;
+        });
+    }
   }
 
   public handleClick(category: Category, card: HTMLDivElement): void {

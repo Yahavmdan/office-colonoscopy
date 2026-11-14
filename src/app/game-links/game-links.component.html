@@ -1,12 +1,17 @@
-<div class="d-flex align-content-start justify-content-between pointer p-2 border-bottom text-grey2 f-16"
-     *ngIf="isAdmin"
-     (click)="add()">
+<div class="d-flex align-content-start justify-content-between p-2 border-bottom text-grey2 f-16"
+     *ngIf="isAdmin">
   <div class="d-flex align-items-center">
-    <i class="mx-2 bi bi-plus-circle"></i>
-    <span>Add a game</span>
+    <div class="d-flex align-items-center pointer" (click)="add()">
+      <i class="mx-2 bi bi-plus-circle"></i>
+      <span>Add a game</span>
+    </div>
+    <a routerLink="/admin" class="d-flex align-items-center ms-4 text-grey2 text-decoration-none">
+      <i class="mx-2 bi bi-gear"></i>
+      <span>Admin panel</span>
+    </a>
   </div>
-  <div class="d-flex align-items-center">
-    <span (click)="logout()">logout</span>
+  <div class="d-flex align-items-center pointer" (click)="logout()">
+    <span>logout</span>
     <i class="mx-2 bi bi-door-closed"></i>
   </div>
 </div>
@@ -45,7 +50,7 @@
     </div>
     <div class="row px-4">
       <div class="col-6 col-sm-4 col-lg-3 my-4" *ngFor="let link of links; let i = index">
-          <app-game-list [data]="{link, isAdmin}"></app-game-list>
+          <app-game-list [data]="{link, isAdmin}" (change)="onLinkChanged()"></app-game-list>
       </div>
     </div>
   </div>

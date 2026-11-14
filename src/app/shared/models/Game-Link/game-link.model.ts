@@ -4,7 +4,7 @@ export interface GameLink {
   description: string;
   link: string;
   image: string;
-  subCategory: string;
+  subCategory: SubCategory[] | null;
   category: Category;
   clickCount: number;
   clicked?: boolean;
@@ -21,6 +21,9 @@ export const CATEGORIES: Category[] = [
   'music',
   'all'
 ];
+
+/** Categories a game link can belong to ('all' is only a view filter). */
+export const LINK_CATEGORIES: Category[] = CATEGORIES.filter(c => c !== 'all');
 
 export type SubCategory =
   'map'

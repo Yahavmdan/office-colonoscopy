@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { GameLinksComponent } from 'src/app/game-links/game-links.component';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterLink, RouterModule, Routes } from '@angular/router';
 import { Categories } from 'src/app/shared/resolves/Game-Link/categories.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgClass, NgForOf, NgIf, NgOptimizedImage, TitleCasePipe } from '@angular/common';
@@ -18,6 +18,12 @@ import { LoginComponent } from "../login/login.component";
 import { CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDropList, CdkDropListGroup } from "@angular/cdk/drag-drop";
 import { WheelClickModule } from "../shared/directives/wheel-click.module";
 import { ShbzakComponent } from "../shbzak/shbzak.component";
+import { AdminComponent } from "../admin/admin.component";
+import { ConfirmDialogComponent } from "../shared/components/confirm-dialog/confirm-dialog.component";
+import { adminGuard } from "../shared/guards/admin.guard";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 const routes: Routes = [
   {
@@ -28,6 +34,11 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [adminGuard]
   },
   {
     path: 'shbzak',
@@ -55,7 +66,11 @@ const routes: Routes = [
     CdkDragPlaceholder,
     CdkDragHandle,
     WheelClickModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    RouterLink,
+    MatSnackBarModule,
+    MatTooltipModule,
+    MatCheckboxModule
   ],
   providers: [
     Categories,
@@ -66,7 +81,9 @@ const routes: Routes = [
     GameLinksComponent,
     GameLinkFormComponent,
     GameLinkComponent,
-    GameListComponent
+    GameListComponent,
+    AdminComponent,
+    ConfirmDialogComponent
   ],
 })
 export class GameLinksModule {

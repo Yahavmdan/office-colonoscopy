@@ -1,0 +1,139 @@
+$dark: #333333;
+$light: #f6f6f6;
+$line: #e5e5e5;
+
+.admin {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: solid 3px $dark;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.chip {
+  border: solid 2px $dark;
+  background: #fff;
+  padding: 4px 12px;
+  cursor: pointer;
+  box-shadow: $dark 3px 3px 0 0;
+  transition: all 150ms;
+
+  span {
+    opacity: .6;
+    margin-left: 4px;
+  }
+
+  &.active {
+    background: $dark;
+    color: #fff;
+  }
+
+  &:hover {
+    box-shadow: $dark 5px 5px 0 0;
+  }
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+
+  .search {
+    flex: 1 1 280px;
+  }
+
+  .sort {
+    flex: 0 0 180px;
+  }
+}
+
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  background: $light;
+  border: solid 2px $dark;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+
+  th {
+    text-align: left;
+    font-weight: 700;
+    padding: 8px;
+    border-bottom: solid 2px $dark;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 8px;
+    border-bottom: solid 1px $line;
+    vertical-align: middle;
+  }
+
+  tbody tr:hover {
+    background: $light;
+  }
+
+  .row-selected {
+    background: #fff6e0 !important;
+  }
+
+  .col-check {
+    width: 40px;
+  }
+}
+
+.thumb {
+  object-fit: cover;
+  border: solid 1px $line;
+  flex-shrink: 0;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+.link-cell {
+  max-width: 360px;
+  text-decoration: none;
+}
+
+.tag {
+  display: inline-block;
+  padding: 1px 8px;
+  margin: 2px 4px 2px 0;
+  border: solid 1px $dark;
+  font-size: 12px;
+
+  &.light {
+    border-color: #d2d2d2;
+    color: #5e5e5e;
+  }
+}

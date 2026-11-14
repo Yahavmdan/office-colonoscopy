@@ -20,6 +20,7 @@ export class AuthService {
 
   public storeUserData(authUser: AuthUser): void {
     localStorage.setItem('user', JSON.stringify(authUser));
+    this.userData = authUser;
     this.isAdminAuthenticated.next(true);
   }
 
@@ -49,6 +50,15 @@ export class AuthService {
 
   public getUserSData(): any {
     return this.userData;
+  }
+
+  /** True when a stored token exists and has not expired yet. */
+  public hasValidToken(): boolean {
+    this.setUserData();
+    if (!this.userData?.token) {
+      return false;
+    }
+    return (+this.userData.tokenExpirationAt * 1000) > new Date().getTime();
   }
 
   public autoLogin(): void {

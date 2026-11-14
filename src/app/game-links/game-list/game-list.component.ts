@@ -3,6 +3,7 @@ import { Category, GameLink } from "../../shared/models/Game-Link/game-link.mode
 import { GameLinkFormComponent } from "../game-link-form/game-link-form.component";
 import { MatDialog } from "@angular/material/dialog";
 import { GameLinkService } from "../../shared/services/Game-Link/game-link.service";
+import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-game-list',
@@ -23,30 +24,25 @@ export class GameListComponent {
 
   public edit(link: GameLink): void {
     this.dialog.open(GameLinkFormComponent, {
-      width: '500px',
-      height: '600px',
+      width: '520px',
+      maxWidth: '95vw',
       data: { link },
       autoFocus: false
     }).afterClosed()
       .subscribe(res => {
-        if (res) {
-          this.gameLinkService.getCategories()
-            .subscribe(() => this.change
-              .emit({changed: res.changed.message === 'Success', category: res.category}))
+        if (res?.changed) {
+          this.change.emit({changed: true, category: res.category});
         }
       })
   }
 
   public delete(gameLink: GameLink): void {
-    let answer: boolean = confirm('Are you sure you want to delete?');
-    if (!answer) return;
-    this.gameLinkService.delete(gameLink.id).subscribe(isDeleted => {
-      if (isDeleted) {
-        this.gameLinkService.getCategories()
-          .subscribe(() => this.change
-            .emit({changed: isDeleted, category: gameLink.category}))
-      }
-    })
+    ConfirmDialogComponent.open(this.dialog, `Delete "${gameLink.name}"?`)
+      .subscribe((yes: boolean): void => {
+        if (!yes) return;
+        this.gameLinkService.delete(gameLink.id).subscribe(() =>
+          this.change.emit({changed: true, category: gameLink.category}));
+      });
   }
 
 }

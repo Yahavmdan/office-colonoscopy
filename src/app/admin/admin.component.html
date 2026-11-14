@@ -1,0 +1,111 @@
+<div class="admin">
+  <header class="admin-header">
+    <div class="f-24 fw-700">Admin panel</div>
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <a mat-button routerLink="/"><i class="bi bi-house me-1"></i>View site</a>
+      <button mat-button (click)="logout()"><i class="bi bi-door-closed me-1"></i>Logout</button>
+      <button mat-raised-button color="warn" (click)="add()" matTooltip="Shortcut: n">
+        <i class="bi bi-plus-lg me-1"></i>Add game
+      </button>
+    </div>
+  </header>
+
+  <div class="chips">
+    <button class="chip" [class.active]="category === 'all'" (click)="category = 'all'; applyFilters()">
+      all <span>{{ links.length }}</span>
+    </button>
+    <button *ngFor="let c of categories" class="chip" [class.active]="category === c"
+            (click)="category = c; applyFilters()">
+      {{ c }} <span>{{ counts[c] || 0 }}</span>
+    </button>
+  </div>
+
+  <div class="toolbar">
+    <mat-form-field class="search" subscriptSizing="dynamic">
+      <mat-label>Search name, description, link</mat-label>
+      <i matPrefix class="bi bi-search px-2"></i>
+      <input id="admin-search" matInput [(ngModel)]="search" (ngModelChange)="applyFilters()"
+             (keydown.escape)="search = ''; applyFilters()">
+      <button *ngIf="search" matSuffix mat-icon-button (click)="search = ''; applyFilters()">
+        <i class="bi bi-x"></i>
+      </button>
+    </mat-form-field>
+    <mat-form-field class="sort" subscriptSizing="dynamic">
+      <mat-label>Sort by</mat-label>
+      <mat-select [(ngModel)]="sort" (ngModelChange)="applyFilters()">
+        <mat-option value="clicks">Most clicks</mat-option>
+        <mat-option value="name">Name</mat-option>
+        <mat-option value="newest">Newest</mat-option>
+        <mat-option value="category">Category</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="bulk-bar" *ngIf="selected.size">
+    <span>{{ selected.size }} selected</span>
+    <button mat-button (click)="selected.clear()">Clear</button>
+    <button mat-raised-button color="warn" (click)="removeSelected()">
+      <i class="bi bi-trash3 me-1"></i>Delete selected
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center text-grey3 py-5">
+    <i class="bi bi-arrow-repeat spinner d-inline-block f-24"></i>
+  </div>
+
+  <div *ngIf="!loading && !filtered.length" class="text-center text-grey3 py-5">
+    <div class="mb-2">No games match.</div>
+    <button mat-stroked-button (click)="clearFilters()">Clear filters</button>
+  </div>
+
+  <div *ngIf="!loading && filtered.length" class="table-wrap">
+    <table class="admin-table">
+      <thead>
+      <tr>
+        <th class="col-check">
+          <mat-checkbox [checked]="allVisibleSelected" (change)="toggleAllVisible()"></mat-checkbox>
+        </th>
+        <th>Game</th>
+        <th class="d-none d-md-table-cell">Category</th>
+        <th class="d-none d-lg-table-cell">Sub categories</th>
+        <th class="d-none d-md-table-cell text-end">Clicks</th>
+        <th class="text-end">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let link of filtered; trackBy: trackById" [class.row-selected]="selected.has(link.id)"
+          (dblclick)="edit(link)">
+        <td class="col-check">
+          <mat-checkbox [checked]="selected.has(link.id)" (change)="toggle(link.id)"></mat-checkbox>
+        </td>
+        <td>
+          <div class="d-flex align-items-center gap-3">
+            <img [src]="imageSrc(link)" [alt]="link.name" width="64" height="40" loading="lazy"
+                 class="thumb" (error)="onImageError($event)">
+            <div class="min-w-0">
+              <div class="fw-700">{{ link.name }}</div>
+              <div class="text-grey3 f-12 text-truncate">{{ link.description }}</div>
+              <a [href]="link.link" target="_blank" class="f-12 text-blue text-truncate d-block link-cell">
+                {{ link.link }}
+              </a>
+            </div>
+          </div>
+        </td>
+        <td class="d-none d-md-table-cell"><span class="tag">{{ link.category }}</span></td>
+        <td class="d-none d-lg-table-cell">
+          <span *ngFor="let s of link.subCategory" class="tag light">{{ s }}</span>
+        </td>
+        <td class="d-none d-md-table-cell text-end">{{ link.clickCount }}</td>
+        <td class="text-end text-nowrap">
+          <button mat-icon-button matTooltip="Edit" (click)="edit(link)"><i class="bi bi-pencil text-blue"></i></button>
+          <button mat-icon-button matTooltip="Duplicate" (click)="duplicate(link)"><i class="bi bi-copy"></i></button>
+          <button mat-icon-button matTooltip="Delete" (click)="remove(link)"><i class="bi bi-trash3 text-red"></i></button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="text-grey3 f-12 mt-2">
+      Showing {{ filtered.length }} of {{ links.length }} · double-click a row to edit · "/" to search
+    </div>
+  </div>
+</div>
