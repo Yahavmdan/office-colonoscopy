@@ -149,7 +149,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 32px; // room for the Play 'em all bolts that hang below the text
+  margin-bottom: 24px; // room for the Play 'em all bolts that hang below the text
 }
 
 .search {
@@ -183,7 +183,7 @@
 // Heavy-metal "PLAY 'EM ALL" with lightning bolts shooting down-and-out of the first and last letter
 .play-all {
   margin-left: auto;
-  padding: 0 24px;
+  padding: 0 16px;
   border: 0;
   background: none;
   cursor: pointer;
@@ -193,7 +193,7 @@
     position: relative;
     display: inline-block;
     font-family: 'Metal Mania', cursive;
-    font-size: 22px;
+    font-size: 16px;
     line-height: 1;
     white-space: nowrap;
     background: linear-gradient(180deg, #3a3a3a 0%, var(--ink) 45%, #000 55%, #555 100%);
@@ -206,8 +206,8 @@
   .bolt {
     position: absolute;
     top: 1px;
-    width: 22px;
-    height: 38px;
+    width: 15px;
+    height: 26px;
     filter: drop-shadow(1.5px 1.5px 0 var(--ink));
     transition: transform 120ms;
 
@@ -252,15 +252,15 @@
   }
 
   @media (max-width: 520px) {
-    padding: 0 20px;
+    padding: 0 14px;
 
     .word {
-      font-size: 18px;
+      font-size: 14px;
     }
 
     .bolt {
-      width: 18px;
-      height: 31px;
+      width: 13px;
+      height: 22px;
     }
   }
 }

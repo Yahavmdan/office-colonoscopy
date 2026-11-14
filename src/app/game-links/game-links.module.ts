@@ -25,6 +25,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { PoopLoaderComponent } from "../shared/components/poop-loader/poop-loader.component";
+import { LogoMarkComponent } from "../shared/components/poop-loader/logo-mark.component";
 
 const routes: Routes = [
   {
@@ -88,7 +89,8 @@ const routes: Routes = [
     MatSnackBarModule,
     MatTooltipModule,
     MatCheckboxModule,
-    PoopLoaderComponent
+    PoopLoaderComponent,
+    LogoMarkComponent
   ],
   providers: [
     Categories,
