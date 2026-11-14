@@ -47,6 +47,14 @@
     object-fit: cover;
     display: block;
   }
+  // transparent shield above the preview: mobile browsers still let touch scroll reach iframes with pointer-events:none
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    touch-action: pan-y;
+  }
 }
 
 // Render the site at a desktop-ish viewport (4x the card) and shrink it to fit,
