@@ -48,7 +48,23 @@
   }
 }
 
+// Render the site at a desktop-ish viewport (4x the card) and shrink it to fit,
+// so it reads like a screenshot. pointer-events: none lets clicks hit the card link.
+.site-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400%;
+  height: 400%;
+  transform: scale(.25);
+  transform-origin: 0 0;
+  border: 0;
+  pointer-events: none;
+  background: #fff;
+}
+
 .played-badge {
+  z-index: 1;
   position: absolute;
   top: 8px;
   left: 8px;

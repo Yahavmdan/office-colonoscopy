@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { GameLink } from "../../shared/models/Game-Link/game-link.model";
 import { GameLinkService } from "../../shared/services/Game-Link/game-link.service";
 import { markPlayed } from "../../shared/played";
@@ -15,16 +16,31 @@ const SUB_CATEGORY_ICONS: Record<string, string> = {
   flag: 'bi-flag',
 };
 
+// Sites that send X-Frame-Options / frame-ancestors and render as an error page inside an iframe.
+// The browser can't tell us this from JS, so they're listed here and keep the placeholder image.
+const NO_FRAME_HOSTS = ['mapgame.net', 'histordle.com'];
+
+function canFrame(url: string): boolean {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, '');
+    return /^https?:/.test(url) && !NO_FRAME_HOSTS.some(h => host === h || host.endsWith('.' + h));
+  } catch {
+    return false;
+  }
+}
+
 @Component({
   selector: 'app-game',
   templateUrl: './game-link.component.html',
   styleUrls: ['./game-link.component.scss']
 })
-export class GameLinkComponent {
+export class GameLinkComponent implements OnChanges {
 
   @Input() data: { link: GameLink, isAdmin: boolean };
+  public previewUrl: SafeResourceUrl | null = null;
 
-  constructor(private gameLinkService: GameLinkService) {
+  constructor(private gameLinkService: GameLinkService,
+              private sanitizer: DomSanitizer) {
   }
 
   /** Counts the click and marks the game as played; the anchor itself opens the tab. */
@@ -36,6 +52,14 @@ export class GameLinkComponent {
     });
     this.data.link.clicked = true;
     markPlayed([game.id]);
+  }
+
+  ngOnChanges(): void {
+    const link = this.data?.link;
+    // computed once per input change: a fresh SafeResourceUrl on every check would reload the iframe
+    this.previewUrl = link && !link.image && canFrame(link.link)
+      ? this.sanitizer.bypassSecurityTrustResourceUrl(link.link)
+      : null;
   }
 
   public setGamePic(game: GameLink): string {

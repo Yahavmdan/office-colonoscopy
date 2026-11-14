@@ -2,8 +2,12 @@
    [href]="data.link.link" target="_blank" rel="noopener"
    (click)="nav(data.link)" (auxclick)="$event.button === 1 ? nav(data.link) : null">
   <div class="thumb">
-    <img [src]="setGamePic(data.link)" [alt]="data.link.name" loading="lazy" width="320" height="200"
+    <img *ngIf="!previewUrl" [src]="setGamePic(data.link)" [alt]="data.link.name" loading="lazy" width="320" height="200"
          (error)="onImageError($event)">
+    <!-- Live, non-interactive snapshot of the site for games without an image -->
+    <iframe *ngIf="previewUrl" class="site-preview" [src]="previewUrl" loading="lazy"
+            sandbox="allow-scripts allow-same-origin" tabindex="-1" aria-hidden="true"
+            referrerpolicy="no-referrer" [title]="data.link.name + ' preview'"></iframe>
     <span *ngIf="data.link.clicked" class="played-badge"><i class="bi bi-check-lg"></i> played</span>
   </div>
   <div class="body">
