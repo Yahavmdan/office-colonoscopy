@@ -6,7 +6,7 @@
          (error)="onImageError($event)">
     <!-- Live, non-interactive snapshot of the site for games without an image -->
     <iframe *ngIf="previewUrl" class="site-preview" [src]="previewUrl" loading="lazy"
-            sandbox="allow-scripts allow-same-origin" tabindex="-1" aria-hidden="true"
+            sandbox="allow-scripts allow-same-origin" tabindex="-1" aria-hidden="true" inert
             referrerpolicy="no-referrer" [title]="data.link.name + ' preview'"></iframe>
   </div>
   <div class="body">

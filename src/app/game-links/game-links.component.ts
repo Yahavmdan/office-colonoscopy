@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
@@ -50,6 +50,25 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
     this.authService.autoLogin();
     this.authService.autoLogout();
+  }
+
+  /**
+   * Some embedded sites call focus()/autofocus on load, which makes the browser scroll
+   * this page to their preview. Previews are never meant to have focus (clicks go to the
+   * card link), so whenever one grabs it: take focus back and undo the jump.
+   */
+  private lastScrollY: number = 0;
+
+  @HostListener('window:scroll')
+  @HostListener('window:blur')
+  public guardPreviewFocus(): void {
+    const active = document.activeElement;
+    if (active instanceof HTMLIFrameElement && active.classList.contains('site-preview')) {
+      active.blur();
+      window.scrollTo({top: this.lastScrollY, behavior: 'instant' as ScrollBehavior});
+      return;
+    }
+    this.lastScrollY = window.scrollY;
   }
 
   private initializeAnalytics(): void {
