@@ -24,6 +24,7 @@ import { adminGuard, loginGuard } from "../shared/guards/admin.guard";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { PoopLoaderComponent } from "../shared/components/poop-loader/poop-loader.component";
 
 const routes: Routes = [
   {
@@ -86,7 +87,8 @@ const routes: Routes = [
     RouterLink,
     MatSnackBarModule,
     MatTooltipModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    PoopLoaderComponent
   ],
   providers: [
     Categories,

@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environmentUrl } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/User/auth.service';
@@ -13,8 +13,12 @@ export class GameLinkService {
   constructor(private http: HttpClient, private authService: AuthService) {
   }
 
+  /** Last fetched category list; lets route changes reuse it instead of refetching. */
+  public cachedCategories: Categories | null = null;
+
   public getCategories(): Observable<Categories> {
-    return this.http.get<Categories>(this.path);
+    return this.http.get<Categories>(this.path)
+      .pipe(tap(categories => this.cachedCategories = categories));
   }
 
   public getLinksByCategory(category: Category): Observable<GameLink[]> {

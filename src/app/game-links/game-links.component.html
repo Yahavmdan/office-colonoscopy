@@ -66,14 +66,14 @@
     </button>
   </div>
 
-  <div *ngIf="loading" class="empty"><i class="bi bi-arrow-repeat spinner d-inline-block f-24"></i></div>
+  <app-poop-loader [loading]="loading">
+    <div *ngIf="!filteredLinks.length" class="empty">
+      {{ search ? 'No games match "' + search + '"' : 'No games here yet.' }}
+    </div>
 
-  <div *ngIf="!loading && !filteredLinks.length" class="empty">
-    {{ search ? 'No games match "' + search + '"' : 'No games here yet.' }}
-  </div>
-
-  <div *ngIf="!loading" class="game-grid">
-    <app-game-list *ngFor="let link of filteredLinks; trackBy: trackById"
-                   [data]="{link, isAdmin}" (change)="onLinkChanged()"></app-game-list>
-  </div>
+    <div class="game-grid">
+      <app-game-list *ngFor="let link of filteredLinks; trackBy: trackById"
+                     [data]="{link, isAdmin}" (change)="onLinkChanged()"></app-game-list>
+    </div>
+  </app-poop-loader>
 </main>

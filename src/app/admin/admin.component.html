@@ -63,16 +63,14 @@
     </button>
   </div>
 
-  <div *ngIf="loading" class="text-center text-grey3 py-5">
-    <i class="bi bi-arrow-repeat spinner d-inline-block f-24"></i>
-  </div>
+  <app-poop-loader [loading]="loading">
 
-  <div *ngIf="!loading && !filtered.length" class="text-center text-grey3 py-5">
+  <div *ngIf="!filtered.length" class="text-center text-grey3 py-5">
     <div class="mb-2">No games match.</div>
     <button class="ui-btn" (click)="clearFilters()">Clear filters</button>
   </div>
 
-  <div *ngIf="!loading && filtered.length" class="table-wrap">
+  <div *ngIf="filtered.length" class="table-wrap">
     <table class="admin-table">
       <thead>
       <tr>
@@ -126,4 +124,5 @@
       Showing {{ filtered.length }} of {{ links.length }} · double-click a row to edit · "/" to search
     </div>
   </div>
+  </app-poop-loader>
 </div>
