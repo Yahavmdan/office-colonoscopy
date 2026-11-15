@@ -3,9 +3,11 @@ import { TURD_SVG } from '../../components/poop-loader/turd.component';
 
 const W = 34;          // landed turd size (px)
 const H = 15;
-const COL = 4;         // heightmap column width (px)
-const OVERLAP = 6;     // how far neighbours may overlap sideways
-const SINK = 4;        // how far a turd sinks into the one below
+const OVERLAP = 12;    // how far neighbours may overlap sideways
+const SINK = 7;        // how far a turd sinks into the one below
+const STEP = W * .35;  // sideways distance of one tumble down the pile
+const PROBE = W * .75; // how far to each side the slope is measured
+const MAX_DROP = H * .75; // higher than this above a neighbour and a turd slides off
 const FLY_THRESHOLD = 3; // flies show up once the pile has more turds than this
 const MAX_FLIES = 6;
 
@@ -74,27 +76,52 @@ export class TurdPileService implements OnDestroy {
 
   /** Land `turd` on the pile under x, animating from its current centre (x, y). */
   private fall(turd: Turd, x: number, y: number, rot: number, scale: number): void {
-    turd.x = this.clampX(x);
-    turd.tilt = Math.round((Math.random() - .5) * 16);
-    turd.bottom = this.landingBottom(turd.x, this.turds);
+    // a little sideways scatter so drops from the same spot don't line up
+    const impactX = this.clampX(x + (Math.random() - .5) * 14);
+    const others = this.turds;
+    const impactBottom = this.landingBottom(impactX, others);
+    const path = this.settle(impactX, others);
+    const rest = path[path.length - 1];
+    turd.x = rest.x;
+    turd.bottom = rest.bottom;
+    turd.tilt = this.slopeTilt(turd.x, others);
     this.turds.push(turd);
     this.updateFlies();
     this.place(turd, false);
 
-    const finalY = window.innerHeight - turd.bottom - H / 2;
-    const dx = x - turd.x;
-    const dy = y - finalY;
-    const duration = Math.min(1100, Math.max(320, Math.sqrt(Math.abs(dy)) * 30));
-    turd.el.animate([
-      { transform: `translate(${dx}px, ${dy}px) rotate(${rot}deg) scale(${scale})` },
-      { transform: `translate(0, 0) rotate(${turd.tilt}deg) scale(1)` }
-    ], { duration, easing: 'cubic-bezier(.45, 0, 1, .7)' });
+    const toY = (bottom: number) => window.innerHeight - bottom - H / 2;
+    const finalY = toY(turd.bottom);
+    const fallDy = toY(impactBottom) - y;
+    const fallMs = Math.min(1100, Math.max(320, Math.sqrt(Math.abs(fallDy)) * 30));
+    const rollMs = (path.length - 1) * 130;
+    const total = fallMs + rollMs;
+
+    // fall onto the top of the pile, then tumble down its side one step at a time
+    const frames: Keyframe[] = [
+      { offset: 0, transform: `translate(${x - turd.x}px, ${y - finalY}px) rotate(${rot}deg) scale(${scale})`, easing: 'cubic-bezier(.45, 0, 1, .7)' },
+      { offset: fallMs / total, transform: `translate(${impactX - turd.x}px, ${toY(impactBottom) - finalY}px) rotate(${turd.tilt * .3}deg) scale(1)`, easing: 'ease-in' }
+    ];
+    let spin = turd.tilt * .3;
+    path.slice(1).forEach((p, i) => {
+      spin += (p.x > path[i].x ? 1 : -1) * 70;
+      const last = i === path.length - 2;
+      frames.push({
+        offset: (fallMs + (i + 1) * 130) / total,
+        transform: `translate(${p.x - turd.x}px, ${toY(p.bottom) - finalY}px) rotate(${last ? turd.tilt : spin}deg) scale(1)`,
+        easing: 'ease-in'
+      });
+    });
+    if (frames.length === 2) {
+      // no tumbling: land straight into the resting pose
+      frames[1] = { offset: 1, transform: `translate(0, 0) rotate(${turd.tilt}deg) scale(1)` };
+    }
+    turd.el.animate(frames, { duration: total });
     (turd.el.firstElementChild as HTMLElement).animate([
       { transform: 'scale(1, 1)' },
       { transform: 'scale(1.18, .7)', offset: .4 },
       { transform: 'scale(.94, 1.06)', offset: .75 },
       { transform: 'scale(1, 1)' }
-    ], { duration: 260, delay: duration, easing: 'ease-out' });
+    ], { duration: 260, delay: fallMs, easing: 'ease-out' });
   }
 
   /** Where a turd centred at x comes to rest, given the turds already on the pile. */
@@ -108,19 +135,62 @@ export class TurdPileService implements OnDestroy {
     return base;
   }
 
+  /**
+   * Starting at x, slide downhill while the pile is too steep to hold a turd,
+   * so drops spread into a mound instead of stacking into a column.
+   * Returns every resting point along the way (first = impact point).
+   */
+  private settle(x: number, pile: Turd[]): { x: number; bottom: number }[] {
+    const path = [{ x, bottom: this.landingBottom(x, pile) }];
+    for (let i = 0; i < 40; i++) {
+      const cur = path[path.length - 1];
+      const lp = this.clampX(cur.x - PROBE);
+      const rp = this.clampX(cur.x + PROBE);
+      const lb = lp < cur.x ? this.landingBottom(lp, pile) : Infinity;
+      const rb = rp > cur.x ? this.landingBottom(rp, pile) : Infinity;
+      if (cur.bottom - Math.min(lb, rb) <= MAX_DROP) {
+        break;
+      }
+      const goLeft = lb < rb || (lb === rb && Math.random() < .5);
+      const nx = this.clampX(cur.x + (goLeft ? -STEP : STEP));
+      if (nx === cur.x) {
+        break;
+      }
+      path.push({ x: nx, bottom: this.landingBottom(nx, pile) });
+    }
+    return path;
+  }
+
+  /** Resting tilt that follows the local slope of the pile, plus a little jitter. */
+  private slopeTilt(x: number, pile: Turd[]): number {
+    const span = W * .7;
+    const hl = this.landingBottom(x - span / 2, pile);
+    const hr = this.landingBottom(x + span / 2, pile);
+    const slope = Math.atan2(hl - hr, span) * 180 / Math.PI;
+    return Math.round(Math.max(-35, Math.min(35, slope)) + (Math.random() - .5) * 10);
+  }
+
   /** Re-settle every turd (after one is removed or the window resizes). */
   private restack(animate: boolean): void {
     const settled: Turd[] = [];
     for (const t of this.turds) {
-      t.x = this.clampX(t.x);
-      t.bottom = this.landingBottom(t.x, settled);
+      const path = this.settle(this.clampX(t.x), settled);
+      const rest = path[path.length - 1];
+      const moved = rest.x !== t.x || rest.bottom !== t.bottom;
+      t.x = rest.x;
+      t.bottom = rest.bottom;
+      if (moved) {
+        t.tilt = this.slopeTilt(t.x, settled);
+      }
       settled.push(t);
       this.place(t, animate);
     }
   }
 
   private place(t: Turd, animate: boolean): void {
-    t.el.style.transition = animate ? 'bottom 300ms cubic-bezier(.45, 0, 1, .7)' : '';
+    t.el.style.transition = animate
+      ? 'bottom 300ms cubic-bezier(.45, 0, 1, .7), left 300ms ease-out, transform 300ms ease-out'
+      : '';
     t.el.style.left = `${t.x - W / 2}px`;
     t.el.style.bottom = `${t.bottom}px`;
     t.el.style.transform = `rotate(${t.tilt}deg)`;
@@ -271,7 +341,7 @@ export class TurdPileService implements OnDestroy {
       f.x += vx;
       f.y += vy;
       const flip = vx < 0 ? -1 : 1;
-      f.el.style.transform = `translate(${f.x - 7}px, ${f.y - 7}px) scaleX(${flip})`;
+      f.el.style.transform = `translate(${f.x - 2.5}px, ${f.y - 2.5}px) scaleX(${flip})`;
     }
     this.frame = this.flies.length ? requestAnimationFrame(t => this.tick(t)) : undefined;
   }
@@ -352,7 +422,7 @@ const STYLES = `
   .tp-bin.tp-hot .tp-lid, .tp-bin.tp-open .tp-lid { transform: rotate(35deg) translateY(-4px); }
   .tp-bin.tp-hot { transform: translateY(0) scale(1.12); }
 
-  .tp-fly { position: absolute; left: 0; top: 0; width: 14px; height: 14px; z-index: 3; will-change: transform; }
+  .tp-fly { position: absolute; left: 0; top: 0; width: 5px; height: 5px; z-index: 3; will-change: transform; }
   .tp-fly svg { display: block; width: 100%; height: 100%; overflow: visible; }
   .tp-wing { transform-box: fill-box; transform-origin: 50% 100%; animation: tp-buzz 60ms linear infinite alternate; }
   @keyframes tp-buzz { from { transform: scaleY(1); } to { transform: scaleY(.3); } }
