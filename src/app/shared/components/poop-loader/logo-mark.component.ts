@@ -1,6 +1,7 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { TurdComponent } from './turd.component';
+import { TurdPileService } from '../../services/turd-pile/turd-pile.service';
 
 type Phase = 'idle' | 'digest' | 'release';
 
@@ -8,25 +9,28 @@ const FIRST_DELAY_MS = 6000;
 const MIN_GAP_MS = 25000;
 const MAX_GAP_MS = 50000;
 const DIGEST_MS = 1800;   // two digest cycles
-const RELEASE_MS = 1800;  // 1400ms ooze + 400ms fade; keep in sync with CSS below
+const RELEASE_MS = 1400;  // length of the push animation; keep in sync with CSS below
+const HANDOFF_MS = 812;   // 58% of the ooze: turd is fully out of the tube
+const HANDOFF_DROP = 9;   // turd centre below the rectum at that moment (px)
 
 /**
  * The header logo. Every so often it digests for a moment and drops a turd,
- * echoing the page loader. Skipped for users who prefer reduced motion.
+ * echoing the page loader. Once the turd is out it is handed to the turd pile,
+ * which drops it to the bottom of the screen. Skipped for users who prefer reduced motion.
  */
 @Component({
   selector: 'app-logo-mark',
   standalone: true,
   imports: [NgIf, TurdComponent],
   template: `
-    <span class="mark" [class.digest]="phase === 'digest'" [class.release]="phase === 'release'">
+    <span class="logo" [class.digest]="phase === 'digest'" [class.release]="phase === 'release'">
       <img class="gut" src="assets/images/app-icon.png" alt="">
-      <span *ngIf="phase === 'release'" class="chute"><app-turd class="poop"></app-turd></span>
+      <span *ngIf="phase === 'release' && !handedOff" #chute class="chute"><app-turd class="poop"></app-turd></span>
     </span>
   `,
   styles: [`
     :host { display: inline-block; width: 32px; height: 32px; }
-    .mark { position: relative; display: block; width: 100%; height: 100%; }
+    .logo { position: relative; display: block; width: 100%; height: 100%; }
     .gut { display: block; width: 100%; height: 100%; transform-origin: 50% 85%; }
 
     .digest .gut  { animation: digest 900ms ease-in-out 2; }
@@ -36,7 +40,6 @@ const RELEASE_MS = 1800;  // 1400ms ooze + 400ms fade; keep in sync with CSS bel
     .chute {
       position: absolute; left: 16.8px; top: 29.8px; width: 0; height: 0; pointer-events: none;
       clip-path: polygon(-60px 0, 60px 0, 60px 60px, -60px 60px);
-      animation: fade 400ms ease-in 1400ms forwards;
     }
     .poop {
       position: absolute; left: -8.5px; top: -3.75px; width: 17px; height: 7.5px;
@@ -70,16 +73,15 @@ const RELEASE_MS = 1800;  // 1400ms ooze + 400ms fade; keep in sync with CSS bel
       88%     { transform: translateY(16.5px) rotate(0deg) scale(.94, 1.06); }
       100%    { transform: translateY(18px) rotate(0deg) scale(1, 1); }
     }
-    @keyframes fade {
-      to { opacity: 0; }
-    }
   `]
 })
 export class LogoMarkComponent implements OnInit, OnDestroy {
   public phase: Phase = 'idle';
+  public handedOff = false;
+  @ViewChild('chute') private chute?: ElementRef<HTMLElement>;
   private timer?: ReturnType<typeof setTimeout>;
 
-  constructor(private zone: NgZone) {
+  constructor(private zone: NgZone, private pile: TurdPileService) {
   }
 
   ngOnInit(): void {
@@ -105,10 +107,19 @@ export class LogoMarkComponent implements OnInit, OnDestroy {
     this.phase = 'digest';
     this.timer = setTimeout(() => {
       this.phase = 'release';
+      this.handedOff = false;
       this.timer = setTimeout(() => {
-        this.phase = 'idle';
-        this.schedule(MIN_GAP_MS + Math.random() * (MAX_GAP_MS - MIN_GAP_MS));
-      }, RELEASE_MS);
+        const r = this.chute?.nativeElement.getBoundingClientRect();
+        if (r) {
+          // logo turd is 17px wide, pile turds 34px: hand off at half scale, still upright
+          this.pile.drop(r.left, r.top + HANDOFF_DROP, -90, .5);
+        }
+        this.handedOff = true;
+        this.timer = setTimeout(() => {
+          this.phase = 'idle';
+          this.schedule(MIN_GAP_MS + Math.random() * (MAX_GAP_MS - MIN_GAP_MS));
+        }, RELEASE_MS - HANDOFF_MS);
+      }, HANDOFF_MS);
     }, DIGEST_MS);
   }
 
