@@ -61,7 +61,7 @@
     <button *ngIf="playedCount" class="ui-btn ghost" (click)="resetPlayed()" title="Mark all games as not played">
       <i class="bi bi-arrow-counterclockwise"></i><span class="d-none d-sm-inline">Reset played</span>
     </button>
-    <button class="play-all" (click)="playEmAll()" [disabled]="!filteredLinks.length" aria-label="Play 'em all">
+    <button class="play-all" (click)="playEmAll()" [disabled]="loading || !filteredLinks.length" aria-label="Play 'em all">
       <span class="word"><span class="bolt l"><svg viewBox="0 0 40 70" aria-hidden="true"><path d="M38 1 L14 33 L25 34 L2 69 L33 27 L21 26 L31 1 Z"/></svg></span>PLAY 'EM ALL<span class="bolt r"><svg viewBox="0 0 40 70" aria-hidden="true"><path d="M38 1 L14 33 L25 34 L2 69 L33 27 L21 26 L31 1 Z"/></svg></span></span>
     </button>
   </div>

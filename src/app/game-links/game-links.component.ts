@@ -29,6 +29,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   public loading: boolean = false;
   private isAdminSub: Subscription;
   private paramSub: Subscription;
+  private linksSub?: Subscription;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -129,6 +130,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
     }
     if (this.currentCategory === category) return;
     this.currentCategory = category;
+    this.links = [];
     this.search = '';
     this.title.setTitle(`${category === 'all' ? 'All games' : this.label(category)} · Office Colonoscopy`);
     this.getLinks(category);
@@ -143,7 +145,8 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
   private getLinks(category: Category): void {
     this.loading = true;
-    this.gameLinkService.getLinksByCategory(category).subscribe({
+    this.linksSub?.unsubscribe();
+    this.linksSub = this.gameLinkService.getLinksByCategory(category).subscribe({
       next: (res: GameLink[]): void => {
         const played = playedToday();
         res.forEach(l => l.clicked = played.has(l.id));
@@ -158,7 +161,7 @@ export class GameLinksComponent implements OnInit, OnDestroy {
 
   public playEmAll(): void {
     const links = this.filteredLinks;
-    if (!links.length) return;
+    if (this.loading || !links.length) return;
     links.forEach(link => {
       link.clicked = true;
       window.open(link.link, '_blank');
@@ -189,5 +192,6 @@ export class GameLinksComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.isAdminSub.unsubscribe();
     this.paramSub.unsubscribe();
+    this.linksSub?.unsubscribe();
   }
 }
